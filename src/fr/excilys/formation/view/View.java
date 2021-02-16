@@ -45,6 +45,9 @@ public class View {
 					break;
 				case 3:
 					System.out.println("--- Show computer details ---");
+					System.out.println("Enter an id to search for :");
+					int id = sc.nextInt();
+					System.out.println(computerController.getComputerById(id));
 					break;
 				case 4:
 					System.out.println("--- Create a computer ---");

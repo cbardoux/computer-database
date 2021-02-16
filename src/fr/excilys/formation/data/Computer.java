@@ -20,14 +20,6 @@ public class Computer {
 		this.company_id = company_id;
 	}
 
-	public Computer(int id, String name, Object introduced, Object discontinued, int company_id) {
-		this.id = id;
-		this.name = name;
-		this.introduced = (LocalDate) introduced;
-		this.discontinued = (LocalDate) discontinued;
-		this.company_id = company_id;
-	}
-
 	public int getCompany_id() {
 		return company_id;
 	}

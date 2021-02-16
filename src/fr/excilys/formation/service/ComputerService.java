@@ -22,4 +22,8 @@ public class ComputerService {
 		List<Computer> listCompanies = computerDAO.listComputers();
 		return listCompanies;
 	}
+	
+	public Computer getComputerById(int id) {
+		return computerDAO.getComputerById(id);
+	}
 }

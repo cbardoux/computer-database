@@ -21,4 +21,8 @@ public class ComputerController {
 	public List<Computer> getComputers() {
 		return computerService.getComputers();
 	}
+	
+	public Computer getComputerById(int id) {
+		return computerService.getComputerById(id);
+	}
 }
