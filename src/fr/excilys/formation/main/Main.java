@@ -1,10 +1,10 @@
 package fr.excilys.formation.main;
 
-import fr.excilys.formation.view.UserView;
+import fr.excilys.formation.view.View;
 
 public class Main {
 	public static void main(String[] args) {
-		UserView userView = new UserView();
-		userView.launch();
+		View view = new View();
+		view.launch();
 	}
 }

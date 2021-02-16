@@ -11,8 +11,7 @@ import fr.excilys.formation.data.Computer;
 
 public class ComputerDAO {
 	private static ComputerDAO instanceComputer = null;
-	private DBConnection instanceDB;
-	private Connection connection;
+	private DBConnection instanceDB = null;
 
 	private ComputerDAO() {
 		instanceDB = DBConnection.getInstance();

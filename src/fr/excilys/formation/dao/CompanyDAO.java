@@ -11,7 +11,7 @@ import fr.excilys.formation.data.Company;
 
 public class CompanyDAO {
 	private static CompanyDAO instanceCompany = null;
-	private DBConnection instanceDB;
+	private DBConnection instanceDB = null;
 
 	private CompanyDAO() {
 		this.instanceDB = DBConnection.getInstance();
@@ -38,9 +38,9 @@ public class CompanyDAO {
 
 				resultList.add(company);
 			}
-			
+
 			connection.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -4,20 +4,21 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import fr.excilys.formation.dao.CompanyDAO;
-import fr.excilys.formation.dao.ComputerDAO;
+import fr.excilys.formation.controller.CompanyController;
+import fr.excilys.formation.controller.ComputerController;
 import fr.excilys.formation.data.Company;
 import fr.excilys.formation.data.Computer;
 
-public class UserView {
+public class View {
 
-	private CompanyDAO company = CompanyDAO.getInstance();
-	private ComputerDAO computer = ComputerDAO.getInstance();
+	private CompanyController companyController = CompanyController.getInstance();
+	private ComputerController computerController = ComputerController.getInstance();
 	
 	public void launch() {
 		while (true) {
 			Scanner sc = new Scanner(System.in);
 			System.out.println("Enter a number :");
+			System.out.println("0 - QUIT");
 			System.out.println("1 - Computers list");
 			System.out.println("2 - Companies list");
 			System.out.println("3 - Show computer details");
@@ -32,15 +33,13 @@ public class UserView {
 					System.exit(0);
 				case 1:
 					System.out.println("--- Computers list ---");
-					List<Computer> listComputer = computer.listComputers();
-					for(Computer computer: listComputer) {
+					for(Computer computer: computerController.getComputers()) {
 						System.out.println(computer);
 					}
 					break;
 				case 2:
 					System.out.println("--- Companies list ---");
-					List<Company> listCompany = company.listCompanies();
-					for(Company companies: listCompany) {
+					for(Company companies: companyController.getCompanies()) {
 						System.out.println(companies);
 					}
 					break;
