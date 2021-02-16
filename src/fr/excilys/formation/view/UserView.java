@@ -1,11 +1,20 @@
 package fr.excilys.formation.view;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+
+import fr.excilys.formation.dao.CompanyDAO;
+import fr.excilys.formation.dao.ComputerDAO;
+import fr.excilys.formation.data.Company;
+import fr.excilys.formation.data.Computer;
 
 public class UserView {
 
-	public static void main(String[] args) {
+	private CompanyDAO company = CompanyDAO.getInstance();
+	private ComputerDAO computer = ComputerDAO.getInstance();
+	
+	public void launch() {
 		while (true) {
 			Scanner sc = new Scanner(System.in);
 			System.out.println("Enter a number :");
@@ -23,9 +32,17 @@ public class UserView {
 					System.exit(0);
 				case 1:
 					System.out.println("--- Computers list ---");
+					List<Computer> listComputer = computer.listComputers();
+					for(Computer computer: listComputer) {
+						System.out.println(computer);
+					}
 					break;
 				case 2:
 					System.out.println("--- Companies list ---");
+					List<Company> listCompany = company.listCompanies();
+					for(Company companies: listCompany) {
+						System.out.println(companies);
+					}
 					break;
 				case 3:
 					System.out.println("--- Show computer details ---");

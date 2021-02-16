@@ -1,5 +1,5 @@
 package fr.excilys.formation.controller;
 
-public class Controller {
-	
+public class ComputerController {
+
 }
