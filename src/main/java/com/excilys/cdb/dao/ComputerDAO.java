@@ -66,8 +66,6 @@ public class ComputerDAO {
 						resultSet.getDate(4) != null ? resultSet.getDate(4).toLocalDate() : null, resultSet.getInt(5));
 			}
 
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -85,9 +83,6 @@ public class ComputerDAO {
 			statement.setInt(4, computer.getCompany_id());
 
 			result = statement.executeUpdate();
-
-			statement.close();
-			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -108,9 +103,6 @@ public class ComputerDAO {
 
 			result = statement.executeUpdate();
 
-			statement.close();
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -124,9 +116,6 @@ public class ComputerDAO {
 
 			statement.setInt(1, id);
 			result = statement.executeUpdate();
-
-			statement.close();
-			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();

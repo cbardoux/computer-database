@@ -7,7 +7,6 @@ public class Company {
 	public Company() {}
 	
 	public Company(int id, String name) {
-		super();
 		this.id = id;
 		this.name = name;
 	}
@@ -27,7 +26,7 @@ public class Company {
 
 	@Override
 	public String toString() {
-		return "Company [id=" + id + ", name=" + name + "]";
+		return "id : " + id + " | Company : " + name ;
 	}
 	
 }

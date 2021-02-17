@@ -9,8 +9,7 @@ public class Computer {
 	private LocalDate discontinued;
 	private int company_id;
 
-	public Computer() {
-	}
+	public Computer() {}
 
 	public Computer(int id, String name, LocalDate introduced, LocalDate discontinued, int company_id) {
 		this.id = id;
@@ -62,8 +61,8 @@ public class Computer {
 
 	@Override
 	public String toString() {
-		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", company_id=" + company_id + "]";
+		return "id : " + id + " | Computer : " + name + " | Introduced : " + introduced + " | Discontinued : "
+				+ discontinued + " | ID Company : " + company_id;
 	}
 
 }

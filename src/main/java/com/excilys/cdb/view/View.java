@@ -35,8 +35,8 @@ public class View {
 					System.exit(0);
 				case 1:
 					System.out.println("--- Computers list ---");
-					for (Computer computer : computerController.getComputers()) {
-						System.out.println(computer);
+					for (Computer computers : computerController.getComputers()) {
+						System.out.println(computers);
 					}
 					break;
 				case 2:
@@ -95,8 +95,8 @@ public class View {
 				default:
 					System.out.println("Number not in the list");
 				}
-			} catch (InputMismatchException e) {
-				System.out.println("Enter a number please");
+			} catch (InputMismatchException imputmInputMismatchException) {
+				System.out.println("Enter a valid number please");
 			}
 
 		}
