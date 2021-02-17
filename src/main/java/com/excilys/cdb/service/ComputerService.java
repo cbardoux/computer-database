@@ -41,12 +41,17 @@ public class ComputerService {
 	}
 	
 	public long modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, int company_id) {
+		Computer computerInBase = computerDAO.getComputerById(id);
 		Computer computer = new Computer();
 		computer.setId(id);
 		computer.setName(name);
 		computer.setIntroduced(introduced);
 		computer.setDiscontinued(discontinued);
 		computer.setCompany_id(company_id);
+		
+		if(computer.getName() == null) {
+			computer.setName(computerInBase.getName());
+		}
 
 		return computerDAO.modifyComputer(computer);
 	}

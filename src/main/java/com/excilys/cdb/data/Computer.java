@@ -18,6 +18,11 @@ public class Computer {
 		this.discontinued = discontinued;
 		this.company_id = company_id;
 	}
+	
+	public Computer(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
 	public int getCompany_id() {
 		return company_id;

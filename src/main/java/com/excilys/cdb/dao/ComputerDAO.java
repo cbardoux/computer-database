@@ -79,10 +79,11 @@ public class ComputerDAO {
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(CREATE_COMPUTER_QUERY)) {
 
+			System.out.println(computer.getId());
 			statement.setString(1, computer.getName());
-			statement.setDate(2, java.sql.Date.valueOf(computer.getIntroduced()));
-			statement.setDate(3, java.sql.Date.valueOf(computer.getDiscontinued()));
-			statement.setInt(4, computer.getCompany_id());
+			statement.setDate(2, computer.getIntroduced() != null ? java.sql.Date.valueOf(computer.getIntroduced()) : null);
+			statement.setDate(3, computer.getDiscontinued() != null ? java.sql.Date.valueOf(computer.getDiscontinued()) : null);
+			statement.setString(4, computer.getCompany_id() != 0 ? String.valueOf(computer.getCompany_id()) : null);
 
 			result = statement.executeUpdate();
 
