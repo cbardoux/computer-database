@@ -1,10 +1,10 @@
-package fr.excilys.formation.service;
+package main.java.com.excilys.cdb.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.excilys.formation.dao.CompanyDAO;
-import fr.excilys.formation.data.Company;
+import main.java.com.excilys.cdb.dao.CompanyDAO;
+import main.java.com.excilys.cdb.data.Company;
 
 public class CompanyService {
 	private static CompanyService instance = null;

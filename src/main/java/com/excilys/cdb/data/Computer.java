@@ -1,4 +1,4 @@
-package fr.excilys.formation.data;
+package main.java.com.excilys.cdb.data;
 
 import java.time.LocalDate;
 

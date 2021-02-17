@@ -1,6 +1,6 @@
-package fr.excilys.formation.main;
+package main.java.com.excilys.cdb.app;
 
-import fr.excilys.formation.view.View;
+import main.java.com.excilys.cdb.view.View;
 
 public class Main {
 	public static void main(String[] args) {

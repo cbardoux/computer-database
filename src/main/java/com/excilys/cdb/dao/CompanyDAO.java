@@ -1,4 +1,4 @@
-package fr.excilys.formation.dao;
+package main.java.com.excilys.cdb.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.excilys.formation.data.Company;
+import main.java.com.excilys.cdb.data.Company;
 
 public class CompanyDAO {
 	private static CompanyDAO instanceCompany = null;

@@ -1,4 +1,4 @@
-package fr.excilys.formation.dao;
+package main.java.com.excilys.cdb.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,9 +1,9 @@
-package fr.excilys.formation.controller;
+package main.java.com.excilys.cdb.controller;
 
 import java.util.List;
 
-import fr.excilys.formation.data.Company;
-import fr.excilys.formation.service.CompanyService;
+import main.java.com.excilys.cdb.data.Company;
+import main.java.com.excilys.cdb.service.CompanyService;
 
 public class CompanyController {
 

@@ -1,4 +1,4 @@
-package fr.excilys.formation.data;
+package main.java.com.excilys.cdb.data;
 
 public class Company {
 	private int id;
