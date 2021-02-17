@@ -24,19 +24,21 @@ public class ComputerDAO {
 		return instanceComputer;
 	}
 
-	private static final String FIND_COMPUTERS_QUERY = "SELECT id, name, introduced, discontinued, company_id FROM computer;";
+	private static final String FIND_COMPUTERS_QUERY = "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ?, 20;";
 	private static final String FIND_COMPUTER_QUERY = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?;";
 	private static final String CREATE_COMPUTER_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 	private static final String MODIFY_COMPUTER_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
 	private static final String DELETE_COMPUTER_QUERY = "DELETE FROM computer WHERE id = ?;";
 
-	public List<Computer> listComputers() {
+	public List<Computer> listComputers(int offset) {
 
 		List<Computer> resultList = new ArrayList<>();
 		try (Connection connection = instanceDB.connection();
-				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTERS_QUERY);
-				ResultSet resultSet = statement.executeQuery();) {
+				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTERS_QUERY);) {
 
+			statement.setInt(1, offset);
+			ResultSet resultSet = statement.executeQuery();
+			
 			while (resultSet.next()) {
 				Computer computer = new Computer(resultSet.getInt(1), resultSet.getString(2),
 						resultSet.getDate(3) != null ? resultSet.getDate(3).toLocalDate() : null,

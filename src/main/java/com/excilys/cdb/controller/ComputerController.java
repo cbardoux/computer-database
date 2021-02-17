@@ -19,8 +19,8 @@ public class ComputerController {
 		return instanceController;
 	}
 	
-	public List<Computer> getComputers() {
-		return computerService.getComputers();
+	public List<Computer> getComputers(int page) {
+		return computerService.getComputers(page);
 	}
 	
 	public Computer getComputerById(int id) {

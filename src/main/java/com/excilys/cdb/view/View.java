@@ -35,15 +35,32 @@ public class View {
 					System.exit(0);
 				case 1:
 					System.out.println("--- Computers list ---");
-					for (Computer computers : computerController.getComputers()) {
-						System.out.println(computers);
+					boolean loopPageComputer = true;
+					int pageNumberComputer;
+					while (loopPageComputer) {
+						System.out.println("Enter a page number :");
+						pageNumberComputer = sc.nextInt();
+						sc.nextLine();
+						System.out.println("--- Page number " + pageNumberComputer + " ---");
+						for (Computer computers : computerController.getComputers(pageNumberComputer)) {
+							System.out.println(computers);
+						}
 					}
 					break;
 				case 2:
 					System.out.println("--- Companies list ---");
-					for (Company companies : companyController.getCompanies()) {
-						System.out.println(companies);
+					boolean loopPageCompany = true;
+					int pageNumberCompany;
+					while (loopPageCompany) {
+						System.out.println("Enter a page number :");
+						pageNumberCompany = sc.nextInt();
+						sc.nextLine();
+						System.out.println("--- Page number " + pageNumberCompany + " ---");
+						for (Company companies : companyController.getCompanies(pageNumberCompany)) {
+							System.out.println(companies);
+						}
 					}
+
 					break;
 				case 3:
 					System.out.println("--- Show computer details ---");

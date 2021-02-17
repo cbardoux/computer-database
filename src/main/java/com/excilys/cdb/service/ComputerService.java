@@ -20,8 +20,9 @@ public class ComputerService {
 		return instance;
 	}
 
-	public List<Computer> getComputers() {
-		List<Computer> listCompanies = computerDAO.listComputers();
+	public List<Computer> getComputers(int page) {
+		int offset = (page - 1) * 20;
+		List<Computer> listCompanies = computerDAO.listComputers(offset);
 		return listCompanies;
 	}
 

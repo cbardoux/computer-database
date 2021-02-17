@@ -20,8 +20,8 @@ public class CompanyController {
 		return instanceController;
 	}
 
-	public List<Company> getCompanies(){
-		return companyService.getCompanies();
+	public List<Company> getCompanies(int page){
+		return companyService.getCompanies(page);
 	}
 
 }

@@ -20,10 +20,11 @@ public class CompanyService {
 		return instance;
 	}
 
-	public List<Company> getCompanies() {
+	public List<Company> getCompanies(int page) {
 		List<Company> listCompanies = new ArrayList<>();
 		try {
-			listCompanies = companyDAO.listCompanies();
+			int offset = (page - 1) * 20;
+			listCompanies = companyDAO.listCompanies(offset);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
