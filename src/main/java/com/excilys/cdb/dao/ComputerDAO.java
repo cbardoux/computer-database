@@ -38,7 +38,7 @@ public class ComputerDAO {
 
 			statement.setInt(1, offset);
 			ResultSet resultSet = statement.executeQuery();
-			
+
 			while (resultSet.next()) {
 				Computer computer = new Computer(resultSet.getInt(1), resultSet.getString(2),
 						resultSet.getDate(3) != null ? resultSet.getDate(3).toLocalDate() : null,
@@ -74,56 +74,51 @@ public class ComputerDAO {
 		return computer;
 	}
 
-	public long createComputer(Computer computer) {
-		long result = 0;
+	public void createComputer(Computer computer) {
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(CREATE_COMPUTER_QUERY)) {
 
-			System.out.println(computer.getId());
 			statement.setString(1, computer.getName());
-			statement.setDate(2, computer.getIntroduced() != null ? java.sql.Date.valueOf(computer.getIntroduced()) : null);
-			statement.setDate(3, computer.getDiscontinued() != null ? java.sql.Date.valueOf(computer.getDiscontinued()) : null);
+			statement.setDate(2,
+					computer.getIntroduced() != null ? java.sql.Date.valueOf(computer.getIntroduced()) : null);
+			statement.setDate(3,
+					computer.getDiscontinued() != null ? java.sql.Date.valueOf(computer.getDiscontinued()) : null);
 			statement.setString(4, computer.getCompany_id() != 0 ? String.valueOf(computer.getCompany_id()) : null);
 
-			result = statement.executeUpdate();
+			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return result;
 	}
 
-	public long modifyComputer(Computer computer) {
-		long result = 0;
+	public void modifyComputer(Computer computer) {
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(MODIFY_COMPUTER_QUERY)) {
 
 			statement.setString(1, computer.getName());
-			statement.setDate(2, java.sql.Date.valueOf(computer.getIntroduced()));
-			statement.setDate(3, java.sql.Date.valueOf(computer.getDiscontinued()));
-			statement.setInt(4, computer.getCompany_id());
+			statement.setDate(2, computer.getIntroduced() != null ? java.sql.Date.valueOf(computer.getIntroduced()) : null);
+			statement.setDate(3, computer.getDiscontinued() != null ? java.sql.Date.valueOf(computer.getDiscontinued()) : null);
+			statement.setString(4, computer.getCompany_id() != 0 ? String.valueOf(computer.getCompany_id()) : null);
 			statement.setInt(5, computer.getId());
 
-			result = statement.executeUpdate();
+			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return result;
 	}
 
-	public long deleteComputer(int id) {
-		long result = 0;
+	public void deleteComputer(int id) {
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(DELETE_COMPUTER_QUERY)) {
 
 			statement.setInt(1, id);
-			result = statement.executeUpdate();
+			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return result;
 	}
 
 }

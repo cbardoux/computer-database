@@ -30,17 +30,17 @@ public class ComputerService {
 		return computerDAO.getComputerById(id);
 	}
 
-	public long createComputer(String name, LocalDate introduced, LocalDate discontinued, int company_id) {
+	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, int company_id) {
 		Computer computer = new Computer();
 		computer.setName(name);
 		computer.setIntroduced(introduced);
 		computer.setDiscontinued(discontinued);
 		computer.setCompany_id(company_id);
 
-		return computerDAO.createComputer(computer);
+		computerDAO.createComputer(computer);
 	}
-	
-	public long modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, int company_id) {
+
+	public void modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, int company_id) {
 		Computer computerInBase = computerDAO.getComputerById(id);
 		Computer computer = new Computer();
 		computer.setId(id);
@@ -48,15 +48,15 @@ public class ComputerService {
 		computer.setIntroduced(introduced);
 		computer.setDiscontinued(discontinued);
 		computer.setCompany_id(company_id);
-		
-		if(computer.getName() == null) {
+
+		if (computer.getName() == null) {
 			computer.setName(computerInBase.getName());
 		}
 
-		return computerDAO.modifyComputer(computer);
+		computerDAO.modifyComputer(computer);
 	}
-	
-	public long deleteComputer(int id) {
-		return computerDAO.deleteComputer(id);
+
+	public void deleteComputer(int id) {
+		computerDAO.deleteComputer(id);
 	}
 }
