@@ -9,7 +9,8 @@ public class Computer {
 	private LocalDate discontinued;
 	private int company_id;
 
-	public Computer() {}
+	public Computer() {
+	}
 
 	public Computer(int id, String name, LocalDate introduced, LocalDate discontinued, int company_id) {
 		this.id = id;
@@ -17,11 +18,6 @@ public class Computer {
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		this.company_id = company_id;
-	}
-	
-	public Computer(int id, String name) {
-		this.id = id;
-		this.name = name;
 	}
 
 	public int getCompany_id() {

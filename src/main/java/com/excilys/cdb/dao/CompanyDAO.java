@@ -34,13 +34,12 @@ public class CompanyDAO {
 
 			statement.setInt(1, offset);
 			ResultSet resultSet = statement.executeQuery();
+
 			while (resultSet.next()) {
 				Company company = new Company(resultSet.getInt(1), resultSet.getString(2));
 
 				resultList.add(company);
 			}
-
-			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();

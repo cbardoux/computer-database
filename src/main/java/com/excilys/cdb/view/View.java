@@ -2,22 +2,26 @@ package main.java.com.excilys.cdb.view;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import main.java.com.excilys.cdb.controller.CompanyController;
 import main.java.com.excilys.cdb.controller.ComputerController;
 import main.java.com.excilys.cdb.data.Company;
 import main.java.com.excilys.cdb.data.Computer;
+import main.java.com.excilys.cdb.exception.ServiceException;
 
 public class View {
 
 	private CompanyController companyController = CompanyController.getInstance();
 	private ComputerController computerController = ComputerController.getInstance();
+	private Scanner inputUser = new Scanner(System.in);
 
 	public void launch() {
 		while (true) {
-			Scanner inputUser = new Scanner(System.in);
+
 			System.out.println("Enter a number :");
 			System.out.println("0 - QUIT");
 			System.out.println("1 - Computers list");
@@ -34,22 +38,22 @@ public class View {
 					inputUser.close();
 					System.exit(0);
 				case 1:
-					listComputers(inputUser);
+					listComputers();
 					break;
 				case 2:
-					listCompanies(inputUser);
+					listCompanies();
 					break;
 				case 3:
-					findComputerById(inputUser);
+					findComputerById();
 					break;
 				case 4:
-					createComputer(inputUser);
+					createComputer();
 					break;
 				case 5:
-					modifyComputer(inputUser);
+					modifyComputer();
 					break;
 				case 6:
-					deleteComputer(inputUser);
+					deleteComputer();
 					break;
 				default:
 					System.out.println("Enter a valid number");
@@ -62,7 +66,7 @@ public class View {
 
 	}
 
-	private void deleteComputer(Scanner inputUser) {
+	private void deleteComputer() {
 		System.out.println("--- Delete a computer ---");
 		System.out.println("Enter an id to delete :");
 		int deleteId = inputUser.nextInt();
@@ -71,12 +75,17 @@ public class View {
 		System.out.println("The computer with id " + deleteId + " has been deleted with success");
 	}
 
-	private void modifyComputer(Scanner inputUser) {
+	private void modifyComputer() {
 		System.out.println("--- Update a computer ---");
 		System.out.println("Enter a computer id :");
 		int modifyId = inputUser.nextInt();
 		inputUser.nextLine();
-		Computer computer = computerController.getComputerById(modifyId);
+		Computer computer = null;
+		try {
+			computer = computerController.getComputerById(modifyId);
+		} catch (ServiceException e1) {
+			e1.getMessage();
+		}
 		System.out.println(computer);
 		System.out.println("Enter a name :");
 		String inputName = inputUser.nextLine();
@@ -118,12 +127,15 @@ public class View {
 				System.out.println("Please enter a valid date or press Enter");
 			}
 		}
-		computerController.modifyComputer(modifyId, modifyName, modifyIntroduced, modifyDiscontinued,
-				modifyCompanyId);
-		System.out.println(computerController.getComputerById(modifyId));
+		computerController.modifyComputer(modifyId, modifyName, modifyIntroduced, modifyDiscontinued, modifyCompanyId);
+		try {
+			System.out.println(computerController.getComputerById(modifyId));
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void createComputer(Scanner inputUser) {
+	private void createComputer() {
 		System.out.println("--- Create a computer ---");
 		System.out.println("Enter a name :");
 		String createName = inputUser.nextLine();
@@ -159,20 +171,23 @@ public class View {
 				System.out.println("Please enter a valid number or press Enter");
 			}
 		}
-		System.out.println(companyId);
 		computerController.createComputer(createName, createIntroduced, createDiscontinued, companyId);
 		System.out.println("The computer has been created with success");
 	}
 
-	private void findComputerById(Scanner inputUser) {
+	private void findComputerById() {
 		System.out.println("--- Show computer details ---");
 		System.out.println("Enter an id to search for :");
 		int id = inputUser.nextInt();
 		inputUser.nextLine();
-		System.out.println(computerController.getComputerById(id));
+		try {
+			System.out.println(computerController.getComputerById(id));
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void listCompanies(Scanner inputUser) {
+	private void listCompanies() {
 		System.out.println("--- Companies list ---");
 		boolean loopPageCompany = true;
 		int pageNumberCompany;
@@ -191,23 +206,29 @@ public class View {
 		}
 	}
 
-	private void listComputers(Scanner inputUser) {
+	private void listComputers() {
 		System.out.println("--- Computers list ---");
-		boolean loopPageComputer = true;
+		List<Computer> computerList = new ArrayList<>();
 		int pageNumberComputer;
-		while (loopPageComputer) {
+		while (true) {
 			System.out.println("Enter 0 to quit or a page number :");
 			pageNumberComputer = inputUser.nextInt();
 			inputUser.nextLine();
-			if (pageNumberComputer == 0) {
-				loopPageComputer = false;
+			if (pageNumberComputer <= 0) {
+				break;
 			} else {
+				try {
+					computerList = computerController.getComputers(pageNumberComputer);
+				} catch (ServiceException e) {
+					e.printStackTrace();
+				}
 				System.out.println("--- Page number " + pageNumberComputer + " ---");
-				for (Computer computers : computerController.getComputers(pageNumberComputer)) {
+
+				for (Computer computers : computerList) {
 					System.out.println(computers);
 				}
-			}
 
+			}
 		}
 	}
 }
