@@ -24,23 +24,21 @@ public class ComputerService {
 		return instance;
 	}
 
-	public List<Computer> getComputers(int page) throws ServiceException {
+	public List<Computer> getComputers(int page) throws DAOException {
 		int offset = (page - 1) * LIMIT_PAGINATION;
-		try {
-			return computerDAO.listComputers(offset);
-		} catch (DAOException e) {
-			throw new ServiceException(e.getMessage());
-		}
+
+		return computerDAO.listComputers(offset);
 
 	}
 
 	public Computer getComputerById(int id) throws ServiceException {
 		Optional<Computer> optionalComputer = computerDAO.getComputerById(id);
-		if (optionalComputer.isPresent()) {
+		if (optionalComputer != null) {
 			return optionalComputer.get();
 		} else {
-			throw new ServiceException("The client doesn't exist");
+			throw new ServiceException();
 		}
+
 	}
 
 	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, int company_id) {

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import main.java.com.excilys.cdb.data.Computer;
+import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
 import main.java.com.excilys.cdb.service.ComputerService;
 
@@ -21,11 +22,11 @@ public class ComputerController {
 		return instanceController;
 	}
 
-	public List<Computer> getComputers(int page) throws ServiceException {
+	public List<Computer> getComputers(int page) throws DAOException {
 		return computerService.getComputers(page);
 	}
 
-	public Computer getComputerById(int id) throws ServiceException {
+	public Computer getComputerById(int id) throws ServiceException{
 		return computerService.getComputerById(id);
 	}
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import main.java.com.excilys.cdb.dao.CompanyDAO;
 import main.java.com.excilys.cdb.data.Company;
+import main.java.com.excilys.cdb.exception.DAOException;
 
 public class CompanyService {
 	private final int LIMIT_PAGINATION = 20;
@@ -21,14 +22,12 @@ public class CompanyService {
 		return instance;
 	}
 
-	public List<Company> getCompanies(int page) {
+	public List<Company> getCompanies(int page) throws DAOException {
 		List<Company> listCompanies = new ArrayList<>();
-		try {
-			int offset = (page - 1) * LIMIT_PAGINATION;
-			listCompanies = companyDAO.listCompanies(offset);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+		int offset = (page - 1) * LIMIT_PAGINATION;
+		listCompanies = companyDAO.listCompanies(offset);
+
 		return listCompanies;
 	}
 

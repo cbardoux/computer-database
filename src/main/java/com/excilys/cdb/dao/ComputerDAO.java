@@ -51,7 +51,7 @@ public class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException("Error while trying to display computer's list : " + e.getMessage());
+			throw new DAOException();
 		}
 		return resultList;
 	}

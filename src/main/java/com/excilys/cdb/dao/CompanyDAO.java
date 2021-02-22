@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.com.excilys.cdb.data.Company;
+import main.java.com.excilys.cdb.exception.DAOException;
 
 public class CompanyDAO {
 	private static CompanyDAO instanceCompany = null;
@@ -26,7 +27,7 @@ public class CompanyDAO {
 
 	private static final String FIND_COMPANIES_QUERY = "SELECT id, name FROM company LIMIT ?, 20;";
 
-	public List<Company> listCompanies(int offset) {
+	public List<Company> listCompanies(int offset) throws DAOException {
 
 		List<Company> resultList = new ArrayList<>();
 		try (Connection connection = instanceDB.connection();
@@ -42,7 +43,7 @@ public class CompanyDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new DAOException();
 		}
 		return resultList;
 	}

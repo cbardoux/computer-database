@@ -7,10 +7,14 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.java.com.excilys.cdb.controller.CompanyController;
 import main.java.com.excilys.cdb.controller.ComputerController;
 import main.java.com.excilys.cdb.data.Company;
 import main.java.com.excilys.cdb.data.Computer;
+import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
 
 public class View {
@@ -18,6 +22,7 @@ public class View {
 	private CompanyController companyController = CompanyController.getInstance();
 	private ComputerController computerController = ComputerController.getInstance();
 	private Scanner inputUser = new Scanner(System.in);
+	private static final Logger logger = LoggerFactory.getLogger(View.class);
 
 	public void launch() {
 		while (true) {
@@ -59,7 +64,7 @@ public class View {
 					System.out.println("Enter a valid number");
 				}
 			} catch (InputMismatchException imputmInputMismatchException) {
-				System.out.println("Enter a number please");
+				logger.info("Enter a number please");
 			}
 
 		}
@@ -77,100 +82,149 @@ public class View {
 
 	private void modifyComputer() {
 		System.out.println("--- Update a computer ---");
-		System.out.println("Enter a computer id :");
-		int modifyId = inputUser.nextInt();
-		inputUser.nextLine();
 		Computer computer = null;
-		try {
-			computer = computerController.getComputerById(modifyId);
-		} catch (ServiceException e1) {
-			e1.getMessage();
+		int modifyId = 0;
+		while (true) {
+			System.out.println("Enter a computer id :");
+			modifyId = inputUser.nextInt();
+			inputUser.nextLine();
+			try {
+				computer = computerController.getComputerById(modifyId);
+				System.out.println(computer);
+				break;
+			} catch (ServiceException e1) {
+				e1.WrongID();
+			}
 		}
-		System.out.println(computer);
-		System.out.println("Enter a name :");
-		String inputName = inputUser.nextLine();
+
 		String modifyName = computer.getName();
-		if (!inputName.equals("")) {
-			try {
-				modifyName = inputName;
-			} catch (Exception e) {
-				System.out.println("Please enter a valid name or press Enter");
+		while (true) {
+			System.out.println("Enter a name :");
+			String inputName = inputUser.nextLine();
+			if (!inputName.equals("")) {
+				try {
+					modifyName = inputName;
+					break;
+				} catch (Exception e) {
+					logger.info("Please enter a valid name");
+				}
 			}
 		}
-		System.out.println("Enter an introduced date :");
-		String inputIntroduced = inputUser.nextLine();
+
 		LocalDate modifyIntroduced = computer.getIntroduced();
-		if (!inputIntroduced.equals("")) {
-			try {
-				modifyIntroduced = Date.valueOf(inputIntroduced).toLocalDate();
-			} catch (Exception e) {
-				System.out.println("Please enter a valid date or press Enter");
+		while (true) {
+			System.out.println("Enter an introduced date :");
+			String inputIntroduced = inputUser.nextLine();
+			if (!inputIntroduced.equals("")) {
+				try {
+					modifyIntroduced = Date.valueOf(inputIntroduced).toLocalDate();
+					break;
+				} catch (Exception e) {
+					logger.info("Please enter a valid date yyyy-mm-dd");
+				}
 			}
 		}
-		System.out.println("Enter a discontinued date :");
-		String inputDiscontinued = inputUser.nextLine();
+
 		LocalDate modifyDiscontinued = computer.getDiscontinued();
-		if (!inputDiscontinued.equals("")) {
-			try {
-				modifyDiscontinued = Date.valueOf(inputDiscontinued).toLocalDate();
-			} catch (Exception e) {
-				System.out.println("Please enter a valid date or press Enter");
+		while (true) {
+			System.out.println("Enter a discontinued date :");
+			String inputDiscontinued = inputUser.nextLine();
+
+			if (!inputDiscontinued.equals("")) {
+				try {
+					modifyDiscontinued = Date.valueOf(inputDiscontinued).toLocalDate();
+					break;
+				} catch (Exception e) {
+					logger.info("Please enter a valid date yyyy-mm-dd");
+				}
 			}
 		}
-		System.out.println("Enter a company_id");
-		String inputCompanyId = inputUser.nextLine();
+
 		int modifyCompanyId = computer.getCompany_id();
-		if (!inputCompanyId.equals("")) {
-			try {
-				modifyCompanyId = Integer.parseInt(inputCompanyId);
-			} catch (Exception e) {
-				System.out.println("Please enter a valid date or press Enter");
+		while (true) {
+			System.out.println("Enter a company_id");
+			String inputCompanyId = inputUser.nextLine();
+
+			if (!inputCompanyId.equals("")) {
+				try {
+					modifyCompanyId = Integer.parseInt(inputCompanyId);
+					break;
+				} catch (Exception e) {
+					logger.info("Please enter a valid company id");
+				}
 			}
 		}
+
 		computerController.modifyComputer(modifyId, modifyName, modifyIntroduced, modifyDiscontinued, modifyCompanyId);
 		try {
 			System.out.println(computerController.getComputerById(modifyId));
 		} catch (ServiceException e) {
-			e.printStackTrace();
+			e.WrongID();
 		}
 	}
 
 	private void createComputer() {
 		System.out.println("--- Create a computer ---");
 		System.out.println("Enter a name :");
-		String createName = inputUser.nextLine();
-		System.out.println("Enter an introduced date :");
-		String introduced = inputUser.nextLine();
+		String createName;
+		while(true) {
+			createName = inputUser.nextLine();
+			if(createName.equals("")) {
+				System.out.println("Enter a name please");
+			} else {
+				break;
+			}
+		}
+		
 		LocalDate createIntroduced = null;
-		if (!introduced.equals("")) {
-			try {
-				createIntroduced = Date.valueOf(introduced).toLocalDate();
-			} catch (Exception e) {
-				System.out.println("Please enter a valid date or press Enter");
+
+		while (true) {
+			System.out.println("Enter an introduced date yyyy-mm-dd :");
+			String introduced = inputUser.nextLine();
+			if (!introduced.equals("")) {
+				try {
+					createIntroduced = Date.valueOf(introduced).toLocalDate();
+					break;
+				} catch (Exception e) {
+					logger.info("Please enter a valid date yyyy-mm-dd");
+				}
+			} else {
+				break;
 			}
 		}
-		System.out.println("Enter a discontinued date :");
-		String discontinued = inputUser.nextLine();
+
 		LocalDate createDiscontinued = null;
-		if (!discontinued.equals("")) {
-			try {
-				createDiscontinued = Date.valueOf(discontinued).toLocalDate();
-			} catch (Exception e) {
-				System.out.println("Please enter a valid date or press Enter");
+		while (true) {
+			System.out.println("Enter a discontinued date yyyy-mm-dd :");
+			String discontinued = inputUser.nextLine();
+
+			if (!discontinued.equals("")) {
+				try {
+					createDiscontinued = Date.valueOf(discontinued).toLocalDate();
+					break;
+				} catch (Exception e) {
+					logger.info("Please enter a valid date yyyy-mm-dd");
+				}
+			} else {
+				break;
 			}
 		}
-		System.out.println("Enter a company_id");
 
-		String createCompanyId = inputUser.nextLine();
 		int companyId = 0;
-
-		if (!createCompanyId.equals("")) {
+		while (true) {
 			try {
-				companyId = Integer.parseInt(createCompanyId);
-			} catch (NumberFormatException e) {
-				System.out.println("Please enter a valid number or press Enter");
+				System.out.println("Enter a company_id");
+				String createCompanyId = inputUser.nextLine();
+
+				if (!createCompanyId.equals("")) {
+					companyId = Integer.parseInt(createCompanyId);
+				}
+				break;
+			} catch (Exception e) {
+				logger.info("Please enter a valid company id");
 			}
 		}
+
 		computerController.createComputer(createName, createIntroduced, createDiscontinued, companyId);
 		System.out.println("The computer has been created with success");
 	}
@@ -181,26 +235,32 @@ public class View {
 		int id = inputUser.nextInt();
 		inputUser.nextLine();
 		try {
-			System.out.println(computerController.getComputerById(id));
+			Computer computer = computerController.getComputerById(id);
+			System.out.println(computer);
 		} catch (ServiceException e) {
-			e.printStackTrace();
+			e.WrongID();
 		}
 	}
 
 	private void listCompanies() {
 		System.out.println("--- Companies list ---");
-		boolean loopPageCompany = true;
+		List<Company> companiesList = new ArrayList<>();
 		int pageNumberCompany;
-		while (loopPageCompany) {
+		while (true) {
 			System.out.println("Enter 0 to quit or a page number :");
 			pageNumberCompany = inputUser.nextInt();
 			inputUser.nextLine();
 			if (pageNumberCompany == 0) {
-				loopPageCompany = false;
+				break;
 			} else {
-				System.out.println("--- Page number " + pageNumberCompany + " ---");
-				for (Company companies : companyController.getCompanies(pageNumberCompany)) {
-					System.out.println(companies);
+				try {
+					companiesList = companyController.getCompanies(pageNumberCompany);
+					System.out.println("--- Page number " + pageNumberCompany + " ---");
+					for (Company companies : companiesList) {
+						System.out.println(companies);
+					}
+				} catch (DAOException e) {
+					e.WrongPageNumber();
 				}
 			}
 		}
@@ -214,21 +274,20 @@ public class View {
 			System.out.println("Enter 0 to quit or a page number :");
 			pageNumberComputer = inputUser.nextInt();
 			inputUser.nextLine();
-			if (pageNumberComputer <= 0) {
+			if (pageNumberComputer == 0) {
 				break;
 			} else {
 				try {
 					computerList = computerController.getComputers(pageNumberComputer);
-				} catch (ServiceException e) {
-					e.printStackTrace();
+					System.out.println("--- Page number " + pageNumberComputer + " ---");
+					for (Computer computers : computerList) {
+						System.out.println(computers);
+					}
+				} catch (DAOException e) {
+					e.WrongPageNumber();
 				}
-				System.out.println("--- Page number " + pageNumberComputer + " ---");
-
-				for (Computer computers : computerList) {
-					System.out.println(computers);
-				}
-
 			}
 		}
 	}
+
 }

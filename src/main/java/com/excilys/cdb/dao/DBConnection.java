@@ -20,7 +20,7 @@ public class DBConnection {
 	
 	public Connection connection() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			connectionDB = DriverManager.getConnection("jdbc:mysql://localhost:3306/computer-database-db", "admincdb",
 					"qwerty1234");
 		} catch (SQLException | ClassNotFoundException e) {

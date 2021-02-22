@@ -3,6 +3,7 @@ package main.java.com.excilys.cdb.controller;
 import java.util.List;
 
 import main.java.com.excilys.cdb.data.Company;
+import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.service.CompanyService;
 
 public class CompanyController {
@@ -20,7 +21,7 @@ public class CompanyController {
 		return instanceController;
 	}
 
-	public List<Company> getCompanies(int page){
+	public List<Company> getCompanies(int page) throws DAOException{
 		return companyService.getCompanies(page);
 	}
 
