@@ -6,7 +6,6 @@ main/java/com/excilys/cdb/dao/ComputerDAO.class
 main/java/com/excilys/cdb/exception/DAOException.class
 main/java/com/excilys/cdb/data/Company.class
 main/java/com/excilys/cdb/app/Main.class
-main/java/com/excilys/cdb/exception/ViewException.class
 main/java/com/excilys/cdb/service/CompanyService.class
 main/java/com/excilys/cdb/view/View.class
 main/java/com/excilys/cdb/exception/ServiceException.class

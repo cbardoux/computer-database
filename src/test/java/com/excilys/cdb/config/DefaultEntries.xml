@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <COMPANY id='1' name='Apple'/>
+    <COMPANY id='2' name='Omen'/>
+    <COMPUTER id='1' name='Super' introduced='' discontinued='' company_id='2'/>
+    <COMPUTER id='2' name='Mac' introduced='2000-01-01' discontinued='2019-03-21' company_id='1'/>
+    <COMPUTER id='3' name='Racer' introduced='' discontinued='' company_id=''/>
+    <COMPUTER id='4' name='Titan' introduced='' discontinued='2019-03-23' company_id='2'/>
+    <COMPUTER id='5' name='Trinity' introduced='2012-12-12' discontinued='' company_id=''/>
+</dataset>

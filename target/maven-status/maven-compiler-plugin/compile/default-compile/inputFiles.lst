@@ -6,7 +6,6 @@
 /home/excilys/eclipse-workspace/cdb/src/main/java/com/excilys/cdb/controller/ComputerController.java
 /home/excilys/eclipse-workspace/cdb/src/main/java/com/excilys/cdb/view/View.java
 /home/excilys/eclipse-workspace/cdb/src/main/java/com/excilys/cdb/data/Computer.java
-/home/excilys/eclipse-workspace/cdb/src/main/java/com/excilys/cdb/exception/ViewException.java
 /home/excilys/eclipse-workspace/cdb/src/main/java/com/excilys/cdb/exception/ServiceException.java
 /home/excilys/eclipse-workspace/cdb/src/main/java/com/excilys/cdb/exception/DAOException.java
 /home/excilys/eclipse-workspace/cdb/src/main/java/com/excilys/cdb/data/Company.java
