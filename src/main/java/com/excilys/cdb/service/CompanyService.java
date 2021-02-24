@@ -22,13 +22,17 @@ public class CompanyService {
 		return instance;
 	}
 
-	public List<Company> getCompanies(int page) throws DAOException {
+	public List<Company> getCompaniesWithOffset(int page) throws DAOException {
 		List<Company> listCompanies = new ArrayList<>();
 
 		int offset = (page - 1) * LIMIT_PAGINATION;
-		listCompanies = companyDAO.listCompanies(offset);
+		listCompanies = companyDAO.listCompaniesWithOffset(offset);
 
 		return listCompanies;
+	}
+	
+	public List<Company> getCompanies() throws DAOException {
+		return companyDAO.listCompanies();
 	}
 
 }

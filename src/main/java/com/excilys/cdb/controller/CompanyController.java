@@ -21,8 +21,13 @@ public class CompanyController {
 		return instanceController;
 	}
 
-	public List<Company> getCompanies(int page) throws DAOException{
-		return companyService.getCompanies(page);
+	public List<Company> getCompaniesWithOffset(int page) throws DAOException{
+		return companyService.getCompaniesWithOffset(page);
 	}
+	
+	public List<Company> getCompanies() throws DAOException{
+		return companyService.getCompanies();
+	}
+
 
 }

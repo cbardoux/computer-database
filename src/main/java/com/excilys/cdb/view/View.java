@@ -254,7 +254,7 @@ public class View {
 				break;
 			} else {
 				try {
-					companiesList = companyController.getCompanies(pageNumberCompany);
+					companiesList = companyController.getCompaniesWithOffset(pageNumberCompany);
 					System.out.println("--- Page number " + pageNumberCompany + " ---");
 					for (Company companies : companiesList) {
 						System.out.println(companies);
@@ -278,7 +278,7 @@ public class View {
 				break;
 			} else {
 				try {
-					computerList = computerController.getComputers(pageNumberComputer);
+					computerList = computerController.getComputersWithOffset(pageNumberComputer);
 					System.out.println("--- Page number " + pageNumberComputer + " ---");
 					for (Computer computers : computerList) {
 						System.out.println(computers);

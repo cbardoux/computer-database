@@ -26,19 +26,43 @@ public class ComputerDAO {
 		return instanceComputer;
 	}
 
-	private static final String FIND_COMPUTERS_QUERY = "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ?, 20;";
+	private static final String FIND_COMPUTERS_WITH_OFFSET_QUERY = "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ?, 20;";
+	private static final String FIND_COMPUTERS_QUERY = "SELECT id, name, introduced, discontinued, company_id FROM computer;";
 	private static final String FIND_COMPUTER_QUERY = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?;";
 	private static final String CREATE_COMPUTER_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 	private static final String MODIFY_COMPUTER_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
 	private static final String DELETE_COMPUTER_QUERY = "DELETE FROM computer WHERE id = ?;";
 
-	public List<Computer> listComputers(int offset) throws DAOException{
+	public List<Computer> listComputersWithOffset(int offset) throws DAOException{
+
+		List<Computer> resultList = new ArrayList<>();
+		try (Connection connection = instanceDB.connection();
+				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTERS_WITH_OFFSET_QUERY);) {
+
+			statement.setInt(1, offset);
+			ResultSet resultSet = statement.executeQuery();
+
+			while (resultSet.next()) {
+				Computer computer = new Computer(resultSet.getInt(1), resultSet.getString(2),
+						resultSet.getDate(3) != null ? resultSet.getDate(3).toLocalDate() : null,
+						resultSet.getDate(4) != null ? resultSet.getDate(4).toLocalDate() : null, resultSet.getInt(5));
+
+				resultList.add(computer);
+
+			}
+
+		} catch (SQLException e) {
+			throw new DAOException();
+		}
+		return resultList;
+	}
+	
+	public List<Computer> listComputers() throws DAOException{
 
 		List<Computer> resultList = new ArrayList<>();
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTERS_QUERY);) {
 
-			statement.setInt(1, offset);
 			ResultSet resultSet = statement.executeQuery();
 
 			while (resultSet.next()) {

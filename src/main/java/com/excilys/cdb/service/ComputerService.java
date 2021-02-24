@@ -24,10 +24,15 @@ public class ComputerService {
 		return instance;
 	}
 
-	public List<Computer> getComputers(int page) throws DAOException {
+	public List<Computer> getComputersWithOffset(int page) throws DAOException {
 		int offset = (page - 1) * LIMIT_PAGINATION;
 
-		return computerDAO.listComputers(offset);
+		return computerDAO.listComputersWithOffset(offset);
+
+	}
+
+	public List<Computer> getComputers() throws DAOException {
+		return computerDAO.listComputers();
 
 	}
 

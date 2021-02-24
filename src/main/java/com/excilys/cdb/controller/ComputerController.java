@@ -22,8 +22,8 @@ public class ComputerController {
 		return instanceController;
 	}
 
-	public List<Computer> getComputers(int page) throws DAOException {
-		return computerService.getComputers(page);
+	public List<Computer> getComputersWithOffset(int page) throws DAOException {
+		return computerService.getComputersWithOffset(page);
 	}
 
 	public Computer getComputerById(int id) throws ServiceException{
