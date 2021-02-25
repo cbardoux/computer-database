@@ -19,4 +19,8 @@ public class DAOException extends Exception {
 	public void WrongPageNumber() {
 		logger.info("The page number entered is not good");
 	}
+	
+	public void CompanyListError() {
+		logger.info("No company list found");
+	}
 }

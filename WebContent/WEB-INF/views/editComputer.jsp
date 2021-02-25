@@ -24,32 +24,34 @@
                     </div>
                     <h1>Edit Computer</h1>
 
-                    <form action="editComputer" method="POST">
-                        <input type="hidden" value="${id}" id="id"/> <!-- TODO: Change this value with the computer id -->
+                    <form action="${pageContext.request.contextPath}/home/edit" method="POST">
+                        <input type="hidden" value="${id}" id="id" name="id"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="name" value="${name}">
+                                <input type="text" class="form-control" id="name" name="name" value="${name}">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" value="${introduced}">
+                                <input type="date" class="form-control" id="introduced" name="introduced" value="${introduced}">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" value="${introduced}">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued "value="${discontinued}">
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
-                                <select class="form-control" id="company_id">
-                                    <option value="${company_id}">--</option>
+                                <label for="company_id">Company</label>
+                                <select class="form-control" id="company_id" name="company_id">
+                                    <c:forEach items="${companies}" var="company">
+        								<option value="${company_id}">${company.name}</option>
+    								</c:forEach>
                                 </select>
-                            </div>            
+                            </div>          
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Edit" class="btn btn-primary">
                             or
-                            <a href="dashboard.html" class="btn btn-default">Cancel</a>
+                            <a href="${pageContext.request.contextPath}/home" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

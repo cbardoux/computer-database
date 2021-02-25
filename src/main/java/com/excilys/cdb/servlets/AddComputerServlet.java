@@ -2,8 +2,6 @@ package main.java.com.excilys.cdb.servlets;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,10 +40,12 @@ public class AddComputerServlet extends HttpServlet {
 
 		Computer computer = new Computer();
 		computer.setName(request.getParameter("name"));
-		computer.setIntroduced(
-				Date.valueOf(request.getParameter("introduced")).toLocalDate());
-		computer.setDiscontinued(
-				Date.valueOf(request.getParameter("discontinued")).toLocalDate());
+		computer.setIntroduced(!request.getParameter("introduced").equals("")
+				? Date.valueOf(request.getParameter("introduced")).toLocalDate()
+				: null);
+		computer.setDiscontinued(!request.getParameter("discontinued").equals("")
+				? Date.valueOf(request.getParameter("discontinued")).toLocalDate()
+				: null);
 		computer.setCompany_id(Integer.parseInt(request.getParameter("company_id")));
 		RequestDispatcher dispatcher = null;
 

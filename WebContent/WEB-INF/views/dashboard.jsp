@@ -1,4 +1,4 @@
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,7 +32,8 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="${pageContext.request.contextPath}/home/add">Add
+					<a class="btn btn-success" id="addComputer"
+						href="${pageContext.request.contextPath}/home/add">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
@@ -68,15 +69,17 @@
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-				<c:forEach items= "${computers}" var = "computer">
-					<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="${pageContext.request.contextPath}/home/edit?id=${computer.id}" onclick="">${computer.name}</a></td>
-						<td>${computer.introduced}</td>
-						<td>${computer.discontinued}</td>
-						<td>${computer.company_id}</td>
-					</tr>
+					<c:forEach items="${computers}" var="computer">
+						<tr>
+							<td class="editMode"><input type="checkbox" name="cb"
+								class="cb" value="0"></td>
+							<td><a
+								href="${pageContext.request.contextPath}/home/edit?id=${computer.id}"
+								onclick="">${computer.name}</a></td>
+							<td>${computer.introduced}</td>
+							<td>${computer.discontinued}</td>
+							<td>${computer.company_id}</td>
+						</tr>
 					</c:forEach>
 
 				</tbody>
@@ -100,8 +103,10 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default">10</button>
-				<button type="button" class="btn btn-default">50</button>
+				<button type="button" class="btn btn-default" value="10"
+					name="offset">10</button>
+				<button type="button" class="btn btn-default" value="20"
+					name="offset">50</button>
 				<button type="button" class="btn btn-default">100</button>
 			</div>
 		</div>

@@ -23,7 +23,7 @@ public class DashboardServlet extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp");
 		
 		try {
-			request.setAttribute("computers", instance.getComputersWithOffset(1));
+			request.setAttribute("computers", instance.getComputers());
 		} catch (DAOException e) {
 			request.setAttribute("computers", "An error occured");
 		}
