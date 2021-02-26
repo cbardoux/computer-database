@@ -2,8 +2,8 @@ package main.java.com.excilys.cdb.controller;
 
 import java.util.List;
 
-import main.java.com.excilys.cdb.data.Company;
 import main.java.com.excilys.cdb.exception.DAOException;
+import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.service.CompanyService;
 
 public class CompanyController {

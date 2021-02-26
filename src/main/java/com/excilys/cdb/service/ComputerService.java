@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import main.java.com.excilys.cdb.dao.ComputerDAO;
-import main.java.com.excilys.cdb.data.Computer;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
+import main.java.com.excilys.cdb.model.Computer;
 
 public class ComputerService {
 	private static ComputerService instance = null;

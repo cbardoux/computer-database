@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import main.java.com.excilys.cdb.data.Computer;
 import main.java.com.excilys.cdb.exception.DAOException;
+import main.java.com.excilys.cdb.model.Computer;
 
 public class ComputerDAO {
 	private static ComputerDAO instanceComputer = null;

@@ -12,10 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import main.java.com.excilys.cdb.controller.CompanyController;
 import main.java.com.excilys.cdb.controller.ComputerController;
-import main.java.com.excilys.cdb.data.Company;
-import main.java.com.excilys.cdb.data.Computer;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
+import main.java.com.excilys.cdb.model.Company;
+import main.java.com.excilys.cdb.model.Computer;
 
 public class View {
 

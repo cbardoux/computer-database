@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.com.excilys.cdb.dao.CompanyDAO;
-import main.java.com.excilys.cdb.data.Company;
 import main.java.com.excilys.cdb.exception.DAOException;
+import main.java.com.excilys.cdb.model.Company;
 
 public class CompanyService {
 	private final int LIMIT_PAGINATION = 20;

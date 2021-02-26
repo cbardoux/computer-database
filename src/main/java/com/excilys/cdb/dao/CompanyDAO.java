@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.excilys.cdb.data.Company;
 import main.java.com.excilys.cdb.exception.DAOException;
+import main.java.com.excilys.cdb.model.Company;
 
 public class CompanyDAO {
 	private static CompanyDAO instanceCompany = null;

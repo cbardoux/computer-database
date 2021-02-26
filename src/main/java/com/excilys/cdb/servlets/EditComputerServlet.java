@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import main.java.com.excilys.cdb.data.Computer;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
+import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.service.CompanyService;
 import main.java.com.excilys.cdb.service.ComputerService;
 
