@@ -106,7 +106,7 @@ public class Computer {
 	@Override
 	public String toString() {
 		return "id : " + id + " | Computer : " + name + " | Introduced : " + introduced + " | Discontinued : "
-				+ discontinued + " | ID Company : " + company;
+				+ discontinued + " | ID Company : " + company.getId() + " | Name Company : " + company.getName();
 	}
 
 }

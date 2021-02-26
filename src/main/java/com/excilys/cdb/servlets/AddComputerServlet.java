@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import main.java.com.excilys.cdb.dto.ListComputerDTO;
+import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.service.CompanyService;
@@ -19,9 +21,10 @@ import main.java.com.excilys.cdb.service.ComputerService;
 public class AddComputerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	ComputerService instanceComputer = ComputerService.getInstance();
+	ComputerService instanceComputerService = ComputerService.getInstance();
 	CompanyService instanceCompany = CompanyService.getInstance();
-
+	MappingDTO instanceMapping = MappingDTO.getInstance();
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp");
@@ -38,20 +41,22 @@ public class AddComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		Computer computer = new Computer();
-		computer.setName(request.getParameter("name"));
-		computer.setIntroduced(!request.getParameter("introduced").equals("")
-				? Date.valueOf(request.getParameter("introduced")).toLocalDate()
-				: null);
-		computer.setDiscontinued(!request.getParameter("discontinued").equals("")
-				? Date.valueOf(request.getParameter("discontinued")).toLocalDate()
-				: null);
-		computer.setCompany_id(Integer.parseInt(request.getParameter("company_id")));
+		ListComputerDTO computerDTO = new ListComputerDTO();
+		
+		
+		computerDTO.setName(request.getParameter("name"));
+		computerDTO.setIntroduced(request.getParameter("introduced"));
+		computerDTO.setDiscontinued(request.getParameter("discontinued"));
+		computerDTO.setCompany_id(request.getParameter("company_id"));
+		
+		System.out.println(computerDTO);
+		Computer computer = instanceMapping.createComputerDTOToComputerObject(computerDTO);
+		System.out.println(computer);
+		
 		RequestDispatcher dispatcher = null;
 
 		try {
-			instanceComputer.createComputer(computer.getName(), computer.getIntroduced(), computer.getDiscontinued(),
-					computer.getCompany_id());
+			instanceComputerService.createComputer(computer);
 			response.sendRedirect("/cdb/home");
 		} catch (Exception e) {
 			dispatcher = request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp");

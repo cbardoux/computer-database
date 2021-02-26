@@ -25,12 +25,12 @@ public class ComputerService {
 		return instance;
 	}
 
-	public List<Computer> getComputersWithOffset(int page) throws DAOException {
-		int offset = (page - 1) * LIMIT_PAGINATION;
-
-		return computerDAO.listComputersWithOffset(offset);
-
-	}
+//	public List<Computer> getComputersWithOffset(int page) throws DAOException {
+//		int offset = (page - 1) * LIMIT_PAGINATION;
+//
+//		return computerDAO.listComputersWithOffset(offset);
+//
+//	}
 
 	public List<Computer> getComputers() throws DAOException {
 		return computerDAO.listComputers();
@@ -38,7 +38,7 @@ public class ComputerService {
 
 	public Computer getComputerById(int id) throws ServiceException {
 		Optional<Computer> optionalComputer = computerDAO.getComputerById(id);
-		if (optionalComputer != null) {
+		if (optionalComputer.isPresent()) {
 			return optionalComputer.get();
 		} else {
 			throw new ServiceException();
@@ -46,13 +46,8 @@ public class ComputerService {
 
 	}
 
-	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, Company company) {
-		Computer computer = new Computer.ComputerBuilder()
-				.introduced(introduced)
-				.discontinued(discontinued)
-				.company(company)
-				.build();
-
+	public void createComputer(Computer computer) {
+		System.out.println("a" + computer);
 		computerDAO.createComputer(computer);
 	}
 

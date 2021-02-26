@@ -38,6 +38,7 @@
                             <div class="form-group">
                                 <label for="company_id">Company</label>
                                 <select class="form-control" id="company_id" name="company_id">
+                                    <option value="0">Default</option>
                                     <c:forEach items="${companies}" var="company">
         								<option value="${company.id}">${company.name}</option>
     								</c:forEach>
