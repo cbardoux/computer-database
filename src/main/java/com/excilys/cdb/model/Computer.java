@@ -3,29 +3,64 @@ package main.java.com.excilys.cdb.model;
 import java.time.LocalDate;
 
 public class Computer {
+
+	public static class ComputerBuilder {
+
+		private int id;
+		private String name;
+		private LocalDate introduced;
+		private LocalDate discontinued;
+		private Company company;
+
+		public ComputerBuilder() {
+
+		}
+
+		public ComputerBuilder id(int id) {
+			this.id = id;
+			return this;
+		}
+
+		public ComputerBuilder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public ComputerBuilder introduced(LocalDate introduced) {
+			this.introduced = introduced;
+			return this;
+		}
+
+		public ComputerBuilder discontinued(LocalDate discontinued) {
+
+			this.discontinued = discontinued;
+			return this;
+		}
+
+		public ComputerBuilder company(Company company) {
+			this.company = company;
+			return this;
+		}
+
+		public Computer build() {
+			Computer computerTestBuilder = new Computer();
+			computerTestBuilder.id = this.id;
+			computerTestBuilder.name = this.name;
+			computerTestBuilder.introduced = this.introduced;
+			computerTestBuilder.discontinued = this.discontinued;
+			computerTestBuilder.company = this.company;
+			return computerTestBuilder;
+		}
+
+	}
+
 	private int id;
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
-	private int company_id;
+	private Company company;
 
-	public Computer() {
-	}
-
-	public Computer(int id, String name, LocalDate introduced, LocalDate discontinued, int company_id) {
-		this.id = id;
-		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.company_id = company_id;
-	}
-
-	public int getCompany_id() {
-		return company_id;
-	}
-
-	public void setCompany_id(int company_id) {
-		this.company_id = company_id;
+	private Computer() {
 	}
 
 	public int getId() {
@@ -60,10 +95,18 @@ public class Computer {
 		this.discontinued = discontinued;
 	}
 
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
 	@Override
 	public String toString() {
 		return "id : " + id + " | Computer : " + name + " | Introduced : " + introduced + " | Discontinued : "
-				+ discontinued + " | ID Company : " + company_id;
+				+ discontinued + " | ID Company : " + company;
 	}
 
 }

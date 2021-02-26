@@ -7,6 +7,7 @@ import java.util.Optional;
 import main.java.com.excilys.cdb.dao.ComputerDAO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
+import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.model.Computer;
 
 public class ComputerService {
@@ -33,7 +34,6 @@ public class ComputerService {
 
 	public List<Computer> getComputers() throws DAOException {
 		return computerDAO.listComputers();
-
 	}
 
 	public Computer getComputerById(int id) throws ServiceException {
@@ -46,23 +46,23 @@ public class ComputerService {
 
 	}
 
-	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, int company_id) {
-		Computer computer = new Computer();
-		computer.setName(name);
-		computer.setIntroduced(introduced);
-		computer.setDiscontinued(discontinued);
-		computer.setCompany_id(company_id);
+	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, Company company) {
+		Computer computer = new Computer.ComputerBuilder()
+				.introduced(introduced)
+				.discontinued(discontinued)
+				.company(company)
+				.build();
 
 		computerDAO.createComputer(computer);
 	}
 
-	public void modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, int company_id) {
-		Computer computer = new Computer();
-		computer.setId(id);
-		computer.setName(name);
-		computer.setIntroduced(introduced);
-		computer.setDiscontinued(discontinued);
-		computer.setCompany_id(company_id);
+	public void modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
+		Computer computer = new Computer.ComputerBuilder()
+				.id(id).name(name)
+				.introduced(introduced)
+				.discontinued(discontinued)
+				.company(company)
+				.build();
 
 		computerDAO.modifyComputer(computer);
 	}

@@ -8,12 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import main.java.com.excilys.cdb.dto.ComputerDTO;
+import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Computer;
 
 public class ComputerDAO {
 	private static ComputerDAO instanceComputer = null;
 	private DBConnection instanceDB = null;
+	private MappingDTO mappingDTO = MappingDTO.getInstance();
 
 	private ComputerDAO() {
 		instanceDB = DBConnection.getInstance();
@@ -27,13 +30,13 @@ public class ComputerDAO {
 	}
 
 	private static final String FIND_COMPUTERS_WITH_OFFSET_QUERY = "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ?, 20;";
-	private static final String FIND_COMPUTERS_QUERY = "SELECT id, name, introduced, discontinued, company_id FROM computer;";
+	private static final String FIND_COMPUTERS_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id;";
 	private static final String FIND_COMPUTER_QUERY = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?;";
 	private static final String CREATE_COMPUTER_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 	private static final String MODIFY_COMPUTER_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
 	private static final String DELETE_COMPUTER_QUERY = "DELETE FROM computer WHERE id = ?;";
 
-	public List<Computer> listComputersWithOffset(int offset) throws DAOException{
+	public List<Computer> listComputersWithOffset(int offset) throws DAOException {
 
 		List<Computer> resultList = new ArrayList<>();
 		try (Connection connection = instanceDB.connection();
@@ -56,8 +59,8 @@ public class ComputerDAO {
 		}
 		return resultList;
 	}
-	
-	public List<Computer> listComputers() throws DAOException{
+
+	public List<Computer> listComputers() throws DAOException {
 
 		List<Computer> resultList = new ArrayList<>();
 		try (Connection connection = instanceDB.connection();
@@ -66,10 +69,15 @@ public class ComputerDAO {
 			ResultSet resultSet = statement.executeQuery();
 
 			while (resultSet.next()) {
-				Computer computer = new Computer(resultSet.getInt(1), resultSet.getString(2),
-						resultSet.getDate(3) != null ? resultSet.getDate(3).toLocalDate() : null,
-						resultSet.getDate(4) != null ? resultSet.getDate(4).toLocalDate() : null, resultSet.getInt(5));
+				ComputerDTO computerDTO = new ComputerDTO();
+				computerDTO.setId(resultSet.getInt(1));
+				computerDTO.setName(resultSet.getString(2));
+				computerDTO.setIntroduced(resultSet.getString(3));
+				computerDTO.setDiscontinued(resultSet.getString(4));
+				computerDTO.setCompany_id(resultSet.getString(5));
+				computerDTO.setCompany_name(resultSet.getString(6));
 
+				Computer computer = mappingDTO.computerDTOToComputerObject(computerDTO);
 				resultList.add(computer);
 
 			}

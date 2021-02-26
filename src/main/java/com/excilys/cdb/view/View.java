@@ -278,7 +278,7 @@ public class View {
 				break;
 			} else {
 				try {
-					computerList = computerController.getComputersWithOffset(pageNumberComputer);
+					computerList = computerController.getComputers();
 					System.out.println("--- Page number " + pageNumberComputer + " ---");
 					for (Computer computers : computerList) {
 						System.out.println(computers);
