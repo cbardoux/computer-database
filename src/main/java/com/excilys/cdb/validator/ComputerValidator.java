@@ -1,17 +1,23 @@
 package main.java.com.excilys.cdb.validator;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.java.com.excilys.cdb.controller.CompanyController;
+import main.java.com.excilys.cdb.dto.ListComputerDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
+import main.java.com.excilys.cdb.exception.ServiceException;
 import main.java.com.excilys.cdb.exception.ValidatorException;
 import main.java.com.excilys.cdb.model.Company;
-import main.java.com.excilys.cdb.model.Computer;
 
 public class ComputerValidator {
 
 	private static ComputerValidator instance;
 	private CompanyController controllerInstance = CompanyController.getInstance();
+	//private static final Logger logger = LoggerFactory.getLogger(ComputerValidator.class);
 
 	public static ComputerValidator getInstance() {
 		if (instance == null) {
@@ -23,19 +29,32 @@ public class ComputerValidator {
 	private ComputerValidator() {
 	}
 
-	public void validateComputer(Computer Computer) throws ValidatorException {
+	public void validateComputer(ListComputerDTO computerDTO) throws ValidatorException {
 
-		String name = Computer.getName();
-		LocalDate introduced = Computer.getIntroduced();
-		LocalDate discontinued = Computer.getDiscontinued();
-		int company_id = Computer.getCompany_id();
+		int company_id;
+		LocalDate introduced;
+		LocalDate discontinued;
 
-		if (introduced.isAfter(discontinued)) {
-			throw new ValidatorException("Introduced date must be before discontinnued date");
+		if (computerDTO.name.equals("")) {
+			throw new ValidatorException("Name must not be null");
 		}
 
-		if (name == null) {
-			throw new ValidatorException("Name must not be null");
+		try {
+			company_id = Integer.parseInt(computerDTO.company_id);
+		} catch (Exception e) {
+			company_id = 0;
+		}
+
+		try {
+			introduced = Date.valueOf(computerDTO.introduced).toLocalDate();
+			discontinued = Date.valueOf(computerDTO.discontinued).toLocalDate();
+		} catch (Exception e1) {
+			introduced = null;
+			discontinued = null;
+		}
+
+		if (introduced != null && introduced.isAfter(discontinued)) {
+			throw new ValidatorException("Introduced date must be before discontinued date");
 		}
 
 		boolean isCompanyIdExist = false;

@@ -10,7 +10,6 @@ import main.java.com.excilys.cdb.model.Computer;
 public class MappingDTO {
 
 	private DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
-	private DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	private static MappingDTO instance = null;
 
@@ -29,13 +28,13 @@ public class MappingDTO {
 		int company_id;
 		String company_name;
 
-		introduced = stringToLocalDate(computerDTO.getIntroduced(), formatterTime);
+		introduced = stringToLocalDate(computerDTO.introduced, formatterTime);
 
-		discontinued = stringToLocalDate(computerDTO.getDiscontinued(), formatterTime);
+		discontinued = stringToLocalDate(computerDTO.discontinued, formatterTime);
 
 		try {
-			company_id = Integer.parseInt(computerDTO.getCompany_id());
-			company_name = computerDTO.getCompany_name();
+			company_id = Integer.parseInt(computerDTO.company_id);
+			company_name = computerDTO.company_name;
 			company.setId(company_id);
 			company.setName(company_name);
 		} catch (Exception e) {
@@ -43,8 +42,8 @@ public class MappingDTO {
 		}
 
 		Computer computer = new Computer.ComputerBuilder()
-				.id(computerDTO.getId())
-				.name(computerDTO.getName())
+				.id(computerDTO.id)
+				.name(computerDTO.name)
 				.introduced(introduced)
 				.discontinued(discontinued)
 				.company(company)
@@ -52,21 +51,21 @@ public class MappingDTO {
 
 		return computer;
 	}
-	
+
 	public Computer getComputerByIdDTOToComputerObject(ListComputerDTO computerDTO) {
 
 		Company company = new Company();
 		LocalDate introduced;
-		LocalDate discontinued;		
+		LocalDate discontinued;
 
-		introduced = stringToLocalDate(computerDTO.getIntroduced(), formatterTime);
+		introduced = stringToLocalDate(computerDTO.introduced, formatterTime);
 
-		discontinued = stringToLocalDate(computerDTO.getDiscontinued(), formatterTime);
-		
-		company.setName(computerDTO.getName());
-		
+		discontinued = stringToLocalDate(computerDTO.discontinued, formatterTime);
+
+		company.setName(computerDTO.name);
+
 		Computer computer = new Computer.ComputerBuilder()
-				.name(computerDTO.getName())
+				.name(computerDTO.name)
 				.introduced(introduced)
 				.discontinued(discontinued)
 				.company(company)
@@ -74,27 +73,36 @@ public class MappingDTO {
 
 		return computer;
 	}
-	
+
 	public Computer createComputerDTOToComputerObject(ListComputerDTO computerDTO) {
 
 		Company company = new Company();
 		LocalDate introduced;
-		LocalDate discontinued;		
+		LocalDate discontinued;
 
-		introduced = stringToLocalDate(computerDTO.getIntroduced(), formatterDate);
-
-		discontinued = stringToLocalDate(computerDTO.getDiscontinued(), formatterDate);
+		
+			try {
+				introduced = Date.valueOf(computerDTO.introduced).toLocalDate();
+			} catch (Exception e) {
+				introduced = null;
+			}
+		
+			try {
+				discontinued = Date.valueOf(computerDTO.discontinued).toLocalDate();
+			} catch (Exception e1) {
+				discontinued = null;
+			}
 		
 
 		try {
-			company.setId(Integer.parseInt(computerDTO.getCompany_id()));
+			company.setId(Integer.parseInt(computerDTO.company_id));
 		} catch (NumberFormatException e) {
 			company.setId(0);
 		}
 
-		
-		Computer computer = new Computer.ComputerBuilder()
-				.name(computerDTO.getName())
+		Computer computer = new Computer
+				.ComputerBuilder()
+				.name(computerDTO.name)
 				.introduced(introduced)
 				.discontinued(discontinued)
 				.company(company)
@@ -102,23 +110,35 @@ public class MappingDTO {
 
 		return computer;
 	}
-	
-	public ListComputerDTO computerObjectToCreateComputerDTO(Computer computer) {
-		ListComputerDTO computerDTO = new ListComputerDTO();
-				
-		computerDTO.setName(computer.getName());
-		computerDTO.setIntroduced(computer.getIntroduced().toString());
-		computerDTO.setDiscontinued(computer.getDiscontinued().toString());
-		if(computer.getCompany().getId() == 0) {
-			computerDTO.setCompany_id(null);
+
+	public ComputerDTOForDB computerObjectToCreateComputerDTO(Computer computer) {
+
+		ComputerDTOForDB computerDTO = new ComputerDTOForDB();
+
+		System.out.println("d" + computerDTO);
+
+		computerDTO.name = computer.getName();
+		System.out.println("e" + computerDTO);
+		try {
+			computerDTO.introduced = Date.valueOf(computer.getIntroduced());
+			computerDTO.discontinued = Date.valueOf(computer.getDiscontinued());
+		} catch (Exception e) {
+			computerDTO.introduced = null;
+			computerDTO.discontinued = null;
+		}
+		System.out.println("h" + computerDTO);
+		
+		if (computer.getCompany().getId() == 0) {
+			computerDTO.company_id = null;
 		} else {
-			computerDTO.setCompany_id(Integer.toString(computer.getCompany().getId()));
+			computerDTO.company_id = Integer.toString(computer.getCompany().getId());
 		}
 
-		
+		System.out.println("e" + computerDTO);
+
 		return computerDTO;
 	}
-	
+
 	private LocalDate stringToLocalDate(String stringDate, DateTimeFormatter formatter) {
 		LocalDate date;
 		try {
@@ -126,7 +146,6 @@ public class MappingDTO {
 		} catch (Exception e) {
 			date = null;
 		}
-
 		return date;
 	}
 }

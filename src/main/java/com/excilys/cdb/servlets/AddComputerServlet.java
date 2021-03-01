@@ -13,9 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import main.java.com.excilys.cdb.dto.ListComputerDTO;
 import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
+import main.java.com.excilys.cdb.exception.ValidatorException;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.service.CompanyService;
 import main.java.com.excilys.cdb.service.ComputerService;
+import main.java.com.excilys.cdb.validator.ComputerValidator;
 
 @WebServlet("/home/add")
 public class AddComputerServlet extends HttpServlet {
@@ -24,6 +26,7 @@ public class AddComputerServlet extends HttpServlet {
 	ComputerService instanceComputerService = ComputerService.getInstance();
 	CompanyService instanceCompany = CompanyService.getInstance();
 	MappingDTO instanceMapping = MappingDTO.getInstance();
+	ComputerValidator instanceValidator = ComputerValidator.getInstance();
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -43,23 +46,27 @@ public class AddComputerServlet extends HttpServlet {
 
 		ListComputerDTO computerDTO = new ListComputerDTO();
 		
+		System.out.println("test" + request.getParameter("introduced"));
 		
-		computerDTO.setName(request.getParameter("name"));
-		computerDTO.setIntroduced(request.getParameter("introduced"));
-		computerDTO.setDiscontinued(request.getParameter("discontinued"));
-		computerDTO.setCompany_id(request.getParameter("company_id"));
+		computerDTO.name = request.getParameter("name");
+		computerDTO.introduced = request.getParameter("introduced");
+		computerDTO.discontinued = request.getParameter("discontinued");
+		computerDTO.company_id = request.getParameter("company_id");
 		
-		System.out.println(computerDTO);
-		Computer computer = instanceMapping.createComputerDTOToComputerObject(computerDTO);
-		System.out.println(computer);
-		
-		RequestDispatcher dispatcher = null;
+		//RequestDispatcher dispatcher = null;
 
 		try {
+			instanceValidator.validateComputer(computerDTO);
+		
+			System.out.println(computerDTO);
+			Computer computer = instanceMapping.createComputerDTOToComputerObject(computerDTO);
+			System.out.println(computer);
+		
+			
 			instanceComputerService.createComputer(computer);
 			response.sendRedirect("/cdb/home");
 		} catch (Exception e) {
-			dispatcher = request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp");
 			request.setAttribute("error", true);
 			request.setAttribute("errorMessage", e.getMessage());
 			dispatcher.forward(request, response);

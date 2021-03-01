@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import main.java.com.excilys.cdb.dto.GetComputerByIdDTO;
+import main.java.com.excilys.cdb.dto.ComputerDTOForDB;
 import main.java.com.excilys.cdb.dto.ListComputerDTO;
 import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
@@ -72,12 +72,12 @@ public class ComputerDAO {
 
 			while (resultSet.next()) {
 				
-				computerDTO.setId(resultSet.getInt(1));
-				computerDTO.setName(resultSet.getString(2));
-				computerDTO.setIntroduced(resultSet.getString(3));
-				computerDTO.setDiscontinued(resultSet.getString(4));
-				computerDTO.setCompany_id(resultSet.getString(5));
-				computerDTO.setCompany_name(resultSet.getString(6));
+				computerDTO.id = resultSet.getInt(1);
+				computerDTO.name = resultSet.getString(2);
+				computerDTO.introduced = resultSet.getString(3);
+				computerDTO.discontinued = resultSet.getString(4);
+				computerDTO.company_id = resultSet.getString(5);
+				computerDTO.company_name = resultSet.getString(6);
 				
 				Computer computer = mappingDTO.listComputerDTOToComputerObject(computerDTO);
 				resultList.add(computer);
@@ -100,10 +100,10 @@ public class ComputerDAO {
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				computerDTO.setName(resultSet.getString(1));
-				computerDTO.setIntroduced(resultSet.getString(2));
-				computerDTO.setDiscontinued(resultSet.getString(3));
-				computerDTO.setCompany_name(resultSet.getString(4));
+				computerDTO.name = resultSet.getString(1);
+				computerDTO.introduced = resultSet.getString(2);
+				computerDTO.discontinued = resultSet.getString(3);
+				computerDTO.company_name = resultSet.getString(4);
 				
 				Computer computer = mappingDTO.getComputerByIdDTOToComputerObject(computerDTO);
 				optionalComputer = Optional.of(computer);
@@ -117,15 +117,17 @@ public class ComputerDAO {
 	}
 
 	public void createComputer(Computer computer) {
+		
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(CREATE_COMPUTER_QUERY)) {
-
-			ListComputerDTO computerDTO = mappingDTO.computerObjectToCreateComputerDTO(computer);
-			System.out.println("b" + computerDTO);
-			statement.setString(1, computerDTO.getName());
-			statement.setDate(2, Date.valueOf(computerDTO.getIntroduced()));
-			statement.setDate(3, Date.valueOf(computerDTO.getDiscontinued()));
-			statement.setString(4, computerDTO.getCompany_id());
+			
+			System.out.println("b" + computer);
+			ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTO(computer);
+			System.out.println("c" + computerDTO);
+			statement.setString(1, computerDTO.name);
+			statement.setDate(2, computerDTO.introduced);
+			statement.setDate(3, computerDTO.discontinued);
+			statement.setString(4, computerDTO.company_id);
 
 			statement.executeUpdate();
 
