@@ -17,7 +17,7 @@ public class ComputerValidator {
 
 	private static ComputerValidator instance;
 	private CompanyController controllerInstance = CompanyController.getInstance();
-	//private static final Logger logger = LoggerFactory.getLogger(ComputerValidator.class);
+	ValidatorException validatorException = new ValidatorException();
 
 	public static ComputerValidator getInstance() {
 		if (instance == null) {
@@ -36,6 +36,7 @@ public class ComputerValidator {
 		LocalDate discontinued;
 
 		if (computerDTO.name.equals("")) {
+			validatorException.NoNameEntered();
 			throw new ValidatorException("Name must not be null");
 		}
 
@@ -54,6 +55,7 @@ public class ComputerValidator {
 		}
 
 		if (introduced != null && introduced.isAfter(discontinued)) {
+			validatorException.IntroducedDateMustBeBeforeDiscontinued();
 			throw new ValidatorException("Introduced date must be before discontinued date");
 		}
 

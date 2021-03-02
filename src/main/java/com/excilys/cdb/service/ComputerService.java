@@ -1,14 +1,13 @@
 package main.java.com.excilys.cdb.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import main.java.com.excilys.cdb.dao.ComputerDAO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
-import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.model.Computer;
+import main.java.com.excilys.cdb.model.Page;
 
 public class ComputerService {
 	private static ComputerService instance = null;
@@ -25,12 +24,9 @@ public class ComputerService {
 		return instance;
 	}
 
-//	public List<Computer> getComputersWithOffset(int page) throws DAOException {
-//		int offset = (page - 1) * LIMIT_PAGINATION;
-//
-//		return computerDAO.listComputersWithOffset(offset);
-//
-//	}
+	public Page<Computer> getComputersWithOffset(Page<Computer> page) throws DAOException {
+		return computerDAO.listComputersWithOffset(page);
+	}
 
 	public List<Computer> getComputers() throws DAOException {
 		return computerDAO.listComputers();
@@ -51,18 +47,22 @@ public class ComputerService {
 		computerDAO.createComputer(computer);
 	}
 
-	public void modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
-		Computer computer = new Computer.ComputerBuilder()
-				.id(id).name(name)
-				.introduced(introduced)
-				.discontinued(discontinued)
-				.company(company)
-				.build();
-
-		computerDAO.modifyComputer(computer);
-	}
+//	public void modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
+//		Computer computer = new Computer.ComputerBuilder()
+//				.id(id).name(name)
+//				.introduced(introduced)
+//				.discontinued(discontinued)
+//				.company(company)
+//				.build();
+//
+//		computerDAO.modifyComputer(computer);
+//	}
 
 	public void deleteComputer(int id) {
 		computerDAO.deleteComputer(id);
+	}
+
+	public int countRows() throws DAOException {
+		return computerDAO.countRows();
 	}
 }

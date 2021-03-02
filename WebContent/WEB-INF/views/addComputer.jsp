@@ -25,7 +25,7 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="name">Computer name</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Computer name">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Computer name" required>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
@@ -49,6 +49,9 @@
                             <input type="submit" value="Add" class="btn btn-primary">
                             or
                             <a href="${pageContext.request.contextPath}/home" class="btn btn-default">Cancel</a>
+                        </div>
+                        <div>
+                            ${errorMessage}
                         </div>
                     </form>
                 </div>

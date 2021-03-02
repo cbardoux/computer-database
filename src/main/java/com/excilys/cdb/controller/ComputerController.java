@@ -23,9 +23,9 @@ public class ComputerController {
 		return instanceController;
 	}
 
-	public List<Computer> getComputersWithOffset(int page) throws DAOException {
-		return computerService.getComputersWithOffset(page);
-	}
+//	public List<Computer> getComputersWithOffset(int page) throws DAOException {
+//		return computerService.getComputersWithOffset(page);
+//	}
 	
 	public List<Computer> getComputers() throws DAOException {
 		return computerService.getComputers();
@@ -35,13 +35,13 @@ public class ComputerController {
 		return computerService.getComputerById(id);
 	}
 
-	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, Company company) {
-		computerService.createComputer(name, introduced, discontinued, company);
-	}
-
-	public void modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
-		computerService.modifyComputer(id, name, introduced, discontinued, company);
-	}
+//	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, Company company) {
+//		computerService.createComputer(name, introduced, discontinued, company);
+//	}
+//
+//	public void modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
+//		computerService.modifyComputer(id, name, introduced, discontinued, company);
+//	}
 
 	public void deleteComputer(int id) {
 		computerService.deleteComputer(id);

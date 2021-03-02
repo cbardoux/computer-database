@@ -20,7 +20,7 @@ import main.java.com.excilys.cdb.model.Computer;
 public class View {
 
 	private CompanyController companyController = CompanyController.getInstance();
-	private ComputerController computerController = ComputerController.getInstance();
+	//private ComputerController computerController = ComputerController.getInstance();
 	private Scanner inputUser = new Scanner(System.in);
 	private static final Logger logger = LoggerFactory.getLogger(View.class);
 
@@ -76,91 +76,91 @@ public class View {
 		System.out.println("Enter an id to delete :");
 		int deleteId = inputUser.nextInt();
 		inputUser.nextLine();
-		computerController.deleteComputer(deleteId);
+		//computerController.deleteComputer(deleteId);
 		System.out.println("The computer with id " + deleteId + " has been deleted with success");
 	}
 
 	private void modifyComputer() {
-		System.out.println("--- Update a computer ---");
-		Computer computer = null;
-		int modifyId = 0;
-		while (true) {
-			System.out.println("Enter a computer id :");
-			modifyId = inputUser.nextInt();
-			inputUser.nextLine();
-			try {
-				computer = computerController.getComputerById(modifyId);
-				System.out.println(computer);
-				break;
-			} catch (ServiceException e1) {
-				e1.WrongID();
-			}
-		}
-
-		String modifyName = computer.getName();
-		while (true) {
-			System.out.println("Enter a name :");
-			String inputName = inputUser.nextLine();
-			if (!inputName.equals("")) {
-				try {
-					modifyName = inputName;
-					break;
-				} catch (Exception e) {
-					logger.info("Please enter a valid name");
-				}
-			}
-		}
-
-		LocalDate modifyIntroduced = computer.getIntroduced();
-		while (true) {
-			System.out.println("Enter an introduced date :");
-			String inputIntroduced = inputUser.nextLine();
-			if (!inputIntroduced.equals("")) {
-				try {
-					modifyIntroduced = Date.valueOf(inputIntroduced).toLocalDate();
-					break;
-				} catch (Exception e) {
-					logger.info("Please enter a valid date yyyy-mm-dd");
-				}
-			}
-		}
-
-		LocalDate modifyDiscontinued = computer.getDiscontinued();
-		while (true) {
-			System.out.println("Enter a discontinued date :");
-			String inputDiscontinued = inputUser.nextLine();
-
-			if (!inputDiscontinued.equals("")) {
-				try {
-					modifyDiscontinued = Date.valueOf(inputDiscontinued).toLocalDate();
-					break;
-				} catch (Exception e) {
-					logger.info("Please enter a valid date yyyy-mm-dd");
-				}
-			}
-		}
-
-		int modifyCompanyId = computer.getCompany_id();
-		while (true) {
-			System.out.println("Enter a company_id");
-			String inputCompanyId = inputUser.nextLine();
-
-			if (!inputCompanyId.equals("")) {
-				try {
-					modifyCompanyId = Integer.parseInt(inputCompanyId);
-					break;
-				} catch (Exception e) {
-					logger.info("Please enter a valid company id");
-				}
-			}
-		}
-
-		computerController.modifyComputer(modifyId, modifyName, modifyIntroduced, modifyDiscontinued, modifyCompanyId);
-		try {
-			System.out.println(computerController.getComputerById(modifyId));
-		} catch (ServiceException e) {
-			e.WrongID();
-		}
+//		System.out.println("--- Update a computer ---");
+//		Computer computer = null;
+//		int modifyId = 0;
+//		while (true) {
+//			System.out.println("Enter a computer id :");
+//			modifyId = inputUser.nextInt();
+//			inputUser.nextLine();
+//			try {
+//				computer = computerController.getComputerById(modifyId);
+//				System.out.println(computer);
+//				break;
+//			} catch (ServiceException e1) {
+//				e1.WrongID();
+//			}
+//		}
+//
+//		String modifyName = computer.getName();
+//		while (true) {
+//			System.out.println("Enter a name :");
+//			String inputName = inputUser.nextLine();
+//			if (!inputName.equals("")) {
+//				try {
+//					modifyName = inputName;
+//					break;
+//				} catch (Exception e) {
+//					logger.info("Please enter a valid name");
+//				}
+//			}
+//		}
+//
+//		LocalDate modifyIntroduced = computer.getIntroduced();
+//		while (true) {
+//			System.out.println("Enter an introduced date :");
+//			String inputIntroduced = inputUser.nextLine();
+//			if (!inputIntroduced.equals("")) {
+//				try {
+//					modifyIntroduced = Date.valueOf(inputIntroduced).toLocalDate();
+//					break;
+//				} catch (Exception e) {
+//					logger.info("Please enter a valid date yyyy-mm-dd");
+//				}
+//			}
+//		}
+//
+//		LocalDate modifyDiscontinued = computer.getDiscontinued();
+//		while (true) {
+//			System.out.println("Enter a discontinued date :");
+//			String inputDiscontinued = inputUser.nextLine();
+//
+//			if (!inputDiscontinued.equals("")) {
+//				try {
+//					modifyDiscontinued = Date.valueOf(inputDiscontinued).toLocalDate();
+//					break;
+//				} catch (Exception e) {
+//					logger.info("Please enter a valid date yyyy-mm-dd");
+//				}
+//			}
+//		}
+//
+//		int modifyCompanyId = computer.getCompany_id();
+//		while (true) {
+//			System.out.println("Enter a company_id");
+//			String inputCompanyId = inputUser.nextLine();
+//
+//			if (!inputCompanyId.equals("")) {
+//				try {
+//					modifyCompanyId = Integer.parseInt(inputCompanyId);
+//					break;
+//				} catch (Exception e) {
+//					logger.info("Please enter a valid company id");
+//				}
+//			}
+//		}
+//
+//		computerController.modifyComputer(modifyId, modifyName, modifyIntroduced, modifyDiscontinued, modifyCompanyId);
+//		try {
+//			System.out.println(computerController.getComputerById(modifyId));
+//		} catch (ServiceException e) {
+//			e.WrongID();
+//		}
 	}
 
 	private void createComputer() {
@@ -225,7 +225,7 @@ public class View {
 			}
 		}
 
-		computerController.createComputer(createName, createIntroduced, createDiscontinued, companyId);
+		//computerController.createComputer(createName, createIntroduced, createDiscontinued, companyId);
 		System.out.println("The computer has been created with success");
 	}
 
@@ -234,12 +234,12 @@ public class View {
 		System.out.println("Enter an id to search for :");
 		int id = inputUser.nextInt();
 		inputUser.nextLine();
-		try {
-			Computer computer = computerController.getComputerById(id);
-			System.out.println(computer);
-		} catch (ServiceException e) {
-			e.WrongID();
-		}
+//		try {
+//			Computer computer = computerController.getComputerById(id);
+//			System.out.println(computer);
+//		} catch (ServiceException e) {
+//			e.WrongID();
+//		}
 	}
 
 	private void listCompanies() {
@@ -277,15 +277,15 @@ public class View {
 			if (pageNumberComputer == 0) {
 				break;
 			} else {
-				try {
-					computerList = computerController.getComputers();
-					System.out.println("--- Page number " + pageNumberComputer + " ---");
-					for (Computer computers : computerList) {
-						System.out.println(computers);
-					}
-				} catch (DAOException e) {
-					e.WrongPageNumber();
-				}
+//				try {
+//					computerList = computerController.getComputers();
+//					System.out.println("--- Page number " + pageNumberComputer + " ---");
+//					for (Computer computers : computerList) {
+//						System.out.println(computers);
+//					}
+//				} catch (DAOException e) {
+//					e.WrongPageNumber();
+//				}
 			}
 		}
 	}

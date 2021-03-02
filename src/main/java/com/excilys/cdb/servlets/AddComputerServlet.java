@@ -58,16 +58,12 @@ public class AddComputerServlet extends HttpServlet {
 		try {
 			instanceValidator.validateComputer(computerDTO);
 		
-			System.out.println(computerDTO);
-			Computer computer = instanceMapping.createComputerDTOToComputerObject(computerDTO);
-			System.out.println(computer);
-		
+			Computer computer = instanceMapping.createComputerDTOToComputerObject(computerDTO);		
 			
 			instanceComputerService.createComputer(computer);
 			response.sendRedirect("/cdb/home");
 		} catch (Exception e) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp");
-			request.setAttribute("error", true);
 			request.setAttribute("errorMessage", e.getMessage());
 			dispatcher.forward(request, response);
 

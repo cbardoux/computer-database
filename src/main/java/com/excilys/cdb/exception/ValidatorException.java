@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 public class ValidatorException extends Exception {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(ServiceException.class);
+	private static final Logger logger = LoggerFactory.getLogger(ValidatorException.class);
 
 	public ValidatorException() {
 		super();
@@ -24,8 +24,12 @@ public class ValidatorException extends Exception {
 		logger.info("The page number entered is not good");
 	}
 
-	public void ValidationProblem() {
-		logger.info("There was a validation problem with the computerDTO");
+	public void NoNameEntered() {
+		logger.info("You must enter a name");
+	}
+	
+	public void IntroducedDateMustBeBeforeDiscontinued() {
+		logger.info("Enter valid dates");
 	}
 
 }

@@ -20,7 +20,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">121 Computers found</h1>
+			<h1 id="homeTitle">${rows} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -85,6 +85,9 @@
 				</tbody>
 			</table>
 		</div>
+		<div>
+            ${errorMessage}
+        </div>
 	</section>
 
 	<footer class="navbar-fixed-bottom">
@@ -93,11 +96,14 @@
 				<li><a href="#" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
+				<c:forEach var="i" begin="1" end="5"
+					step="1">
+					<li><a
+						href="<c:url value="/home">
+				  		<c:param name="index" value="${i}"/>
+						</c:url>">
+					${i}</a></li>
+				</c:forEach>
 				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
