@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.java.com.excilys.cdb.dto.ComputerDTOForDB;
 import main.java.com.excilys.cdb.dto.ListComputerDTO;
 import main.java.com.excilys.cdb.dto.MappingDTO;
@@ -19,6 +22,7 @@ public class ComputerDAO {
 	private static ComputerDAO instanceComputer = null;
 	private DBConnection instanceDB = null;
 	private MappingDTO mappingDTO = MappingDTO.getInstance();
+	private static final Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
 	private ComputerDAO() {
 		instanceDB = DBConnection.getInstance();
@@ -39,7 +43,7 @@ public class ComputerDAO {
 	private static final String DELETE_COMPUTER_QUERY = "DELETE FROM computer WHERE id = ?;";
 	private static final String COUNT_ROWS = "SELECT COUNT(id) FROM computer;";
 
-	public Page<Computer> listComputersWithOffset(Page<Computer> page) throws DAOException {
+	public Page<Computer> listComputersWithOffset(Page<Computer> page) {
 
 		ListComputerDTO computerDTO = new ListComputerDTO();
 		List<Computer> resultList = new ArrayList<>();
@@ -66,12 +70,12 @@ public class ComputerDAO {
 			page.setContent(resultList);
 
 		} catch (SQLException e) {
-			throw new DAOException(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return page;
 	}
 
-	public List<Computer> listComputers() throws DAOException {
+	public List<Computer> listComputers() {
 		ListComputerDTO computerDTO = new ListComputerDTO();
 		List<Computer> resultList = new ArrayList<>();
 		try (Connection connection = instanceDB.connection();
@@ -94,12 +98,12 @@ public class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return resultList;
 	}
 
-	public Optional<Computer> getComputerById(int id) throws DAOException {
+	public Optional<Computer> getComputerById(int id) {
 
 		ListComputerDTO computerDTO = new ListComputerDTO();
 		Optional<Computer> optionalComputer;
@@ -120,19 +124,18 @@ public class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return Optional.empty();
 	}
 
-	public void createComputer(Computer computer) throws DAOException {
+	public void createComputer(Computer computer) {
 
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(CREATE_COMPUTER_QUERY)) {
 
-			System.out.println("b" + computer);
 			ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
-			System.out.println("c" + computerDTO);
+
 			statement.setString(1, computerDTO.name);
 			statement.setDate(2, computerDTO.introduced);
 			statement.setDate(3, computerDTO.discontinued);
@@ -141,7 +144,7 @@ public class ComputerDAO {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			throw new DAOException(e.getLocalizedMessage());
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -164,7 +167,7 @@ public class ComputerDAO {
 //		}
 //	}
 
-	public void deleteComputer(int id) throws DAOException {
+	public void deleteComputer(int id) {
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(DELETE_COMPUTER_QUERY)) {
 
@@ -172,11 +175,11 @@ public class ComputerDAO {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			throw new DAOException(e.getLocalizedMessage());
+			logger.error(e.getMessage());
 		}
 	}
 
-	public int countRows() throws DAOException {
+	public int countRows() {
 		int countRows = 0;
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(COUNT_ROWS)) {
@@ -186,7 +189,7 @@ public class ComputerDAO {
 			countRows = resultSet.getInt(1);
 
 		} catch (SQLException e) {
-			throw new DAOException(e.getLocalizedMessage());
+			logger.error(e.getMessage());
 		}
 		return countRows;
 	}

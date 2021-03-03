@@ -4,10 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import main.java.com.excilys.cdb.exception.ServiceException;
+
 public class DBConnection {
 
 	private static DBConnection instance = null;
 	private Connection connectionDB = null;
+	private static final Logger logger = LoggerFactory.getLogger(DBConnection.class);
 
 	private DBConnection() {}
 	
@@ -24,7 +30,7 @@ public class DBConnection {
 			connectionDB = DriverManager.getConnection("jdbc:mysql://localhost:3306/computer-database-db", "admincdb",
 					"qwerty1234");
 		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
+			logger.error("An error has occured on the db connection : ", e);
 		}
 		return connectionDB;
 

@@ -3,21 +3,15 @@ package main.java.com.excilys.cdb.validator;
 import java.sql.Date;
 import java.time.LocalDate;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import main.java.com.excilys.cdb.controller.CompanyController;
 import main.java.com.excilys.cdb.dto.ListComputerDTO;
-import main.java.com.excilys.cdb.exception.DAOException;
-import main.java.com.excilys.cdb.exception.ServiceException;
 import main.java.com.excilys.cdb.exception.ValidatorException;
 import main.java.com.excilys.cdb.model.Company;
+import main.java.com.excilys.cdb.service.CompanyService;
 
 public class ComputerValidator {
 
 	private static ComputerValidator instance;
-	private CompanyController controllerInstance = CompanyController.getInstance();
-	ValidatorException validatorException = new ValidatorException();
+	private CompanyService controllerInstance = CompanyService.getInstance();
 
 	public static ComputerValidator getInstance() {
 		if (instance == null) {
@@ -36,7 +30,6 @@ public class ComputerValidator {
 		LocalDate discontinued;
 
 		if (computerDTO.name.equals("")) {
-			validatorException.NoNameEntered();
 			throw new ValidatorException("Name must not be null");
 		}
 
@@ -48,15 +41,22 @@ public class ComputerValidator {
 
 		try {
 			introduced = Date.valueOf(computerDTO.introduced).toLocalDate();
-			discontinued = Date.valueOf(computerDTO.discontinued).toLocalDate();
-		} catch (Exception e1) {
+		} catch (Exception e) {
 			introduced = null;
+		}
+		
+		try {
+			discontinued = Date.valueOf(computerDTO.discontinued).toLocalDate();
+		} catch (Exception e) {
 			discontinued = null;
 		}
 
 		if (introduced != null && introduced.isAfter(discontinued)) {
-			validatorException.IntroducedDateMustBeBeforeDiscontinued();
 			throw new ValidatorException("Introduced date must be before discontinued date");
+		}
+
+		if (introduced == null && discontinued != null) {
+			throw new ValidatorException("Cannot enter a discontinued date with no introduced date");
 		}
 
 		boolean isCompanyIdExist = false;
@@ -64,15 +64,11 @@ public class ComputerValidator {
 		if (company_id == 0) {
 			isCompanyIdExist = true;
 		} else {
-			try {
-				for (Company userlist : controllerInstance.getCompanies()) {
-					if (userlist.getId() == company_id) {
-						isCompanyIdExist = true;
-						break;
-					}
+			for (Company userlist : controllerInstance.getCompanies()) {
+				if (userlist.getId() == company_id) {
+					isCompanyIdExist = true;
+					break;
 				}
-			} catch (DAOException e) {
-				e.CompanyListError();
 			}
 		}
 

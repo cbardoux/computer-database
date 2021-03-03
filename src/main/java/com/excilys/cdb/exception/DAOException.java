@@ -14,7 +14,6 @@ public class DAOException extends Exception {
 
 	public DAOException(String msg) {
 		super(msg);
-		logger.info(msg);
 	}
 	
 	public void WrongPageNumber() {

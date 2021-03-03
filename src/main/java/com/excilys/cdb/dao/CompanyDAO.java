@@ -7,12 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Company;
 
 public class CompanyDAO {
 	private static CompanyDAO instanceCompany = null;
 	private DBConnection instanceDB = null;
+	private static final Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
 	private CompanyDAO() {
 		this.instanceDB = DBConnection.getInstance();
@@ -28,7 +32,7 @@ public class CompanyDAO {
 	private static final String FIND_COMPANIES_WITH_OFFSET_QUERY = "SELECT id, name FROM company LIMIT ?, 20;";
 	private static final String FIND_COMPANIES_QUERY = "SELECT id, name FROM company;";
 
-	public List<Company> listCompaniesWithOffset(int offset) throws DAOException {
+	public List<Company> listCompaniesWithOffset(int offset) {
 
 		List<Company> resultList = new ArrayList<>();
 		try (Connection connection = instanceDB.connection();
@@ -44,12 +48,12 @@ public class CompanyDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException();
+			logger.error(e.getMessage());
 		}
 		return resultList;
 	}
 	
-	public List<Company> listCompanies() throws DAOException {
+	public List<Company> listCompanies() {
 
 		List<Company> resultList = new ArrayList<>();
 		try (Connection connection = instanceDB.connection();
@@ -64,7 +68,7 @@ public class CompanyDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException();
+			logger.error(e.getMessage());
 		}
 		return resultList;
 	}

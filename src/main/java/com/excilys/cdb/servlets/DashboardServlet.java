@@ -29,8 +29,8 @@ public class DashboardServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp");
+		
 		HttpSession session = request.getSession();
 		Page<Computer> page = (Page<Computer>) session.getAttribute("page");
 		if (page == null) {
@@ -39,37 +39,33 @@ public class DashboardServlet extends HttpServlet {
 		}
 
 		ArrayList<ListComputerDTO> computerDTOList = new ArrayList<>();
-
-		try {
-			request.setAttribute("rows", instanceService.countRows());
-			int numberOfRows = instanceService.countRows();
-			int limit = page.getLimit();
-			int indexMax = numberOfRows % limit == 0 ? numberOfRows / limit : numberOfRows / limit + 1;
-			if (request.getParameter("index") != null) {
-				try {
-					page.setIndex(Integer.parseInt(request.getParameter("index")));
-				} catch (NumberFormatException numberFormatExceptoin) {
-					request.setAttribute("errorMessage", "No index found");
-				}
-			} else if (request.getParameter("limit") != null) {
-				try {
-					page.setLimit(Integer.parseInt(request.getParameter("limit")));
-					page.setIndex(INDEX_MIN);
-				} catch (NumberFormatException numberFormatExceptoin) {
-					request.setAttribute("errorMessage", "No limit found");
-				}
+		int numberOfRows = instanceService.countRows();
+		int limit = page.getLimit();
+		int indexMax = numberOfRows % limit == 0 ? numberOfRows / limit : numberOfRows / limit + 1;
+		
+		if (request.getParameter("index") != null) {
+			try {
+				page.setIndex(Integer.parseInt(request.getParameter("index")));
+			} catch (NumberFormatException numberFormatException) {
+				request.setAttribute("errorMessage", numberFormatException);
 			}
-
-			for (Computer computer : instanceService.getComputersWithOffset(page).getContent()) {
-				computerDTOList.add(mapping.computerObjectToCreateComputerDTO(computer));
+		} else if (request.getParameter("limit") != null) {
+			try {
+				page.setLimit(Integer.parseInt(request.getParameter("limit")));
+				page.setIndex(INDEX_MIN);
+			} catch (NumberFormatException numberFormatException) {
+				request.setAttribute("errorMessage", numberFormatException);
 			}
-			request.setAttribute("computers", computerDTOList);
-			request.setAttribute("indexLow", page.valueOfIndexLow(indexMax));
-			request.setAttribute("indexHigh", page.valueOfIndexHigh(indexMax));
-			request.setAttribute("indexMax", indexMax);
-		} catch (DAOException e) {
-			e.printStackTrace();
 		}
+
+		for (Computer computer : instanceService.getComputersWithOffset(page).getContent()) {
+			computerDTOList.add(mapping.computerObjectToCreateComputerDTO(computer));
+		}
+		request.setAttribute("rows", instanceService.countRows());
+		request.setAttribute("computers", computerDTOList);
+		request.setAttribute("indexLow", page.valueOfIndexLow(indexMax));
+		request.setAttribute("indexHigh", page.valueOfIndexHigh(indexMax));
+		request.setAttribute("indexMax", indexMax);
 
 		dispatcher.forward(request, response);
 

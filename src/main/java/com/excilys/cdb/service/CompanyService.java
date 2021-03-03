@@ -22,7 +22,7 @@ public class CompanyService {
 		return instance;
 	}
 
-	public List<Company> getCompaniesWithOffset(int page) throws DAOException {
+	public List<Company> getCompaniesWithOffset(int page) {
 		List<Company> listCompanies = new ArrayList<>();
 
 		int offset = (page - 1) * LIMIT_PAGINATION;
@@ -31,7 +31,7 @@ public class CompanyService {
 		return listCompanies;
 	}
 	
-	public List<Company> getCompanies() throws DAOException {
+	public List<Company> getCompanies() {
 		return companyDAO.listCompanies();
 	}
 
