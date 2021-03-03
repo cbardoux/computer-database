@@ -61,6 +61,7 @@ public class DashboardServlet extends HttpServlet {
 		for (Computer computer : instanceService.getComputersWithOffset(page).getContent()) {
 			computerDTOList.add(mapping.computerObjectToCreateComputerDTO(computer));
 		}
+		
 		request.setAttribute("rows", instanceService.countRows());
 		request.setAttribute("computers", computerDTOList);
 		request.setAttribute("indexLow", page.valueOfIndexLow(indexMax));
