@@ -5,9 +5,9 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<style><%@include file="../resources/css/bootstrap.min.css"%></style>
-<style><%@include file="../resources/css/font-awesome.css"%></style>
-<style><%@include file="../resources/css/main.css"%></style>
+<style><%@include file="../../resources/css/bootstrap.min.css"%></style>
+<style><%@include file="../../resources/css/font-awesome.css"%></style>
+<style><%@include file="../../resources/css/main.css"%></style>
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">

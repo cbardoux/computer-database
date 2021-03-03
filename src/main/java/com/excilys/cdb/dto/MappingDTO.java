@@ -111,22 +111,23 @@ public class MappingDTO {
 		return computer;
 	}
 
-	public ComputerDTOForDB computerObjectToCreateComputerDTO(Computer computer) {
+	public ComputerDTOForDB computerObjectToCreateComputerDTOForDB(Computer computer) {
 
 		ComputerDTOForDB computerDTO = new ComputerDTOForDB();
 
-		System.out.println("d" + computerDTO);
-
 		computerDTO.name = computer.getName();
-		System.out.println("e" + computerDTO);
+
 		try {
 			computerDTO.introduced = Date.valueOf(computer.getIntroduced());
-			computerDTO.discontinued = Date.valueOf(computer.getDiscontinued());
 		} catch (Exception e) {
 			computerDTO.introduced = null;
+		}
+		
+		try {
+			computerDTO.discontinued = Date.valueOf(computer.getDiscontinued());
+		} catch (Exception e) {
 			computerDTO.discontinued = null;
 		}
-		System.out.println("h" + computerDTO);
 		
 		if (computer.getCompany().getId() == 0) {
 			computerDTO.company_id = null;
@@ -134,7 +135,36 @@ public class MappingDTO {
 			computerDTO.company_id = Integer.toString(computer.getCompany().getId());
 		}
 
-		System.out.println("e" + computerDTO);
+
+		return computerDTO;
+	}
+	
+	public ListComputerDTO computerObjectToCreateComputerDTO(Computer computer) {
+
+		ListComputerDTO computerDTO = new ListComputerDTO();
+
+
+		computerDTO.id = computer.getId();
+		computerDTO.name = computer.getName();
+		
+		try {
+			computerDTO.introduced = computer.getIntroduced().toString();
+		} catch (NullPointerException e) {
+			computerDTO.introduced = null;
+		}
+		
+		try {
+			computerDTO.discontinued = computer.getDiscontinued().toString();
+		} catch (NullPointerException e1) {
+			computerDTO.discontinued = null;
+		}
+		
+		try {
+			computerDTO.company_name = computer.getCompany().getName();
+		} catch (NullPointerException e) {
+			computerDTO.company_name = null;
+		}
+		
 
 		return computerDTO;
 	}

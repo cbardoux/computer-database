@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<style><%@include file="../resources/css/bootstrap.min.css"%></style>
-<style><%@include file="../resources/css/font-awesome.css"%></style>
-<style><%@include file="../resources/css/main.css"%></style>
+<style><%@include file="../../resources/css/bootstrap.min.css"%></style>
+<style><%@include file="../../resources/css/font-awesome.css"%></style>
+<style><%@include file="../../resources/css/main.css"%></style>
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -78,7 +78,7 @@
 								onclick="">${computer.name}</a></td>
 							<td>${computer.introduced}</td>
 							<td>${computer.discontinued}</td>
-							<td>${computer.company.name}</td>
+							<td>${computer.company_name}</td>
 						</tr>
 					</c:forEach>
 
@@ -93,10 +93,13 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="#" aria-label="Previous"> <span
+				<li><a href="<c:url value="/home">
+			  		<c:param name="index" value="${index > 1 ? index - 1 : 1}"/>
+			  		</c:url>"
+			  		 aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
-				<c:forEach var="i" begin="1" end="5"
+				<c:forEach var="i" begin="${indexLow}" end="${indexHigh}"
 					step="1">
 					<li><a
 						href="<c:url value="/home">
@@ -104,22 +107,29 @@
 						</c:url>">
 					${i}</a></li>
 				</c:forEach>
-				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<li><a href="<c:url value="/home">
+			  		<c:param name="index" value="${index == indexMax ? index : index + 1}"/>
+					</c:url>" 
+					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default" value="10"
-					name="offset">10</button>
-				<button type="button" class="btn btn-default" value="20"
-					name="offset">50</button>
-				<button type="button" class="btn btn-default">100</button>
+				<a href="<c:url value="/home">
+				  		<c:param name="limit" value="10"/>
+						</c:url>" class="btn btn-default">10</a>
+				<a href="<c:url value="/home">
+				  		<c:param name="limit" value="20"/>
+						</c:url>" class="btn btn-default">20</a>
+				<a href="<c:url value="/home">
+				  		<c:param name="limit" value="50"/>
+						</c:url>" class="btn btn-default">50</a>
 			</div>
 		</div>
 	</footer>
-	<script src="../resources/js/jquery.min.js"></script>
-	<script src="../resources/js/bootstrap.min.js"></script>
-	<script src="../resources/js/dashboard.js"></script>
+	<script src="resources/js/jquery.min.js"></script>
+	<script src="resources/js/bootstrap.min.js"></script>
+	<script src="resources/js/dashboard.js"></script>
 
 </body>
 </html>

@@ -1,6 +1,8 @@
 package main.java.com.excilys.cdb.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,8 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import main.java.com.excilys.cdb.controller.ComputerController;
+import main.java.com.excilys.cdb.dto.ListComputerDTO;
+import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.model.Page;
@@ -20,35 +24,52 @@ public class DashboardServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private ComputerService instanceService = ComputerService.getInstance();
+	private MappingDTO mapping = MappingDTO.getInstance();
+	private final int INDEX_MIN = 1;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp");
-		
+		HttpSession session = request.getSession();
+		Page<Computer> page = (Page<Computer>) session.getAttribute("page");
+		if (page == null) {
+			page = new Page<Computer>();
+			session.setAttribute("page", page);
+		}
+
+		ArrayList<ListComputerDTO> computerDTOList = new ArrayList<>();
+
 		try {
 			request.setAttribute("rows", instanceService.countRows());
-			int indexPage = 1;
+			int numberOfRows = instanceService.countRows();
+			int limit = page.getLimit();
+			int indexMax = numberOfRows % limit == 0 ? numberOfRows / limit : numberOfRows / limit + 1;
 			if (request.getParameter("index") != null) {
 				try {
-					indexPage = Integer.parseInt(request.getParameter("index"));
+					page.setIndex(Integer.parseInt(request.getParameter("index")));
 				} catch (NumberFormatException numberFormatExceptoin) {
-					request.setAttribute("errorMessage", "An error occured");
+					request.setAttribute("errorMessage", "No index found");
+				}
+			} else if (request.getParameter("limit") != null) {
+				try {
+					page.setLimit(Integer.parseInt(request.getParameter("limit")));
+					page.setIndex(INDEX_MIN);
+				} catch (NumberFormatException numberFormatExceptoin) {
+					request.setAttribute("errorMessage", "No limit found");
 				}
 			}
-			request.setAttribute("computers", instanceService.getComputersWithOffset(new Page<Computer>(indexPage, 10)).getContent());
-			//request.setAttribute("index", indexPage);
+
+			for (Computer computer : instanceService.getComputersWithOffset(page).getContent()) {
+				computerDTOList.add(mapping.computerObjectToCreateComputerDTO(computer));
+			}
+			request.setAttribute("computers", computerDTOList);
+			request.setAttribute("indexLow", page.valueOfIndexLow(indexMax));
+			request.setAttribute("indexHigh", page.valueOfIndexHigh(indexMax));
+			request.setAttribute("indexMax", indexMax);
 		} catch (DAOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-//		try {
-//			request.setAttribute("rows", instanceService.countRows());
-//			request.setAttribute("computers", instanceService.getComputers());
-//		} catch (DAOException e) {
-//			request.setAttribute("errorMessage", "An error occured");
-//		}
 
 		dispatcher.forward(request, response);
 

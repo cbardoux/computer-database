@@ -12,7 +12,6 @@ import main.java.com.excilys.cdb.model.Page;
 public class ComputerService {
 	private static ComputerService instance = null;
 	private ComputerDAO computerDAO = ComputerDAO.getInstance();
-	private final int LIMIT_PAGINATION = 20;
 
 	private ComputerService() {
 	}
@@ -33,16 +32,20 @@ public class ComputerService {
 	}
 
 	public Computer getComputerById(int id) throws ServiceException {
-		Optional<Computer> optionalComputer = computerDAO.getComputerById(id);
+		Optional<Computer> optionalComputer = Optional.empty();
+		try {
+			optionalComputer = computerDAO.getComputerById(id);
+		} catch (DAOException e) {
+			e.getMessage();
+		}
 		if (optionalComputer.isPresent()) {
 			return optionalComputer.get();
 		} else {
-			throw new ServiceException();
+			throw new ServiceException("No computer found with this id");
 		}
-
 	}
 
-	public void createComputer(Computer computer) {
+	public void createComputer(Computer computer) throws DAOException {
 		System.out.println("a" + computer);
 		computerDAO.createComputer(computer);
 	}
@@ -58,7 +61,7 @@ public class ComputerService {
 //		computerDAO.modifyComputer(computer);
 //	}
 
-	public void deleteComputer(int id) {
+	public void deleteComputer(int id) throws DAOException {
 		computerDAO.deleteComputer(id);
 	}
 

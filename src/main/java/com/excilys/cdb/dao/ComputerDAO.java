@@ -66,7 +66,7 @@ public class ComputerDAO {
 			page.setContent(resultList);
 
 		} catch (SQLException e) {
-			throw new DAOException();
+			throw new DAOException(e.getMessage());
 		}
 		return page;
 	}
@@ -94,12 +94,12 @@ public class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException();
+			throw new DAOException(e.getMessage());
 		}
 		return resultList;
 	}
 
-	public Optional<Computer> getComputerById(int id) {
+	public Optional<Computer> getComputerById(int id) throws DAOException {
 
 		ListComputerDTO computerDTO = new ListComputerDTO();
 		Optional<Computer> optionalComputer;
@@ -120,18 +120,18 @@ public class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new DAOException(e.getMessage());
 		}
 		return Optional.empty();
 	}
 
-	public void createComputer(Computer computer) {
+	public void createComputer(Computer computer) throws DAOException {
 
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(CREATE_COMPUTER_QUERY)) {
 
 			System.out.println("b" + computer);
-			ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTO(computer);
+			ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
 			System.out.println("c" + computerDTO);
 			statement.setString(1, computerDTO.name);
 			statement.setDate(2, computerDTO.introduced);
@@ -141,7 +141,7 @@ public class ComputerDAO {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new DAOException(e.getLocalizedMessage());
 		}
 	}
 
@@ -164,7 +164,7 @@ public class ComputerDAO {
 //		}
 //	}
 
-	public void deleteComputer(int id) {
+	public void deleteComputer(int id) throws DAOException {
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(DELETE_COMPUTER_QUERY)) {
 
@@ -172,7 +172,7 @@ public class ComputerDAO {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new DAOException(e.getLocalizedMessage());
 		}
 	}
 
@@ -186,7 +186,7 @@ public class ComputerDAO {
 			countRows = resultSet.getInt(1);
 
 		} catch (SQLException e) {
-			throw new DAOException();
+			throw new DAOException(e.getLocalizedMessage());
 		}
 		return countRows;
 	}
