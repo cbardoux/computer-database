@@ -8,6 +8,7 @@
 <style><%@include file="../../resources/css/bootstrap.min.css"%></style>
 <style><%@include file="../../resources/css/font-awesome.css"%></style>
 <style><%@include file="../../resources/css/main.css"%></style>
+<script><%@include file="../../resources/js/addComputer.js"%></script>
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -29,11 +30,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="YYYY-MM-DD">
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="YYYY-MM-DD" onchange = limitMinDate(this.value)>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="YYYY-MM-DD">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="YYYY-MM-DD" onchange = limitMaxDate(this.value)>
                             </div>
                             <div class="form-group">
                                 <label for="company_id">Company</label>
