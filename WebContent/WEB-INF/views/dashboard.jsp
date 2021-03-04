@@ -94,7 +94,7 @@
 		<div class="container text-center">
 			<ul class="pagination">
 				<li><a href="<c:url value="/home">
-			  		<c:param name="index" value="${index > 1 ? index - 1 : 1}"/>
+			  		<c:param name="index" value="${index = 1}"/>
 			  		</c:url>"
 			  		 aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
@@ -108,7 +108,7 @@
 					${i}</a></li>
 				</c:forEach>
 				<li><a href="<c:url value="/home">
-			  		<c:param name="index" value="${index == indexMax ? index : index + 1}"/>
+			  		<c:param name="index" value="${index = indexMax}"/>
 					</c:url>" 
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>

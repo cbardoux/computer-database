@@ -1,6 +1,6 @@
 package main.java.com.excilys.cdb.dto;
 
-public class ListComputerDTO {
+public class ComputerDTOForServlet {
 
 	public int id;
 	public String name;

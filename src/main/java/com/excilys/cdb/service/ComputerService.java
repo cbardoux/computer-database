@@ -47,16 +47,9 @@ public class ComputerService {
 		computerDAO.createComputer(computer);
 	}
 
-//	public void modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
-//		Computer computer = new Computer.ComputerBuilder()
-//				.id(id).name(name)
-//				.introduced(introduced)
-//				.discontinued(discontinued)
-//				.company(company)
-//				.build();
-//
-//		computerDAO.modifyComputer(computer);
-//	}
+	public void modifyComputer(Computer computer) {
+		computerDAO.modifyComputer(computer);
+	}
 
 	public void deleteComputer(int id) {
 		computerDAO.deleteComputer(id);

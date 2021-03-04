@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import main.java.com.excilys.cdb.dto.ComputerDTOForDB;
-import main.java.com.excilys.cdb.dto.ListComputerDTO;
+import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
 import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Computer;
@@ -37,7 +37,7 @@ public class ComputerDAO {
 
 	private static final String FIND_COMPUTERS_WITH_PAGE_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id LIMIT ?, ?;";
 	private static final String FIND_COMPUTERS_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id;";
-	private static final String FIND_COMPUTER_QUERY = "SELECT computer.name, computer.introduced, computer.discontinued, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id = ?;";
+	private static final String FIND_COMPUTER_QUERY = "SELECT computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id = ?;";
 	private static final String CREATE_COMPUTER_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 	private static final String MODIFY_COMPUTER_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
 	private static final String DELETE_COMPUTER_QUERY = "DELETE FROM computer WHERE id = ?;";
@@ -45,7 +45,7 @@ public class ComputerDAO {
 
 	public Page<Computer> listComputersWithOffset(Page<Computer> page) {
 
-		ListComputerDTO computerDTO = new ListComputerDTO();
+		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
 		List<Computer> resultList = new ArrayList<>();
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTERS_WITH_PAGE_QUERY);) {
@@ -76,7 +76,7 @@ public class ComputerDAO {
 	}
 
 	public List<Computer> listComputers() {
-		ListComputerDTO computerDTO = new ListComputerDTO();
+		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
 		List<Computer> resultList = new ArrayList<>();
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTERS_QUERY);) {
@@ -105,7 +105,7 @@ public class ComputerDAO {
 
 	public Optional<Computer> getComputerById(int id) {
 
-		ListComputerDTO computerDTO = new ListComputerDTO();
+		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
 		Optional<Computer> optionalComputer;
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTER_QUERY)) {
@@ -116,17 +116,19 @@ public class ComputerDAO {
 				computerDTO.name = resultSet.getString(1);
 				computerDTO.introduced = resultSet.getString(2);
 				computerDTO.discontinued = resultSet.getString(3);
-				computerDTO.company_name = resultSet.getString(4);
-
+				computerDTO.company_id = resultSet.getString(4);
+				computerDTO.company_name = resultSet.getString(5);
+				
+				System.out.println(computerDTO);
 				Computer computer = mappingDTO.getComputerByIdDTOToComputerObject(computerDTO);
+				System.out.println("test1" + computer);
 				optionalComputer = Optional.of(computer);
 				return optionalComputer;
 			}
-
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		}
-		return Optional.empty();
+		return optionalComputer = Optional.empty();
 	}
 
 	public void createComputer(Computer computer) {
@@ -148,24 +150,26 @@ public class ComputerDAO {
 		}
 	}
 
-//	public void modifyComputer(Computer computer) {
-//		try (Connection connection = instanceDB.connection();
-//				PreparedStatement statement = connection.prepareStatement(MODIFY_COMPUTER_QUERY)) {
-//
-//			statement.setString(1, computer.getName());
-//			statement.setDate(2,
-//					computer.getIntroduced() != null ? java.sql.Date.valueOf(computer.getIntroduced()) : null);
-//			statement.setDate(3,
-//					computer.getDiscontinued() != null ? java.sql.Date.valueOf(computer.getDiscontinued()) : null);
-//			statement.setString(4, computer.getCompany_id() != 0 ? String.valueOf(computer.getCompany_id()) : null);
-//			statement.setInt(5, computer.getId());
-//
-//			statement.executeUpdate();
-//
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//	}
+	public void modifyComputer(Computer computer) {
+		try (Connection connection = instanceDB.connection();
+				PreparedStatement statement = connection.prepareStatement(MODIFY_COMPUTER_QUERY)) {
+
+			System.out.println(computer);
+			ComputerDTOForDB computerDTO = mappingDTO.computerObjectToModifyComputerDTOForDB(computer);
+			System.out.println("qsd" + computerDTO);
+			statement.setString(1, computerDTO.name);
+			statement.setDate(2, computerDTO.introduced);
+			statement.setDate(3, computerDTO.discontinued);
+			statement.setString(4, computerDTO.company_id);
+			statement.setInt(5, computerDTO.id);
+			System.out.println(statement);
+
+			statement.executeUpdate();
+
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+		}
+	}
 
 	public void deleteComputer(int id) {
 		try (Connection connection = instanceDB.connection();

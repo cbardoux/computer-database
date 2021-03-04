@@ -2,7 +2,6 @@ package main.java.com.excilys.cdb.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,9 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import main.java.com.excilys.cdb.dto.ListComputerDTO;
+import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
 import main.java.com.excilys.cdb.dto.MappingDTO;
-import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.model.Page;
 import main.java.com.excilys.cdb.service.ComputerService;
@@ -38,7 +36,7 @@ public class DashboardServlet extends HttpServlet {
 			session.setAttribute("page", page);
 		}
 
-		ArrayList<ListComputerDTO> computerDTOList = new ArrayList<>();
+		ArrayList<ComputerDTOForServlet> computerDTO = new ArrayList<>();
 		int numberOfRows = instanceService.countRows();
 		int limit = page.getLimit();
 		int indexMax = numberOfRows % limit == 0 ? numberOfRows / limit : numberOfRows / limit + 1;
@@ -59,11 +57,11 @@ public class DashboardServlet extends HttpServlet {
 		}
 
 		for (Computer computer : instanceService.getComputersWithOffset(page).getContent()) {
-			computerDTOList.add(mapping.computerObjectToCreateComputerDTO(computer));
+			computerDTO.add(mapping.computerObjectToCreateComputerDTO(computer));
 		}
 		
 		request.setAttribute("rows", instanceService.countRows());
-		request.setAttribute("computers", computerDTOList);
+		request.setAttribute("computers", computerDTO);
 		request.setAttribute("indexLow", page.valueOfIndexLow(indexMax));
 		request.setAttribute("indexHigh", page.valueOfIndexHigh(indexMax));
 		request.setAttribute("indexMax", indexMax);

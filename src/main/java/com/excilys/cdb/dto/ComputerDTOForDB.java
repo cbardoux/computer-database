@@ -3,6 +3,7 @@ package main.java.com.excilys.cdb.dto;
 import java.sql.Date;
 
 public class ComputerDTOForDB {
+	public int id;
 	public String name;
 	public Date introduced;
 	public Date discontinued;

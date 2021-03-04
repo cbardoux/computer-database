@@ -3,7 +3,7 @@ package main.java.com.excilys.cdb.validator;
 import java.sql.Date;
 import java.time.LocalDate;
 
-import main.java.com.excilys.cdb.dto.ListComputerDTO;
+import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
 import main.java.com.excilys.cdb.exception.ValidatorException;
 import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.service.CompanyService;
@@ -23,7 +23,7 @@ public class ComputerValidator {
 	private ComputerValidator() {
 	}
 
-	public void validateComputer(ListComputerDTO computerDTO) throws ValidatorException {
+	public void validateComputer(ComputerDTOForServlet computerDTO) throws ValidatorException {
 
 		int company_id;
 		LocalDate introduced;

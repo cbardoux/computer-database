@@ -20,7 +20,7 @@ public class MappingDTO {
 		return instance;
 	}
 
-	public Computer listComputerDTOToComputerObject(ListComputerDTO computerDTO) {
+	public Computer listComputerDTOToComputerObject(ComputerDTOForServlet computerDTO) {
 
 		Company company = new Company();
 		LocalDate introduced;
@@ -28,9 +28,17 @@ public class MappingDTO {
 		int company_id;
 		String company_name;
 
-		introduced = stringToLocalDate(computerDTO.introduced, formatterTime);
+		try {
+			introduced = stringToLocalDate(computerDTO.introduced, formatterTime);
+		} catch (Exception e1) {
+			introduced = null;
+		}
 
-		discontinued = stringToLocalDate(computerDTO.discontinued, formatterTime);
+		try {
+			discontinued = stringToLocalDate(computerDTO.discontinued, formatterTime);
+		} catch (Exception e1) {
+			discontinued = null;
+		}
 
 		try {
 			company_id = Integer.parseInt(computerDTO.company_id);
@@ -52,17 +60,31 @@ public class MappingDTO {
 		return computer;
 	}
 
-	public Computer getComputerByIdDTOToComputerObject(ListComputerDTO computerDTO) {
+	public Computer getComputerByIdDTOToComputerObject(ComputerDTOForServlet computerDTO) {
 
 		Company company = new Company();
 		LocalDate introduced;
 		LocalDate discontinued;
 
-		introduced = stringToLocalDate(computerDTO.introduced, formatterTime);
+		try {
+			introduced = stringToLocalDate(computerDTO.introduced, formatterTime);
+		} catch (Exception e) {
+			introduced = null;
+		}
 
-		discontinued = stringToLocalDate(computerDTO.discontinued, formatterTime);
+		try {
+			discontinued = stringToLocalDate(computerDTO.discontinued, formatterTime);
+		} catch (Exception e) {
+			discontinued = null;
+		}
 
-		company.setName(computerDTO.name);
+		try {
+			company.setId(Integer.parseInt(computerDTO.company_id));
+		} catch (NumberFormatException e) {
+			company.setId(0);
+		}
+		
+		company.setName(computerDTO.company_name);
 
 		Computer computer = new Computer.ComputerBuilder()
 				.name(computerDTO.name)
@@ -74,25 +96,23 @@ public class MappingDTO {
 		return computer;
 	}
 
-	public Computer createComputerDTOToComputerObject(ListComputerDTO computerDTO) {
+	public Computer createComputerDTOToComputerObject(ComputerDTOForServlet computerDTO) {
 
 		Company company = new Company();
 		LocalDate introduced;
 		LocalDate discontinued;
+		
+		try {
+			introduced = Date.valueOf(computerDTO.introduced).toLocalDate();
+		} catch (Exception e) {
+			introduced = null;
+		}
 
-		
-			try {
-				introduced = Date.valueOf(computerDTO.introduced).toLocalDate();
-			} catch (Exception e) {
-				introduced = null;
-			}
-		
-			try {
-				discontinued = Date.valueOf(computerDTO.discontinued).toLocalDate();
-			} catch (Exception e1) {
-				discontinued = null;
-			}
-		
+		try {
+			discontinued = Date.valueOf(computerDTO.discontinued).toLocalDate();
+		} catch (Exception e1) {
+			discontinued = null;
+		}
 
 		try {
 			company.setId(Integer.parseInt(computerDTO.company_id));
@@ -100,8 +120,42 @@ public class MappingDTO {
 			company.setId(0);
 		}
 
-		Computer computer = new Computer
-				.ComputerBuilder()
+		Computer computer = new Computer.ComputerBuilder()
+				.name(computerDTO.name)
+				.introduced(introduced)
+				.discontinued(discontinued)
+				.company(company)
+				.build();
+
+		return computer;
+	}
+	
+	public Computer modifyComputerDTOToComputerObject(ComputerDTOForServlet computerDTO) {
+
+		Company company = new Company();
+		LocalDate introduced;
+		LocalDate discontinued;
+		
+		try {
+			introduced = Date.valueOf(computerDTO.introduced).toLocalDate();
+		} catch (Exception e) {
+			introduced = null;
+		}
+
+		try {
+			discontinued = Date.valueOf(computerDTO.discontinued).toLocalDate();
+		} catch (Exception e1) {
+			discontinued = null;
+		}
+		
+		try {
+			company.setId(Integer.parseInt(computerDTO.company_id));
+		} catch (NumberFormatException e) {
+			company.setId(0);
+		}
+
+		Computer computer = new Computer.ComputerBuilder()
+				.id(computerDTO.id)
 				.name(computerDTO.name)
 				.introduced(introduced)
 				.discontinued(discontinued)
@@ -139,9 +193,39 @@ public class MappingDTO {
 		return computerDTO;
 	}
 	
-	public ListComputerDTO computerObjectToCreateComputerDTO(Computer computer) {
+	public ComputerDTOForDB computerObjectToModifyComputerDTOForDB(Computer computer) {
 
-		ListComputerDTO computerDTO = new ListComputerDTO();
+		ComputerDTOForDB computerDTO = new ComputerDTOForDB();
+		
+		computerDTO.id = computer.getId();
+
+		computerDTO.name = computer.getName();
+
+		try {
+			computerDTO.introduced = Date.valueOf(computer.getIntroduced());
+		} catch (Exception e) {
+			computerDTO.introduced = null;
+		}
+		
+		try {
+			computerDTO.discontinued = Date.valueOf(computer.getDiscontinued());
+		} catch (Exception e) {
+			computerDTO.discontinued = null;
+		}
+		
+		if (computer.getCompany().getId() == 0) {
+			computerDTO.company_id = null;
+		} else {
+			computerDTO.company_id = Integer.toString(computer.getCompany().getId());
+		}
+
+
+		return computerDTO;
+	}
+	
+	public ComputerDTOForServlet computerObjectToCreateComputerDTO(Computer computer) {
+
+		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
 
 
 		computerDTO.id = computer.getId();
@@ -165,7 +249,36 @@ public class MappingDTO {
 			computerDTO.company_name = null;
 		}
 		
+		return computerDTO;
+	}
+		
+	public ComputerDTOForServlet objectToCreateDTOForEdit(Computer computer) {
 
+		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
+
+		computerDTO.id = computer.getId();
+		computerDTO.name = computer.getName();
+		
+		try {
+			computerDTO.introduced = computer.getIntroduced().toString();
+		} catch (NullPointerException e) {
+			computerDTO.introduced = null;
+		}
+		
+		try {
+			computerDTO.discontinued = computer.getDiscontinued().toString();
+		} catch (NullPointerException e1) {
+			computerDTO.discontinued = null;
+		}
+		
+		try {
+			computerDTO.company_id = Integer.toString(computer.getCompany().getId());
+			computerDTO.company_name = computer.getCompany().getName();
+		} catch (NullPointerException e) {
+			computerDTO.company_id = null;
+			computerDTO.company_name = null;
+		}
+	
 		return computerDTO;
 	}
 

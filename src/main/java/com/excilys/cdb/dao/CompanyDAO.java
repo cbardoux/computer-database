@@ -6,12 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Company;
+import main.java.com.excilys.cdb.model.Computer;
 
 public class CompanyDAO {
 	private static CompanyDAO instanceCompany = null;
@@ -31,6 +33,7 @@ public class CompanyDAO {
 
 	private static final String FIND_COMPANIES_WITH_OFFSET_QUERY = "SELECT id, name FROM company LIMIT ?, 20;";
 	private static final String FIND_COMPANIES_QUERY = "SELECT id, name FROM company;";
+	private static final String FIND_COMPANY_ID_QUERY = "SELECT id FROM company WHERE name = ?;";
 
 	public List<Company> listCompaniesWithOffset(int offset) {
 
@@ -52,7 +55,7 @@ public class CompanyDAO {
 		}
 		return resultList;
 	}
-	
+
 	public List<Company> listCompanies() {
 
 		List<Company> resultList = new ArrayList<>();

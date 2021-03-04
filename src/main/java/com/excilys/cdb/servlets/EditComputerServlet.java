@@ -10,26 +10,42 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
+import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.service.CompanyService;
 import main.java.com.excilys.cdb.service.ComputerService;
+import main.java.com.excilys.cdb.validator.ComputerValidator;
 
 @WebServlet("/home/edit")
 public class EditComputerServlet extends HttpServlet {
-//	private static final long serialVersionUID = 1L;
-//
-//	ComputerService instance = ComputerService.getInstance();
-//	CompanyService instanceCompany = CompanyService.getInstance();
-//
-//	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-//			throws ServletException, IOException {
-//		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp");
-//
-//		Computer computer = new Computer();
-//		computer.setId(Integer.parseInt(request.getParameter("id")));
-//
+	private static final long serialVersionUID = 1L;
+
+	ComputerService instanceComputer = ComputerService.getInstance();
+	CompanyService instanceCompany = CompanyService.getInstance();
+	ComputerValidator instanceValidator = ComputerValidator.getInstance();
+	MappingDTO mapping = MappingDTO.getInstance();
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp");
+
+		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
+		try {
+			System.out.println("a" + request.getParameter("id"));
+			computerDTO = mapping.objectToCreateDTOForEdit(
+					instanceComputer.getComputerById(Integer.parseInt(request.getParameter("id"))));
+			System.out.println("b" + computerDTO);
+			computerDTO.id = Integer.parseInt(request.getParameter("id"));
+			
+		} catch (NumberFormatException e) {
+			request.setAttribute("errorMessage", e.getMessage());
+		} catch (ServiceException e) {
+			request.setAttribute("errorMessage", e.getMessage());
+		}
+
 //		try {
 //			request.setAttribute("companies", instanceCompany.getCompanies());
 //			computer = instance.getComputerById(Integer.parseInt(request.getParameter("id")));
@@ -43,20 +59,36 @@ public class EditComputerServlet extends HttpServlet {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-//
-//		request.setAttribute("id", Integer.parseInt(request.getParameter("id")));
-//		request.setAttribute("name", computer.getName());
-//		request.setAttribute("introduced", computer.getIntroduced());
-//		request.setAttribute("discontinued", computer.getDiscontinued());
-//		request.setAttribute("company_id", computer.getCompany_id());
-//
-//		dispatcher.forward(request, response);
-//
-//	}
-//
-//	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-//			throws ServletException, IOException {
-//
+
+		request.setAttribute("companies", instanceCompany.getCompanies());
+		request.setAttribute("computer", computerDTO);
+
+		dispatcher.forward(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
+
+		try {
+			computerDTO.id = Integer.parseInt(request.getParameter("id"));
+			
+			computerDTO.name = request.getParameter("name");
+			computerDTO.introduced = request.getParameter("introduced");
+			computerDTO.discontinued = request.getParameter("discontinued");
+			computerDTO.company_id = request.getParameter("company_id");
+			instanceValidator.validateComputer(computerDTO);
+			Computer computer = mapping.modifyComputerDTOToComputerObject(computerDTO);
+
+			instanceComputer.modifyComputer(computer);
+			response.sendRedirect("/cdb/home");
+		} catch (Exception e) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp");
+			request.setAttribute("errorMessage", e.getMessage());
+			dispatcher.forward(request, response);
+		}
+
 //		Computer computer = new Computer();
 //		computer.setId(Integer.parseInt(request.getParameter("id")));
 //		computer.setName(request.getParameter("name"));
@@ -86,6 +118,6 @@ public class EditComputerServlet extends HttpServlet {
 //			dispatcher.forward(request, response);
 //
 //		}
-//
-//	}
+
+	}
 }

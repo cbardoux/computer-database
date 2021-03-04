@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import main.java.com.excilys.cdb.dao.ComputerDAO;
-import main.java.com.excilys.cdb.dto.ListComputerDTO;
+import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
 import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ValidatorException;
@@ -46,7 +46,7 @@ public class AddComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		ListComputerDTO computerDTO = new ListComputerDTO();
+		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
 
 		computerDTO.name = request.getParameter("name");
 		computerDTO.introduced = request.getParameter("introduced");
