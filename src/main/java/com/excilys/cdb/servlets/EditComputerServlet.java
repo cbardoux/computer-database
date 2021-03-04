@@ -34,31 +34,15 @@ public class EditComputerServlet extends HttpServlet {
 
 		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
 		try {
-			System.out.println("a" + request.getParameter("id"));
 			computerDTO = mapping.objectToCreateDTOForEdit(
 					instanceComputer.getComputerById(Integer.parseInt(request.getParameter("id"))));
-			System.out.println("b" + computerDTO);
 			computerDTO.id = Integer.parseInt(request.getParameter("id"));
-			
+
 		} catch (NumberFormatException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} catch (ServiceException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		}
-
-//		try {
-//			request.setAttribute("companies", instanceCompany.getCompanies());
-//			computer = instance.getComputerById(Integer.parseInt(request.getParameter("id")));
-//		} catch (NumberFormatException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ServiceException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (DAOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 
 		request.setAttribute("companies", instanceCompany.getCompanies());
 		request.setAttribute("computer", computerDTO);
@@ -68,12 +52,12 @@ public class EditComputerServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
 
 		try {
 			computerDTO.id = Integer.parseInt(request.getParameter("id"));
-			
+
 			computerDTO.name = request.getParameter("name");
 			computerDTO.introduced = request.getParameter("introduced");
 			computerDTO.discontinued = request.getParameter("discontinued");
@@ -88,36 +72,5 @@ public class EditComputerServlet extends HttpServlet {
 			request.setAttribute("errorMessage", e.getMessage());
 			dispatcher.forward(request, response);
 		}
-
-//		Computer computer = new Computer();
-//		computer.setId(Integer.parseInt(request.getParameter("id")));
-//		computer.setName(request.getParameter("name"));
-//		computer.setIntroduced(
-//				!request.getParameter("introduced").equals("") || !request.getParameter("introduced").equals(null)
-//						? Date.valueOf(request.getParameter("introduced")).toLocalDate()
-//						: null);
-//		computer.setDiscontinued(
-//				!request.getParameter("discontinued").equals("") || !request.getParameter("discontinued").equals(null)
-//						? Date.valueOf(request.getParameter("discontinued")).toLocalDate()
-//						: null);
-//		computer.setCompany_id(Integer.parseInt(request.getParameter("company_id")));
-//		RequestDispatcher dispatcher = null;
-//
-//		try {
-//			instance.modifyComputer(computer.getId(), computer.getName(), computer.getIntroduced(),
-//					computer.getDiscontinued(), computer.getCompany_id());
-//			response.sendRedirect("/cdb/home");
-//		} catch (Exception e) {
-//			dispatcher = request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp");
-//			request.setAttribute("errorMessage", e.getMessage());
-//			request.setAttribute("id", Integer.parseInt(request.getParameter("id")));
-//			request.setAttribute("name", computer.getName());
-//			request.setAttribute("introduced", computer.getIntroduced());
-//			request.setAttribute("discontinued", computer.getDiscontinued());
-//			request.setAttribute("company_id", computer.getCompany_id());
-//			dispatcher.forward(request, response);
-//
-//		}
-
 	}
 }

@@ -2,6 +2,8 @@ package main.java.com.excilys.cdb.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
 import main.java.com.excilys.cdb.dto.MappingDTO;
+import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.model.Page;
 import main.java.com.excilys.cdb.service.ComputerService;
@@ -28,7 +31,7 @@ public class DashboardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp");
-		
+
 		HttpSession session = request.getSession();
 		Page<Computer> page = (Page<Computer>) session.getAttribute("page");
 		if (page == null) {
@@ -40,7 +43,7 @@ public class DashboardServlet extends HttpServlet {
 		int numberOfRows = instanceService.countRows();
 		int limit = page.getLimit();
 		int indexMax = numberOfRows % limit == 0 ? numberOfRows / limit : numberOfRows / limit + 1;
-		
+
 		if (request.getParameter("index") != null) {
 			try {
 				page.setIndex(Integer.parseInt(request.getParameter("index")));
@@ -59,7 +62,7 @@ public class DashboardServlet extends HttpServlet {
 		for (Computer computer : instanceService.getComputersWithOffset(page).getContent()) {
 			computerDTO.add(mapping.computerObjectToCreateComputerDTO(computer));
 		}
-		
+
 		request.setAttribute("rows", instanceService.countRows());
 		request.setAttribute("computers", computerDTO);
 		request.setAttribute("indexLow", page.valueOfIndexLow(indexMax));
@@ -72,6 +75,19 @@ public class DashboardServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		if (request.getParameter("selection") != null) {
+			List<Integer> deleteIdList;
+			try {
+				deleteIdList = Arrays.asList(Integer.parseInt(request.getParameter("selection")));
+				for (int id : deleteIdList) {
+					instanceService.deleteComputer(id);
+				}
+			} catch (NumberFormatException e1) {
+				request.setAttribute("errorMessage", "Not a valid format" + e1);
+			} catch (DAOException e) {
+				request.setAttribute("errorMessage", e.getMessage());
+			}
+		}
 		doGet(request, response);
 	}
 

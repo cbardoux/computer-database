@@ -43,7 +43,7 @@ public class ComputerController {
 //		computerService.modifyComputer(id, name, introduced, discontinued, company);
 //	}
 
-	public void deleteComputer(int id) {
-		computerService.deleteComputer(id);
-	}
+//	public void deleteComputer(int id) {
+//		computerService.deleteComputer(id);
+//	}
 }

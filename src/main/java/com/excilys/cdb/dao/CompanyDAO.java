@@ -33,7 +33,6 @@ public class CompanyDAO {
 
 	private static final String FIND_COMPANIES_WITH_OFFSET_QUERY = "SELECT id, name FROM company LIMIT ?, 20;";
 	private static final String FIND_COMPANIES_QUERY = "SELECT id, name FROM company;";
-	private static final String FIND_COMPANY_ID_QUERY = "SELECT id FROM company WHERE name = ?;";
 
 	public List<Company> listCompaniesWithOffset(int offset) {
 

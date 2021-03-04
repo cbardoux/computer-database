@@ -51,7 +51,7 @@ public class ComputerService {
 		computerDAO.modifyComputer(computer);
 	}
 
-	public void deleteComputer(int id) {
+	public void deleteComputer(int id) throws DAOException {
 		computerDAO.deleteComputer(id);
 	}
 

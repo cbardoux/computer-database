@@ -93,8 +93,8 @@ public class ComputerDAO {
 				computerDTO.company_name = resultSet.getString(6);
 
 				Computer computer = mappingDTO.listComputerDTOToComputerObject(computerDTO);
+				
 				resultList.add(computer);
-
 			}
 
 		} catch (SQLException e) {
@@ -118,11 +118,11 @@ public class ComputerDAO {
 				computerDTO.discontinued = resultSet.getString(3);
 				computerDTO.company_id = resultSet.getString(4);
 				computerDTO.company_name = resultSet.getString(5);
-				
-				System.out.println(computerDTO);
+
 				Computer computer = mappingDTO.getComputerByIdDTOToComputerObject(computerDTO);
-				System.out.println("test1" + computer);
+
 				optionalComputer = Optional.of(computer);
+
 				return optionalComputer;
 			}
 		} catch (SQLException e) {
@@ -154,15 +154,13 @@ public class ComputerDAO {
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(MODIFY_COMPUTER_QUERY)) {
 
-			System.out.println(computer);
 			ComputerDTOForDB computerDTO = mappingDTO.computerObjectToModifyComputerDTOForDB(computer);
-			System.out.println("qsd" + computerDTO);
+
 			statement.setString(1, computerDTO.name);
 			statement.setDate(2, computerDTO.introduced);
 			statement.setDate(3, computerDTO.discontinued);
 			statement.setString(4, computerDTO.company_id);
 			statement.setInt(5, computerDTO.id);
-			System.out.println(statement);
 
 			statement.executeUpdate();
 
@@ -171,7 +169,7 @@ public class ComputerDAO {
 		}
 	}
 
-	public void deleteComputer(int id) {
+	public void deleteComputer(int id) throws DAOException {
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(DELETE_COMPUTER_QUERY)) {
 
@@ -180,6 +178,7 @@ public class ComputerDAO {
 
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
+			throw new DAOException("No computer with this id");
 		}
 	}
 
