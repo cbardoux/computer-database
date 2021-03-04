@@ -57,7 +57,15 @@ public class DashboardServlet extends HttpServlet {
 			} catch (NumberFormatException numberFormatException) {
 				request.setAttribute("errorMessage", numberFormatException);
 			}
+		} else if (request.getParameter("search") != null) {
+			try {
+				page.setSearch(request.getParameter("search"));
+				page.setIndex(INDEX_MIN);
+			} catch (NumberFormatException numberFormatException) {
+				request.setAttribute("errorMessage", numberFormatException);
+			}
 		}
+		
 
 		for (Computer computer : instanceService.getComputersWithOffset(page).getContent()) {
 			computerDTO.add(mapping.computerObjectToCreateComputerDTO(computer));

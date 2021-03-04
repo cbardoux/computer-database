@@ -35,7 +35,7 @@ public class ComputerDAO {
 		return instanceComputer;
 	}
 
-	private static final String FIND_COMPUTERS_WITH_PAGE_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id LIMIT ?, ?;";
+	private static final String FIND_COMPUTERS_WITH_PAGE_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ? LIMIT ?, ?;";
 	private static final String FIND_COMPUTERS_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id;";
 	private static final String FIND_COMPUTER_QUERY = "SELECT computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id = ?;";
 	private static final String CREATE_COMPUTER_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
@@ -50,8 +50,10 @@ public class ComputerDAO {
 		try (Connection connection = instanceDB.connection();
 				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTERS_WITH_PAGE_QUERY);) {
 
-			statement.setInt(1, (page.getIndex() - 1) * page.getLimit());
-			statement.setInt(2, page.getLimit());
+			statement.setString(1, "%" + page.getSearch() + "%");
+			statement.setInt(2, (page.getIndex() - 1) * page.getLimit());
+			statement.setInt(3, page.getLimit());
+			
 			ResultSet resultSet = statement.executeQuery();
 
 			while (resultSet.next()) {
@@ -61,9 +63,9 @@ public class ComputerDAO {
 				computerDTO.discontinued = resultSet.getString(4);
 				computerDTO.company_id = resultSet.getString(5);
 				computerDTO.company_name = resultSet.getString(6);
-
+				
 				Computer computer = mappingDTO.listComputerDTOToComputerObject(computerDTO);
-
+				
 				resultList.add(computer);
 
 			}
@@ -93,7 +95,7 @@ public class ComputerDAO {
 				computerDTO.company_name = resultSet.getString(6);
 
 				Computer computer = mappingDTO.listComputerDTOToComputerObject(computerDTO);
-				
+
 				resultList.add(computer);
 			}
 

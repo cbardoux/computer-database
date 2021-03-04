@@ -9,6 +9,7 @@ public class Page<E> {
 	private int indexLow;
 	private int indexHigh;
 	private List<E> content;
+	private String search = "";
 	
 	public Page() {
 		content = new ArrayList<>();
@@ -58,6 +59,14 @@ public class Page<E> {
 
 	public void setContent(List<E> content) {
 		this.content = content;
+	}
+	
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		this.search = search;
 	}
 	
 	public int valueOfIndexLow(int indexMax) {
