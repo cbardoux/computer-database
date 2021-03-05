@@ -32,15 +32,7 @@ public class ComputerService {
 	}
 
 	public Computer getComputerById(int id) throws ServiceException {
-		Optional<Computer> optionalComputer = Optional.empty();
-
-		optionalComputer = computerDAO.getComputerById(id);
-
-		if (optionalComputer.isPresent()) {
-			return optionalComputer.get();
-		} else {
-			throw new ServiceException("No computer found with this id");
-		}
+		return computerDAO.getComputerById(id).orElseThrow(() -> new ServiceException("No computer found with this id"));
 	}
 
 	public void createComputer(Computer computer) {

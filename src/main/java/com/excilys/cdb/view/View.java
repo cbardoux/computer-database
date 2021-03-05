@@ -3,9 +3,7 @@ package main.java.com.excilys.cdb.view;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -13,16 +11,19 @@ import org.slf4j.LoggerFactory;
 
 import main.java.com.excilys.cdb.controller.CompanyController;
 import main.java.com.excilys.cdb.controller.ComputerController;
+import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
 import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.model.Computer;
+import main.java.com.excilys.cdb.model.Page;
 
 public class View {
 
 	private CompanyController companyController = CompanyController.getInstance();
 	private ComputerController computerController = ComputerController.getInstance();
 	private Scanner inputUser = new Scanner(System.in);
+	private MappingDTO mapping = MappingDTO.getInstance();
 	private static final Logger logger = LoggerFactory.getLogger(View.class);
 
 	public void launch() {
@@ -178,9 +179,9 @@ public class View {
 		System.out.println("--- Create a computer ---");
 		System.out.println("Enter a name :");
 		String createName;
-		while(true) {
+		while (true) {
 			createName = inputUser.nextLine();
-			if(createName.equals("")) {
+			if (createName.equals("")) {
 				System.out.println("Enter a name please");
 			} else {
 				break;
@@ -247,31 +248,31 @@ public class View {
 		System.out.println("Enter an id to search for :");
 		int id = inputUser.nextInt();
 		inputUser.nextLine();
-//		try {
-//			Computer computer = computerController.getComputerById(id);
-//			System.out.println(computer);
-//		} catch (ServiceException e) {
-//			e.WrongID();
-//		}
+		try {
+			Computer computer = computerController.getComputerById(id);
+			computer.setId(id);
+			System.out.println(computer);
+		} catch (ServiceException e) {
+			e.WrongID();
+		}
 	}
 
 	private void listCompanies() {
 		System.out.println("--- Companies list ---");
-		List<Company> companiesList = new ArrayList<>();
 		int pageNumberCompany;
 		while (true) {
 			System.out.println("Enter 0 to quit or a page number :");
-			pageNumberCompany = inputUser.nextInt();
+			try {
+				pageNumberCompany = inputUser.nextInt();
+			} catch (Exception e1) {
+				pageNumberCompany = 0;
+			}
 			inputUser.nextLine();
 			if (pageNumberCompany == 0) {
 				break;
 			} else {
 				try {
-					companiesList = companyController.getCompaniesWithOffset(pageNumberCompany);
-					System.out.println("--- Page number " + pageNumberCompany + " ---");
-					for (Company companies : companiesList) {
-						System.out.println(companies);
-					}
+					companyController.getCompaniesWithOffset(pageNumberCompany).stream().forEach(System.out::println);
 				} catch (DAOException e) {
 					e.WrongPageNumber();
 				}
@@ -281,28 +282,25 @@ public class View {
 
 	private void listComputers() {
 		System.out.println("--- Computers list ---");
-		List<Computer> computerList = new ArrayList<>();
 		int pageNumberComputer;
 		while (true) {
 			System.out.println("Enter 0 to quit or a page number :");
 			pageNumberComputer = inputUser.nextInt();
 			inputUser.nextLine();
+			Page<Computer> page = new Page<>();
+			page.setIndex(pageNumberComputer);
+			page.setLimit(10);
+
 			if (pageNumberComputer == 0) {
 				break;
 			} else {
-//				try {
-//					computerList = computerController.getComputers();
-//					System.out.println("--- Page number " + pageNumberComputer + " ---");
-//					for (Computer computers : computerList) {
-//						System.out.println(computers);
-//					}
-//				} catch (DAOException e) {
-//					e.WrongPageNumber();
-//				}
+				computerController.getComputersWithOffset(page).getContent().stream()
+						.map(computer -> mapping.computerObjectToCreateComputerDTO(computer))
+						.forEach(System.out::println);
 			}
 		}
 	}
-	
+
 	public void deleteCompany() {
 		System.out.println("--- Delete a computer ---");
 		System.out.println("Enter an id to delete :");

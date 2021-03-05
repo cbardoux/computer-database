@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -39,7 +40,7 @@ public class DashboardServlet extends HttpServlet {
 			session.setAttribute("page", page);
 		}
 
-		ArrayList<ComputerDTOForServlet> computerDTO = new ArrayList<>();
+		List<ComputerDTOForServlet> computerDTO = new ArrayList<>();
 		int numberOfRows = instanceService.countRows();
 		int limit = page.getLimit();
 		int indexMax = numberOfRows % limit == 0 ? numberOfRows / limit : numberOfRows / limit + 1;
@@ -65,11 +66,9 @@ public class DashboardServlet extends HttpServlet {
 				request.setAttribute("errorMessage", numberFormatException);
 			}
 		}
-		
 
-		for (Computer computer : instanceService.getComputersWithOffset(page).getContent()) {
-			computerDTO.add(mapping.computerObjectToCreateComputerDTO(computer));
-		}
+		computerDTO = instanceService.getComputersWithOffset(page).getContent().stream()
+				.map(computer -> mapping.computerObjectToCreateComputerDTO(computer)).collect(Collectors.toList());
 
 		request.setAttribute("rows", instanceService.countRows());
 		request.setAttribute("computers", computerDTO);

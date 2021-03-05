@@ -7,6 +7,7 @@ import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
 import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.model.Computer;
+import main.java.com.excilys.cdb.model.Page;
 import main.java.com.excilys.cdb.service.ComputerService;
 
 public class ComputerController {
@@ -23,9 +24,9 @@ public class ComputerController {
 		return instanceController;
 	}
 
-//	public List<Computer> getComputersWithOffset(int page) throws DAOException {
-//		return computerService.getComputersWithOffset(page);
-//	}
+	public Page<Computer> getComputersWithOffset(Page<Computer> page) {
+		return computerService.getComputersWithOffset(page);
+	}
 	
 	public List<Computer> getComputers() throws DAOException {
 		return computerService.getComputers();

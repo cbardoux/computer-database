@@ -62,7 +62,9 @@ public class EditComputerServlet extends HttpServlet {
 			computerDTO.introduced = request.getParameter("introduced");
 			computerDTO.discontinued = request.getParameter("discontinued");
 			computerDTO.company_id = request.getParameter("company_id");
+			
 			instanceValidator.validateComputer(computerDTO);
+			
 			Computer computer = mapping.modifyComputerDTOToComputerObject(computerDTO);
 
 			instanceComputer.modifyComputer(computer);
