@@ -33,6 +33,8 @@ public class CompanyDAO {
 
 	private static final String FIND_COMPANIES_WITH_OFFSET_QUERY = "SELECT id, name FROM company LIMIT ?, 20;";
 	private static final String FIND_COMPANIES_QUERY = "SELECT id, name FROM company;";
+	private static final String DELETE_COMPANY_QUERY = "DELETE FROM company WHERE id = ?;";
+	private static final String DELETE_COMPUTER_WITH_COMPANY_ID_QUERY = "DELETE FROM computer WHERE company_id = ?;";
 
 	public List<Company> listCompaniesWithOffset(int offset) {
 
@@ -73,5 +75,33 @@ public class CompanyDAO {
 			logger.error(e.getMessage());
 		}
 		return resultList;
+	}
+
+	public void deleteCompany(int id) throws SQLException, DAOException {
+		Connection connection = this.instanceDB.connection();
+		try (PreparedStatement statementDeleteComputer = connection.prepareStatement(DELETE_COMPUTER_WITH_COMPANY_ID_QUERY);
+				PreparedStatement statementDeleteCompany = connection
+						.prepareStatement(DELETE_COMPANY_QUERY);) {
+			
+			connection.setAutoCommit(false);
+
+			statementDeleteComputer.setInt(1, id);
+			statementDeleteComputer.executeUpdate();
+
+			statementDeleteCompany.setInt(1, id);
+			statementDeleteCompany.executeUpdate();
+
+			connection.commit();
+		} catch (SQLException errorSQL) {
+			try {
+				connection.rollback();
+			} catch (SQLException errorRollBack) {
+				logger.error(errorRollBack.getMessage());
+			}
+			logger.error(errorSQL.getMessage());
+			throw new DAOException(errorSQL.getMessage());
+		} finally {
+			connection.close();
+		}
 	}
 }

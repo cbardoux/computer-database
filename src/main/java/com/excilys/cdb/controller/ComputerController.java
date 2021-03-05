@@ -35,15 +35,28 @@ public class ComputerController {
 		return computerService.getComputerById(id);
 	}
 
-//	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, Company company) {
-//		computerService.createComputer(name, introduced, discontinued, company);
-//	}
-//
-//	public void modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
-//		computerService.modifyComputer(id, name, introduced, discontinued, company);
-//	}
+	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, Company company) {
+		Computer computer = new Computer.ComputerBuilder()
+				.name(name)
+				.introduced(introduced)
+				.discontinued(discontinued)
+				.company(company)
+				.build();
+		computerService.createComputer(computer);
+	}
 
-//	public void deleteComputer(int id) {
-//		computerService.deleteComputer(id);
-//	}
+	public void modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
+		Computer computer = new Computer.ComputerBuilder()
+				.id(id)
+				.name(name)
+				.introduced(introduced)
+				.discontinued(discontinued)
+				.company(company)
+				.build();
+		computerService.modifyComputer(computer);
+	}
+
+	public void deleteComputer(int id) throws DAOException {
+		computerService.deleteComputer(id);
+	}
 }

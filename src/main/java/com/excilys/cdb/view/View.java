@@ -1,6 +1,7 @@
 package main.java.com.excilys.cdb.view;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -20,7 +21,7 @@ import main.java.com.excilys.cdb.model.Computer;
 public class View {
 
 	private CompanyController companyController = CompanyController.getInstance();
-	//private ComputerController computerController = ComputerController.getInstance();
+	private ComputerController computerController = ComputerController.getInstance();
 	private Scanner inputUser = new Scanner(System.in);
 	private static final Logger logger = LoggerFactory.getLogger(View.class);
 
@@ -35,6 +36,7 @@ public class View {
 			System.out.println("4 - Create a computer");
 			System.out.println("5 - Update a computer");
 			System.out.println("6 - Delete a computer");
+			System.out.println("7 - Delete a computer");
 			try {
 				int userNumber = inputUser.nextInt();
 				inputUser.nextLine();
@@ -60,6 +62,9 @@ public class View {
 				case 6:
 					deleteComputer();
 					break;
+				case 7:
+					deleteCompany();
+					break;
 				default:
 					System.out.println("Enter a valid number");
 				}
@@ -76,91 +81,97 @@ public class View {
 		System.out.println("Enter an id to delete :");
 		int deleteId = inputUser.nextInt();
 		inputUser.nextLine();
-		//computerController.deleteComputer(deleteId);
+		try {
+			computerController.deleteComputer(deleteId);
+		} catch (DAOException e) {
+			logger.info("No computer with that id");
+		}
 		System.out.println("The computer with id " + deleteId + " has been deleted with success");
 	}
 
 	private void modifyComputer() {
-//		System.out.println("--- Update a computer ---");
-//		Computer computer = null;
-//		int modifyId = 0;
-//		while (true) {
-//			System.out.println("Enter a computer id :");
-//			modifyId = inputUser.nextInt();
-//			inputUser.nextLine();
-//			try {
-//				computer = computerController.getComputerById(modifyId);
-//				System.out.println(computer);
-//				break;
-//			} catch (ServiceException e1) {
-//				e1.WrongID();
-//			}
-//		}
-//
-//		String modifyName = computer.getName();
-//		while (true) {
-//			System.out.println("Enter a name :");
-//			String inputName = inputUser.nextLine();
-//			if (!inputName.equals("")) {
-//				try {
-//					modifyName = inputName;
-//					break;
-//				} catch (Exception e) {
-//					logger.info("Please enter a valid name");
-//				}
-//			}
-//		}
-//
-//		LocalDate modifyIntroduced = computer.getIntroduced();
-//		while (true) {
-//			System.out.println("Enter an introduced date :");
-//			String inputIntroduced = inputUser.nextLine();
-//			if (!inputIntroduced.equals("")) {
-//				try {
-//					modifyIntroduced = Date.valueOf(inputIntroduced).toLocalDate();
-//					break;
-//				} catch (Exception e) {
-//					logger.info("Please enter a valid date yyyy-mm-dd");
-//				}
-//			}
-//		}
-//
-//		LocalDate modifyDiscontinued = computer.getDiscontinued();
-//		while (true) {
-//			System.out.println("Enter a discontinued date :");
-//			String inputDiscontinued = inputUser.nextLine();
-//
-//			if (!inputDiscontinued.equals("")) {
-//				try {
-//					modifyDiscontinued = Date.valueOf(inputDiscontinued).toLocalDate();
-//					break;
-//				} catch (Exception e) {
-//					logger.info("Please enter a valid date yyyy-mm-dd");
-//				}
-//			}
-//		}
-//
-//		int modifyCompanyId = computer.getCompany_id();
-//		while (true) {
-//			System.out.println("Enter a company_id");
-//			String inputCompanyId = inputUser.nextLine();
-//
-//			if (!inputCompanyId.equals("")) {
-//				try {
-//					modifyCompanyId = Integer.parseInt(inputCompanyId);
-//					break;
-//				} catch (Exception e) {
-//					logger.info("Please enter a valid company id");
-//				}
-//			}
-//		}
-//
-//		computerController.modifyComputer(modifyId, modifyName, modifyIntroduced, modifyDiscontinued, modifyCompanyId);
-//		try {
-//			System.out.println(computerController.getComputerById(modifyId));
-//		} catch (ServiceException e) {
-//			e.WrongID();
-//		}
+		System.out.println("--- Update a computer ---");
+		Computer computer = null;
+		int modifyId = 0;
+		while (true) {
+			System.out.println("Enter a computer id :");
+			modifyId = inputUser.nextInt();
+			inputUser.nextLine();
+			try {
+				computer = computerController.getComputerById(modifyId);
+				System.out.println(computer);
+				break;
+			} catch (ServiceException e1) {
+				e1.WrongID();
+			}
+		}
+
+		String modifyName = computer.getName();
+		while (true) {
+			System.out.println("Enter a name :");
+			String inputName = inputUser.nextLine();
+			if (!inputName.equals("")) {
+				try {
+					modifyName = inputName;
+					break;
+				} catch (Exception e) {
+					logger.info("Please enter a valid name");
+				}
+			}
+		}
+
+		LocalDate modifyIntroduced = computer.getIntroduced();
+		while (true) {
+			System.out.println("Enter an introduced date :");
+			String inputIntroduced = inputUser.nextLine();
+			if (!inputIntroduced.equals("")) {
+				try {
+					modifyIntroduced = Date.valueOf(inputIntroduced).toLocalDate();
+					break;
+				} catch (Exception e) {
+					logger.info("Please enter a valid date yyyy-mm-dd");
+				}
+			}
+		}
+
+		LocalDate modifyDiscontinued = computer.getDiscontinued();
+		while (true) {
+			System.out.println("Enter a discontinued date :");
+			String inputDiscontinued = inputUser.nextLine();
+
+			if (!inputDiscontinued.equals("")) {
+				try {
+					modifyDiscontinued = Date.valueOf(inputDiscontinued).toLocalDate();
+					break;
+				} catch (Exception e) {
+					logger.info("Please enter a valid date yyyy-mm-dd");
+				}
+			}
+		}
+
+		int modifyCompanyId = computer.getCompany().getId();
+		while (true) {
+			System.out.println("Enter a company_id");
+			String inputCompanyId = inputUser.nextLine();
+
+			if (!inputCompanyId.equals("")) {
+				try {
+					modifyCompanyId = Integer.parseInt(inputCompanyId);
+					break;
+				} catch (Exception e) {
+					logger.info("Please enter a valid company id");
+				}
+			}
+		}
+		Company company = new Company();
+		company.setId(modifyCompanyId);
+
+		computerController.modifyComputer(modifyId, modifyName, modifyIntroduced, modifyDiscontinued, company);
+		try {
+			System.out.println(computerController.getComputerById(modifyId));
+		} catch (ServiceException e) {
+			e.WrongID();
+		}
 	}
 
 	private void createComputer() {
@@ -224,8 +235,10 @@ public class View {
 				logger.info("Please enter a valid company id");
 			}
 		}
+		Company company = new Company();
+		company.setId(companyId);
 
-		//computerController.createComputer(createName, createIntroduced, createDiscontinued, companyId);
+		computerController.createComputer(createName, createIntroduced, createDiscontinued, company);
 		System.out.println("The computer has been created with success");
 	}
 
@@ -288,6 +301,21 @@ public class View {
 //				}
 			}
 		}
+	}
+	
+	public void deleteCompany() {
+		System.out.println("--- Delete a computer ---");
+		System.out.println("Enter an id to delete :");
+		int deleteId = inputUser.nextInt();
+		inputUser.nextLine();
+		try {
+			companyController.deleteCompany(deleteId);
+		} catch (DAOException e) {
+			logger.info("No computer with that id");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("The computer with id " + deleteId + " has been deleted with success");
 	}
 
 }
