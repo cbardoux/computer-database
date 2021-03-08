@@ -1,10 +1,13 @@
 package main.java.com.excilys.cdb.service;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import main.java.com.excilys.cdb.dao.ComputerDAO;
-import main.java.com.excilys.cdb.data.Computer;
+import main.java.com.excilys.cdb.exception.DAOException;
+import main.java.com.excilys.cdb.exception.ServiceException;
+import main.java.com.excilys.cdb.model.Computer;
+import main.java.com.excilys.cdb.model.Page;
 
 public class ComputerService {
 	private static ComputerService instance = null;
@@ -20,43 +23,31 @@ public class ComputerService {
 		return instance;
 	}
 
-	public List<Computer> getComputers(int page) {
-		int offset = (page - 1) * 20;
-		List<Computer> listCompanies = computerDAO.listComputers(offset);
-		return listCompanies;
+	public Page<Computer> getComputersWithOffset(Page<Computer> page) {
+		return computerDAO.listComputersWithOffset(page);
 	}
 
-	public Computer getComputerById(int id) {
-		return computerDAO.getComputerById(id);
+	public List<Computer> getComputers() {
+		return computerDAO.listComputers();
 	}
 
-	public void createComputer(String name, LocalDate introduced, LocalDate discontinued, int company_id) {
-		Computer computer = new Computer();
-		computer.setName(name);
-		computer.setIntroduced(introduced);
-		computer.setDiscontinued(discontinued);
-		computer.setCompany_id(company_id);
+	public Computer getComputerById(int id) throws ServiceException {
+		return computerDAO.getComputerById(id).orElseThrow(() -> new ServiceException("No computer found with this id"));
+	}
 
+	public void createComputer(Computer computer) {
 		computerDAO.createComputer(computer);
 	}
 
-	public void modifyComputer(int id, String name, LocalDate introduced, LocalDate discontinued, int company_id) {
-		Computer computerInBase = computerDAO.getComputerById(id);
-		Computer computer = new Computer();
-		computer.setId(id);
-		computer.setName(name);
-		computer.setIntroduced(introduced);
-		computer.setDiscontinued(discontinued);
-		computer.setCompany_id(company_id);
-
-		if (computer.getName() == null) {
-			computer.setName(computerInBase.getName());
-		}
-
+	public void modifyComputer(Computer computer) {
 		computerDAO.modifyComputer(computer);
 	}
 
-	public void deleteComputer(int id) {
+	public void deleteComputer(int id) throws DAOException {
 		computerDAO.deleteComputer(id);
+	}
+
+	public int countRows() {
+		return computerDAO.countRows();
 	}
 }

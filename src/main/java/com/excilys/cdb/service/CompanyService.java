@@ -1,12 +1,15 @@
 package main.java.com.excilys.cdb.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import main.java.com.excilys.cdb.dao.CompanyDAO;
-import main.java.com.excilys.cdb.data.Company;
+import main.java.com.excilys.cdb.exception.DAOException;
+import main.java.com.excilys.cdb.model.Company;
 
 public class CompanyService {
+	private final int LIMIT_PAGINATION = 20;
 	private static CompanyService instance = null;
 	private CompanyDAO companyDAO = CompanyDAO.getInstance();
 
@@ -20,16 +23,21 @@ public class CompanyService {
 		return instance;
 	}
 
-	public List<Company> getCompanies(int page) {
+	public List<Company> getCompaniesWithOffset(int page) {
 		List<Company> listCompanies = new ArrayList<>();
-		try {
-			int offset = (page - 1) * 20;
-			listCompanies = companyDAO.listCompanies(offset);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		int offset = (page - 1) * LIMIT_PAGINATION;
+		listCompanies = companyDAO.listCompaniesWithOffset(offset);
+
 		return listCompanies;
+	}
+	
+	public List<Company> getCompanies() {
+		return companyDAO.listCompanies();
+	}
+	
+	public void deleteCompany(int id) throws DAOException, SQLException {
+		companyDAO.deleteCompany(id);
 	}
 
 }
