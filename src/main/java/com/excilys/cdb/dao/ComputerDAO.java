@@ -35,7 +35,7 @@ public class ComputerDAO {
 		return instanceComputer;
 	}
 
-	private static final String FIND_COMPUTERS_WITH_PAGE_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ? LIMIT ?, ?;";
+	private static final String FIND_COMPUTERS_WITH_PAGE_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ?";
 	private static final String FIND_COMPUTERS_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id;";
 	private static final String FIND_COMPUTER_QUERY = "SELECT computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id = ?;";
 	private static final String CREATE_COMPUTER_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
@@ -47,13 +47,15 @@ public class ComputerDAO {
 
 		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
 		List<Computer> resultList = new ArrayList<>();
+		String request = FIND_COMPUTERS_WITH_PAGE_QUERY 
+				+ " ORDER BY " + "computer." + page.getOrderBy()
+				+ " LIMIT " + (page.getIndex() - 1) * page.getLimit() + ", " + page.getLimit()
+				+ ";";
 		try (Connection connection = instanceDB.connection();
-				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTERS_WITH_PAGE_QUERY);) {
+				PreparedStatement statement = connection.prepareStatement(request)) {
 
 			statement.setString(1, "%" + page.getSearch() + "%");
-			statement.setInt(2, (page.getIndex() - 1) * page.getLimit());
-			statement.setInt(3, page.getLimit());
-			
+
 			ResultSet resultSet = statement.executeQuery();
 
 			while (resultSet.next()) {

@@ -40,7 +40,7 @@ public class DashboardServlet extends HttpServlet {
 			session.setAttribute("page", page);
 		}
 
-		List<ComputerDTOForServlet> computerDTO = new ArrayList<>();
+		List<ComputerDTOForServlet> computerDTOList = new ArrayList<>();
 		int numberOfRows = instanceService.countRows();
 		int limit = page.getLimit();
 		int indexMax = numberOfRows % limit == 0 ? numberOfRows / limit : numberOfRows / limit + 1;
@@ -65,13 +65,20 @@ public class DashboardServlet extends HttpServlet {
 			} catch (NumberFormatException numberFormatException) {
 				request.setAttribute("errorMessage", numberFormatException);
 			}
+		} else if (request.getParameter("orderBy") != null) {
+			try {
+				page.setOrderBy(request.getParameter("orderBy"));
+				page.setIndex(INDEX_MIN);
+			} catch (NumberFormatException numberFormatException) {
+				request.setAttribute("errorMessage", numberFormatException);
+			}
 		}
 
-		computerDTO = instanceService.getComputersWithOffset(page).getContent().stream()
+		computerDTOList = instanceService.getComputersWithOffset(page).getContent().stream()
 				.map(computer -> mapping.computerObjectToCreateComputerDTO(computer)).collect(Collectors.toList());
 
 		request.setAttribute("rows", instanceService.countRows());
-		request.setAttribute("computers", computerDTO);
+		request.setAttribute("computers", computerDTOList);
 		request.setAttribute("indexLow", page.valueOfIndexLow(indexMax));
 		request.setAttribute("indexHigh", page.valueOfIndexHigh(indexMax));
 		request.setAttribute("indexMax", indexMax);

@@ -10,6 +10,7 @@ public class Page<E> {
 	private int indexHigh;
 	private List<E> content;
 	private String search = "";
+	private String orderBy = "id";
 	
 	public Page() {
 		content = new ArrayList<>();
@@ -69,6 +70,14 @@ public class Page<E> {
 		this.search = search;
 	}
 	
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+
 	public int valueOfIndexLow(int indexMax) {
 		int indexLow = 1;
 		if(index >= 3 && index <= indexMax - 2) {

@@ -13,7 +13,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
+			<a class="navbar-brand" href="${pageContext.request.contextPath}/home"> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -58,12 +58,20 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th><a href="<c:url value="/home">
+				  		<c:param name="orderBy" value="name"/>
+						</c:url>">Computer name</a></th>
+						<th><a href="<c:url value="/home">
+				  		<c:param name="orderBy" value="introduced"/>
+						</c:url>">Introduced date</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><a href="<c:url value="/home">
+				  		<c:param name="orderBy" value="discontinued"/>
+						</c:url>">Discontinued date</a></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><a href="<c:url value="/home">
+				  		<c:param name="orderBy" value="company_id"/>
+						</c:url>">Company</a></th>
 
 					</tr>
 				</thead>

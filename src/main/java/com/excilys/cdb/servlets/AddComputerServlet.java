@@ -53,8 +53,6 @@ public class AddComputerServlet extends HttpServlet {
 		computerDTO.discontinued = request.getParameter("discontinued");
 		computerDTO.company_id = request.getParameter("company_id");
 
-		// RequestDispatcher dispatcher = null;
-
 		try {
 			instanceValidator.validateComputer(computerDTO);
 
