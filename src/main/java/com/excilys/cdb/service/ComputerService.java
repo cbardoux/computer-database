@@ -1,7 +1,10 @@
 package main.java.com.excilys.cdb.service;
 
 import java.util.List;
-import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import main.java.com.excilys.cdb.dao.ComputerDAO;
 import main.java.com.excilys.cdb.exception.DAOException;
@@ -9,19 +12,12 @@ import main.java.com.excilys.cdb.exception.ServiceException;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.model.Page;
 
+@Service
+@Scope("singleton")
 public class ComputerService {
-	private static ComputerService instance = null;
-	private ComputerDAO computerDAO = ComputerDAO.getInstance();
-
-	private ComputerService() {
-	}
-
-	public static ComputerService getInstance() {
-		if (instance == null) {
-			instance = new ComputerService();
-		}
-		return instance;
-	}
+	
+	@Autowired
+	private ComputerDAO computerDAO;
 
 	public Page<Computer> getComputersWithOffset(Page<Computer> page) {
 		return computerDAO.listComputersWithOffset(page);

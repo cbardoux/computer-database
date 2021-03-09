@@ -3,6 +3,10 @@ package main.java.com.excilys.cdb.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
 import main.java.com.excilys.cdb.model.Company;
@@ -10,19 +14,12 @@ import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.model.Page;
 import main.java.com.excilys.cdb.service.ComputerService;
 
+@Controller
+@Scope("singleton")
 public class ComputerController {
-	private static ComputerController instanceController = null;
-	private ComputerService computerService = ComputerService.getInstance();
 
-	private ComputerController() {
-	}
-
-	public static ComputerController getInstance() {
-		if (instanceController == null) {
-			instanceController = new ComputerController();
-		}
-		return instanceController;
-	}
+	@Autowired
+	private ComputerService computerService;
 
 	public Page<Computer> getComputersWithOffset(Page<Computer> page) {
 		return computerService.getComputersWithOffset(page);

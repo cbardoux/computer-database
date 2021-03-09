@@ -4,21 +4,17 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.model.Computer;
 
+@Component
+@Scope("singleton")
 public class MappingDTO {
 
 	private DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
-
-	private static MappingDTO instance = null;
-
-	public static MappingDTO getInstance() {
-		if (instance == null) {
-			instance = new MappingDTO();
-		}
-		return instance;
-	}
 
 	public Computer listComputerDTOToComputerObject(ComputerDTOForServlet computerDTO) {
 
@@ -259,15 +255,15 @@ public class MappingDTO {
 		computerDTO.id = computer.getId();
 		computerDTO.name = computer.getName();
 		
-		try {
+		if(computer.getIntroduced() != null) {
 			computerDTO.introduced = computer.getIntroduced().toString();
-		} catch (NullPointerException e) {
+		} else {
 			computerDTO.introduced = null;
 		}
 		
-		try {
+		if(computer.getDiscontinued() != null) {
 			computerDTO.discontinued = computer.getDiscontinued().toString();
-		} catch (NullPointerException e1) {
+		} else {
 			computerDTO.discontinued = null;
 		}
 		

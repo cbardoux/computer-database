@@ -4,24 +4,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+
 import main.java.com.excilys.cdb.dao.CompanyDAO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Company;
 
+@Service
+@Scope("singleton")
 public class CompanyService {
 	private final int LIMIT_PAGINATION = 20;
-	private static CompanyService instance = null;
-	private CompanyDAO companyDAO = CompanyDAO.getInstance();
-
-	private CompanyService() {
-	}
-
-	public static CompanyService getInstance() {
-		if (instance == null) {
-			instance = new CompanyService();
-		}
-		return instance;
-	}
+	
+	@Autowired
+	private CompanyDAO companyDAO;
 
 	public List<Company> getCompaniesWithOffset(int page) {
 		List<Company> listCompanies = new ArrayList<>();

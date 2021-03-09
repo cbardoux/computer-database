@@ -3,25 +3,21 @@ package main.java.com.excilys.cdb.validator;
 import java.sql.Date;
 import java.time.LocalDate;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
 import main.java.com.excilys.cdb.exception.ValidatorException;
 import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.service.CompanyService;
 
+@Component
+@Scope("singleton")
 public class ComputerValidator {
 
-	private static ComputerValidator instance;
-	private CompanyService controllerInstance = CompanyService.getInstance();
-
-	public static ComputerValidator getInstance() {
-		if (instance == null) {
-			instance = new ComputerValidator();
-		}
-		return instance;
-	}
-
-	private ComputerValidator() {
-	}
+	@Autowired
+	private CompanyService controllerInstance;
 
 	public void validateComputer(ComputerDTOForServlet computerDTO) throws ValidatorException {
 
@@ -39,24 +35,24 @@ public class ComputerValidator {
 			company_id = 0;
 		}
 
-		try {
+		if (!computerDTO.introduced.equals("")) {
 			introduced = Date.valueOf(computerDTO.introduced).toLocalDate();
-		} catch (Exception e) {
+		} else {
 			introduced = null;
 		}
-		
-		try {
-			discontinued = Date.valueOf(computerDTO.discontinued).toLocalDate();
-		} catch (Exception e) {
-			discontinued = null;
-		}
 
-		if (introduced != null && introduced.isAfter(discontinued)) {
-			throw new ValidatorException("Introduced date must be before discontinued date");
+		if (!computerDTO.discontinued.equals("")) {
+			discontinued = Date.valueOf(computerDTO.discontinued).toLocalDate();
+		} else {
+			discontinued = null;
 		}
 
 		if (introduced == null && discontinued != null) {
 			throw new ValidatorException("Cannot enter a discontinued date with no introduced date");
+		}
+
+		if (introduced != null && discontinued != null && introduced.isAfter(discontinued)) {
+			throw new ValidatorException("Introduced date must be before discontinued date");
 		}
 
 		boolean isCompanyIdExist = false;

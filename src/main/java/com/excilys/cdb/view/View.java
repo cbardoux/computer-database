@@ -8,6 +8,9 @@ import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import main.java.com.excilys.cdb.controller.CompanyController;
 import main.java.com.excilys.cdb.controller.ComputerController;
@@ -18,12 +21,20 @@ import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.model.Page;
 
+@Component
+@Scope("prototype")
 public class View {
 
-	private CompanyController companyController = CompanyController.getInstance();
-	private ComputerController computerController = ComputerController.getInstance();
+	@Autowired
+	private CompanyController companyController;
+
+	@Autowired
+	private ComputerController computerController;
+
+	@Autowired
+	private MappingDTO mapping;
+
 	private Scanner inputUser = new Scanner(System.in);
-	private MappingDTO mapping = MappingDTO.getInstance();
 	private static final Logger logger = LoggerFactory.getLogger(View.class);
 
 	public void launch() {
@@ -37,7 +48,7 @@ public class View {
 			System.out.println("4 - Create a computer");
 			System.out.println("5 - Update a computer");
 			System.out.println("6 - Delete a computer");
-			System.out.println("7 - Delete a computer");
+			System.out.println("7 - Delete a company");
 			try {
 				int userNumber = inputUser.nextInt();
 				inputUser.nextLine();
@@ -187,7 +198,7 @@ public class View {
 				break;
 			}
 		}
-		
+
 		LocalDate createIntroduced = null;
 
 		while (true) {
@@ -302,7 +313,7 @@ public class View {
 	}
 
 	public void deleteCompany() {
-		System.out.println("--- Delete a computer ---");
+		System.out.println("--- Delete a company ---");
 		System.out.println("Enter an id to delete :");
 		int deleteId = inputUser.nextInt();
 		inputUser.nextLine();
@@ -313,7 +324,7 @@ public class View {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("The computer with id " + deleteId + " has been deleted with success");
+		System.out.println("The company with id " + deleteId + " has been deleted with success");
 	}
 
 }

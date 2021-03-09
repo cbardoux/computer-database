@@ -1,32 +1,43 @@
 package main.java.com.excilys.cdb.servlets;
 
 import java.io.IOException;
-import java.sql.Date;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
 import main.java.com.excilys.cdb.dto.MappingDTO;
-import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
 import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.service.CompanyService;
 import main.java.com.excilys.cdb.service.ComputerService;
 import main.java.com.excilys.cdb.validator.ComputerValidator;
 
+@Controller
 @WebServlet("/home/edit")
 public class EditComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	ComputerService instanceComputer = ComputerService.getInstance();
-	CompanyService instanceCompany = CompanyService.getInstance();
-	ComputerValidator instanceValidator = ComputerValidator.getInstance();
-	MappingDTO mapping = MappingDTO.getInstance();
+	@Autowired
+	private ComputerService instanceComputer;
+	
+	@Autowired
+	private CompanyService instanceCompany;
+	
+	@Autowired
+	private ComputerValidator instanceValidator;
+
+	@Autowired
+	private MappingDTO mapping;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -37,6 +48,7 @@ public class EditComputerServlet extends HttpServlet {
 			computerDTO = mapping.objectToCreateDTOForEdit(
 					instanceComputer.getComputerById(Integer.parseInt(request.getParameter("id"))));
 			computerDTO.id = Integer.parseInt(request.getParameter("id"));
+			System.out.println("c" + computerDTO);
 
 		} catch (NumberFormatException e) {
 			request.setAttribute("errorMessage", e.getMessage());
@@ -48,6 +60,12 @@ public class EditComputerServlet extends HttpServlet {
 		request.setAttribute("computer", computerDTO);
 
 		dispatcher.forward(request, response);
+	}
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+		super.init(config);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -62,8 +80,9 @@ public class EditComputerServlet extends HttpServlet {
 			computerDTO.introduced = request.getParameter("introduced");
 			computerDTO.discontinued = request.getParameter("discontinued");
 			computerDTO.company_id = request.getParameter("company_id");
-			
+			System.out.println(computerDTO);
 			instanceValidator.validateComputer(computerDTO);
+			System.out.println(computerDTO);
 			
 			Computer computer = mapping.modifyComputerDTOToComputerObject(computerDTO);
 

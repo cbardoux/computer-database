@@ -7,12 +7,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
 import main.java.com.excilys.cdb.dto.MappingDTO;
@@ -21,13 +26,24 @@ import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.model.Page;
 import main.java.com.excilys.cdb.service.ComputerService;
 
+@Controller
 @WebServlet("/home")
 public class DashboardServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private ComputerService instanceService = ComputerService.getInstance();
-	private MappingDTO mapping = MappingDTO.getInstance();
 	private final int INDEX_MIN = 1;
+
+	@Autowired
+	private MappingDTO mapping;
+
+	@Autowired
+	private ComputerService instanceService;
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+		super.init(config);
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
