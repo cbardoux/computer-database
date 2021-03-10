@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import main.java.com.excilys.cdb.model.Company;
 public class CompanyDAO {
 
 	@Autowired
-	private DBConnection instanceDB;
+	private DataSource dataSource;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 
@@ -33,7 +35,7 @@ public class CompanyDAO {
 	public List<Company> listCompaniesWithOffset(int offset) {
 
 		List<Company> resultList = new ArrayList<>();
-		try (Connection connection = instanceDB.getConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(FIND_COMPANIES_WITH_OFFSET_QUERY);) {
 
 			statement.setInt(1, offset);
@@ -53,7 +55,7 @@ public class CompanyDAO {
 	public List<Company> listCompanies() {
 
 		List<Company> resultList = new ArrayList<>();
-		try (Connection connection = instanceDB.getConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(FIND_COMPANIES_QUERY);) {
 
 			ResultSet resultSet = statement.executeQuery();
@@ -71,7 +73,7 @@ public class CompanyDAO {
 	}
 
 	public void deleteCompany(int id) throws SQLException, DAOException {
-		Connection connection = this.instanceDB.getConnection();
+		Connection connection = this.dataSource.getConnection();
 		try (PreparedStatement statementDeleteComputer = connection.prepareStatement(DELETE_COMPUTER_WITH_COMPANY_ID_QUERY);
 				PreparedStatement statementDeleteCompany = connection
 						.prepareStatement(DELETE_COMPANY_QUERY);) {

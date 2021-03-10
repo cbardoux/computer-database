@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ import main.java.com.excilys.cdb.model.Page;
 public class ComputerDAO {
 	
 	@Autowired
-	private DBConnection instanceDB;
+	private DataSource dataSource;
 	
 	@Autowired
 	private MappingDTO mappingDTO;
@@ -49,7 +51,7 @@ public class ComputerDAO {
 				+ " ORDER BY " + "computer." + page.getOrderBy()
 				+ " LIMIT " + (page.getIndex() - 1) * page.getLimit() + ", " + page.getLimit()
 				+ ";";
-		try (Connection connection = instanceDB.getConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(request)) {
 
 			statement.setString(1, "%" + page.getSearch() + "%");
@@ -80,7 +82,7 @@ public class ComputerDAO {
 	public List<Computer> listComputers() {
 		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
 		List<Computer> resultList = new ArrayList<>();
-		try (Connection connection = instanceDB.getConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTERS_QUERY);) {
 
 			ResultSet resultSet = statement.executeQuery();
@@ -109,7 +111,7 @@ public class ComputerDAO {
 
 		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
 		Optional<Computer> optionalComputer;
-		try (Connection connection = instanceDB.getConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTER_QUERY)) {
 
 			statement.setInt(1, id);
@@ -135,7 +137,7 @@ public class ComputerDAO {
 
 	public void createComputer(Computer computer) {
 
-		try (Connection connection = instanceDB.getConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(CREATE_COMPUTER_QUERY)) {
 
 			ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
@@ -153,7 +155,7 @@ public class ComputerDAO {
 	}
 
 	public void modifyComputer(Computer computer) {
-		try (Connection connection = instanceDB.getConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(MODIFY_COMPUTER_QUERY)) {
 
 			ComputerDTOForDB computerDTO = mappingDTO.computerObjectToModifyComputerDTOForDB(computer);
@@ -172,7 +174,7 @@ public class ComputerDAO {
 	}
 
 	public void deleteComputer(int id) throws DAOException {
-		try (Connection connection = instanceDB.getConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(DELETE_COMPUTER_QUERY)) {
 
 			statement.setInt(1, id);
@@ -186,7 +188,7 @@ public class ComputerDAO {
 
 	public int countRows() {
 		int countRows = 0;
-		try (Connection connection = instanceDB.getConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(COUNT_ROWS)) {
 
 			ResultSet resultSet = statement.executeQuery();
