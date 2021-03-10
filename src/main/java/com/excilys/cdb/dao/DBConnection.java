@@ -16,17 +16,11 @@ import com.zaxxer.hikari.HikariDataSource;
 @Scope("singleton")
 public class DBConnection {
 
-	private static HikariConfig config = new HikariConfig();
+	private static HikariConfig config;
 	private HikariDataSource connection;
 
 	private void connection() {
-		config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		config.setJdbcUrl("jdbc:mysql://localhost:3306/computer-database-db");
-		config.setUsername("admincdb");
-		config.setPassword("qwerty1234");
-		config.addDataSourceProperty("cachePrepStmts", "true");
-		config.addDataSourceProperty("prepStmtCacheSize", "250");
-		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+		config = new HikariConfig("/main/resources/db.properties");
 		connection = new HikariDataSource(config);
 	}
 	

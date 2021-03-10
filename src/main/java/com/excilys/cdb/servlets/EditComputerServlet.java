@@ -48,8 +48,6 @@ public class EditComputerServlet extends HttpServlet {
 			computerDTO = mapping.objectToCreateDTOForEdit(
 					instanceComputer.getComputerById(Integer.parseInt(request.getParameter("id"))));
 			computerDTO.id = Integer.parseInt(request.getParameter("id"));
-			System.out.println("c" + computerDTO);
-
 		} catch (NumberFormatException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} catch (ServiceException e) {
@@ -80,9 +78,8 @@ public class EditComputerServlet extends HttpServlet {
 			computerDTO.introduced = request.getParameter("introduced");
 			computerDTO.discontinued = request.getParameter("discontinued");
 			computerDTO.company_id = request.getParameter("company_id");
-			System.out.println(computerDTO);
+
 			instanceValidator.validateComputer(computerDTO);
-			System.out.println(computerDTO);
 			
 			Computer computer = mapping.modifyComputerDTOToComputerObject(computerDTO);
 

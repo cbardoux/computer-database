@@ -121,9 +121,8 @@ public class ComputerDAO {
 				computerDTO.company_id = resultSet.getString(4);
 				computerDTO.company_name = resultSet.getString(5);
 
-				System.out.println("a" + computerDTO);
 				Computer computer = mappingDTO.getComputerByIdDTOToComputerObject(computerDTO);
-				System.out.println("b"+computer);
+
 				optionalComputer = Optional.of(computer);
 
 				return optionalComputer;
