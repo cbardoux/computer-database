@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import main.java.com.excilys.cdb.dto.ComputerDTOForDB;
@@ -24,16 +23,17 @@ import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.model.Page;
 
 @Repository
-@Scope("singleton")
 public class ComputerDAO {
 	
-	@Autowired
 	private DataSource dataSource;
-	
-	@Autowired
 	private MappingDTO mappingDTO;
 	
-	private static final Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+	public ComputerDAO(DataSource dataSource, MappingDTO mappingDTO) {
+		this.dataSource = dataSource;
+		this.mappingDTO = mappingDTO;
+	}
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
 	private static final String FIND_COMPUTERS_WITH_PAGE_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ?";
 	private static final String FIND_COMPUTERS_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id;";
@@ -63,8 +63,8 @@ public class ComputerDAO {
 				computerDTO.name = resultSet.getString(2);
 				computerDTO.introduced = resultSet.getString(3);
 				computerDTO.discontinued = resultSet.getString(4);
-				computerDTO.company_id = resultSet.getString(5);
-				computerDTO.company_name = resultSet.getString(6);
+				computerDTO.companyId = resultSet.getString(5);
+				computerDTO.companyName = resultSet.getString(6);
 				
 				Computer computer = mappingDTO.listComputerDTOToComputerObject(computerDTO);
 				
@@ -74,7 +74,7 @@ public class ComputerDAO {
 			page.setContent(resultList);
 
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 		return page;
 	}
@@ -93,8 +93,8 @@ public class ComputerDAO {
 				computerDTO.name = resultSet.getString(2);
 				computerDTO.introduced = resultSet.getString(3);
 				computerDTO.discontinued = resultSet.getString(4);
-				computerDTO.company_id = resultSet.getString(5);
-				computerDTO.company_name = resultSet.getString(6);
+				computerDTO.companyId = resultSet.getString(5);
+				computerDTO.companyName = resultSet.getString(6);
 
 				Computer computer = mappingDTO.listComputerDTOToComputerObject(computerDTO);
 
@@ -102,7 +102,7 @@ public class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 		return resultList;
 	}
@@ -120,8 +120,8 @@ public class ComputerDAO {
 				computerDTO.name = resultSet.getString(1);
 				computerDTO.introduced = resultSet.getString(2);
 				computerDTO.discontinued = resultSet.getString(3);
-				computerDTO.company_id = resultSet.getString(4);
-				computerDTO.company_name = resultSet.getString(5);
+				computerDTO.companyId = resultSet.getString(4);
+				computerDTO.companyName = resultSet.getString(5);
 
 				Computer computer = mappingDTO.getComputerByIdDTOToComputerObject(computerDTO);
 
@@ -130,7 +130,7 @@ public class ComputerDAO {
 				return optionalComputer;
 			}
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 		return optionalComputer = Optional.empty();
 	}
@@ -145,12 +145,12 @@ public class ComputerDAO {
 			statement.setString(1, computerDTO.name);
 			statement.setDate(2, computerDTO.introduced);
 			statement.setDate(3, computerDTO.discontinued);
-			statement.setString(4, computerDTO.company_id);
+			statement.setString(4, computerDTO.companyId);
 
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 	}
 
@@ -163,13 +163,13 @@ public class ComputerDAO {
 			statement.setString(1, computerDTO.name);
 			statement.setDate(2, computerDTO.introduced);
 			statement.setDate(3, computerDTO.discontinued);
-			statement.setString(4, computerDTO.company_id);
+			statement.setString(4, computerDTO.companyId);
 			statement.setInt(5, computerDTO.id);
 
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 	}
 
@@ -181,7 +181,7 @@ public class ComputerDAO {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOGGER.error(e.getMessage());
 			throw new DAOException("No computer with this id");
 		}
 	}
@@ -196,7 +196,7 @@ public class ComputerDAO {
 			countRows = resultSet.getInt(1);
 
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 		return countRows;
 	}

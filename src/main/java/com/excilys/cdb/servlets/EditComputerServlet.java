@@ -77,7 +77,7 @@ public class EditComputerServlet extends HttpServlet {
 			computerDTO.name = request.getParameter("name");
 			computerDTO.introduced = request.getParameter("introduced");
 			computerDTO.discontinued = request.getParameter("discontinued");
-			computerDTO.company_id = request.getParameter("company_id");
+			computerDTO.companyId = request.getParameter("companyId");
 
 			instanceValidator.validateComputer(computerDTO);
 			

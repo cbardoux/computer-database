@@ -12,23 +12,26 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
+import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Company;
 
 @Repository
-@Scope("singleton")
 public class CompanyDAO {
 
-	@Autowired
 	private DataSource dataSource;
-	
-	private static final Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
+
+	public CompanyDAO(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 
 	private static final String FIND_COMPANIES_WITH_OFFSET_QUERY = "SELECT id, name FROM company LIMIT ?, 20;";
 	private static final String FIND_COMPANIES_QUERY = "SELECT id, name FROM company;";
+	private static final String FIND_IF_COMPANY_EXISTS = "SELECT COUNT(id) FROM company WHERE id = ?;";
 	private static final String DELETE_COMPANY_QUERY = "DELETE FROM company WHERE id = ?;";
 	private static final String DELETE_COMPUTER_WITH_COMPANY_ID_QUERY = "DELETE FROM computer WHERE company_id = ?;";
 
@@ -47,7 +50,7 @@ public class CompanyDAO {
 				resultList.add(company);
 			}
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 		return resultList;
 	}
@@ -67,17 +70,17 @@ public class CompanyDAO {
 			}
 
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 		return resultList;
 	}
 
 	public void deleteCompany(int id) throws SQLException, DAOException {
 		Connection connection = this.dataSource.getConnection();
-		try (PreparedStatement statementDeleteComputer = connection.prepareStatement(DELETE_COMPUTER_WITH_COMPANY_ID_QUERY);
-				PreparedStatement statementDeleteCompany = connection
-						.prepareStatement(DELETE_COMPANY_QUERY);) {
-			
+		try (PreparedStatement statementDeleteComputer = connection
+				.prepareStatement(DELETE_COMPUTER_WITH_COMPANY_ID_QUERY);
+				PreparedStatement statementDeleteCompany = connection.prepareStatement(DELETE_COMPANY_QUERY);) {
+
 			connection.setAutoCommit(false);
 
 			statementDeleteComputer.setInt(1, id);
@@ -91,12 +94,29 @@ public class CompanyDAO {
 			try {
 				connection.rollback();
 			} catch (SQLException errorRollBack) {
-				logger.error(errorRollBack.getMessage());
+				LOGGER.error(errorRollBack.getMessage());
 			}
-			logger.error(errorSQL.getMessage());
+			LOGGER.error(errorSQL.getMessage());
 			throw new DAOException(errorSQL.getMessage());
 		} finally {
 			connection.close();
 		}
+	}
+
+	public int isCompanyExists(int id) {
+		int computerExists = 0;
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(FIND_IF_COMPANY_EXISTS);) {
+
+			statement.setInt(1, id);
+			ResultSet resultSet = statement.executeQuery();
+
+			resultSet.next();
+			computerExists = resultSet.getInt(1);
+
+		} catch (SQLException e) {
+			LOGGER.error(FIND_IF_COMPANY_EXISTS);
+		}
+		return computerExists;
 	}
 }

@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 public class ServiceException extends Exception {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(ServiceException.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceException.class);
 
 	public ServiceException() {
 		super();
@@ -16,11 +16,11 @@ public class ServiceException extends Exception {
 		super(msg);
 	}
 	
-	public void WrongID() {
-		logger.info("The ID entered is not in the database");
+	public void wrongID() {
+		LOGGER.info("The ID entered is not in the database");
 	}
 	
-	public void WrongPageNumber() {
-		logger.info("The page number entered is not good");
+	public void wrongPageNumber() {
+		LOGGER.info("The page number entered is not good");
 	}
 }

@@ -11,7 +11,7 @@ public class Page<E> {
 	private List<E> content;
 	private String search = "";
 	private String orderBy = "id";
-	
+
 	public Page() {
 		content = new ArrayList<>();
 	}
@@ -61,7 +61,7 @@ public class Page<E> {
 	public void setContent(List<E> content) {
 		this.content = content;
 	}
-	
+
 	public String getSearch() {
 		return search;
 	}
@@ -69,7 +69,7 @@ public class Page<E> {
 	public void setSearch(String search) {
 		this.search = search;
 	}
-	
+
 	public String getOrderBy() {
 		return orderBy;
 	}
@@ -80,26 +80,26 @@ public class Page<E> {
 
 	public int valueOfIndexLow(int indexMax) {
 		int indexLow = 1;
-		if(index >= 3 && index <= indexMax - 2) {
+		if (index >= 3 && index <= indexMax - 2) {
 			indexLow = index - 2;
-		} else if(index < 3) {
+		} else if (index < 3) {
 			indexLow = 1;
-		} else if(index > indexMax -2) {
+		} else if (index > indexMax - 2) {
 			indexLow = indexMax - 4;
 		}
-		 return indexLow;
+		return indexLow;
 	}
-	
+
 	public int valueOfIndexHigh(int indexMax) {
 		int indexHigh = 5;
-		if(index >= 3 && index <= indexMax - 2){
+		if (index >= 3 && index <= indexMax - 2) {
 			indexHigh = index + 2;
-		} else if(index < 3) {
+		} else if (index < 3) {
 			indexHigh = 5;
-		} else if(index > indexMax - 2) {
+		} else if (index > indexMax - 2) {
 			indexHigh = indexMax;
 		}
-		 return indexHigh;
+		return indexHigh;
 	}
 
 }

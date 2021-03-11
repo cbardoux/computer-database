@@ -41,9 +41,9 @@
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" onchange = limitMaxDate(this.value) value="${computer.discontinued}">
                             </div>
                             <div class="form-group">
-                                <label for="company_id">Company</label>
-                                <select class="form-control" id="company_id" name="company_id">
-                                	<option value="${computer.company_id}">${computer.company_name}</option>
+                                <label for="companyId">Company</label>
+                                <select class="form-control" id="companyId" name="companyId">
+                                	<option value="${computer.companyId}">${computer.companyName}</option>
                                     <c:forEach items="${companies}" var="company">
         								<option value="${company.id}">${company.name}</option>
     								</c:forEach>

@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 public class DAOException extends Exception {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(ServiceException.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceException.class);
 
 	public DAOException() {
 		super();
@@ -15,12 +15,12 @@ public class DAOException extends Exception {
 	public DAOException(String msg) {
 		super(msg);
 	}
-	
-	public void WrongPageNumber() {
-		logger.info("The page number entered is not good");
+
+	public void wrongPageNumber() {
+		LOGGER.info("The page number entered is not good");
 	}
-	
-	public void CompanyListError() {
-		logger.info("No company list found");
+
+	public void companyListError() {
+		LOGGER.info("No company list found");
 	}
 }

@@ -70,7 +70,7 @@
 						</c:url>">Discontinued date</a></th>
 						<!-- Table header for Company -->
 						<th><a href="<c:url value="/home">
-				  		<c:param name="orderBy" value="company_id"/>
+				  		<c:param name="orderBy" value="companyId"/>
 						</c:url>">Company</a></th>
 
 					</tr>
@@ -86,7 +86,7 @@
 								onclick="">${computer.name}</a></td>
 							<td>${computer.introduced}</td>
 							<td>${computer.discontinued}</td>
-							<td>${computer.company_name}</td>
+							<td>${computer.companyName}</td>
 						</tr>
 					</c:forEach>
 

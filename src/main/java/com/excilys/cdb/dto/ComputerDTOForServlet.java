@@ -6,13 +6,13 @@ public class ComputerDTOForServlet {
 	public String name;
 	public String introduced;
 	public String discontinued;
-	public String company_id;
-	public String company_name;
-	
+	public String companyId;
+	public String companyName;
+
 	@Override
 	public String toString() {
 		return "ListComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
-				+ discontinued + ", company_id=" + company_id + ", company_name=" + company_name + "]";
+				+ discontinued + ", company_id=" + companyId + ", company_name=" + companyName + "]";
 	}
 
 	public int getId() {
@@ -47,20 +47,20 @@ public class ComputerDTOForServlet {
 		this.discontinued = discontinued;
 	}
 
-	public String getCompany_id() {
-		return company_id;
+	public String getCompanyId() {
+		return companyId;
 	}
 
-	public void setCompany_id(String company_id) {
-		this.company_id = company_id;
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
 	}
 
-	public String getCompany_name() {
-		return company_name;
+	public String getCompanyName() {
+		return companyName;
 	}
 
-	public void setCompany_name(String company_name) {
-		this.company_name = company_name;
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
 }

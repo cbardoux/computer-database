@@ -35,7 +35,7 @@ public class View {
 	private MappingDTO mapping;
 
 	private Scanner inputUser = new Scanner(System.in);
-	private static final Logger logger = LoggerFactory.getLogger(View.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(View.class);
 
 	public void launch() {
 		while (true) {
@@ -81,7 +81,7 @@ public class View {
 					System.out.println("Enter a valid number");
 				}
 			} catch (InputMismatchException imputmInputMismatchException) {
-				logger.info("Enter a number please");
+				LOGGER.info("Enter a number please");
 			}
 
 		}
@@ -96,7 +96,7 @@ public class View {
 		try {
 			computerController.deleteComputer(deleteId);
 		} catch (DAOException e) {
-			logger.info("No computer with that id");
+			LOGGER.info("No computer with that id");
 		}
 		System.out.println("The computer with id " + deleteId + " has been deleted with success");
 	}
@@ -114,7 +114,7 @@ public class View {
 				System.out.println(computer);
 				break;
 			} catch (ServiceException e1) {
-				e1.WrongID();
+				e1.wrongID();
 			}
 		}
 
@@ -127,7 +127,7 @@ public class View {
 					modifyName = inputName;
 					break;
 				} catch (Exception e) {
-					logger.info("Please enter a valid name");
+					LOGGER.info("Please enter a valid name");
 				}
 			}
 		}
@@ -141,7 +141,7 @@ public class View {
 					modifyIntroduced = Date.valueOf(inputIntroduced).toLocalDate();
 					break;
 				} catch (Exception e) {
-					logger.info("Please enter a valid date yyyy-mm-dd");
+					LOGGER.info("Please enter a valid date yyyy-mm-dd");
 				}
 			}
 		}
@@ -156,7 +156,7 @@ public class View {
 					modifyDiscontinued = Date.valueOf(inputDiscontinued).toLocalDate();
 					break;
 				} catch (Exception e) {
-					logger.info("Please enter a valid date yyyy-mm-dd");
+					LOGGER.info("Please enter a valid date yyyy-mm-dd");
 				}
 			}
 		}
@@ -171,7 +171,7 @@ public class View {
 					modifyCompanyId = Integer.parseInt(inputCompanyId);
 					break;
 				} catch (Exception e) {
-					logger.info("Please enter a valid company id");
+					LOGGER.info("Please enter a valid company id");
 				}
 			}
 		}
@@ -182,7 +182,7 @@ public class View {
 		try {
 			System.out.println(computerController.getComputerById(modifyId));
 		} catch (ServiceException e) {
-			e.WrongID();
+			e.wrongID();
 		}
 	}
 
@@ -209,7 +209,7 @@ public class View {
 					createIntroduced = Date.valueOf(introduced).toLocalDate();
 					break;
 				} catch (Exception e) {
-					logger.info("Please enter a valid date yyyy-mm-dd");
+					LOGGER.info("Please enter a valid date yyyy-mm-dd");
 				}
 			} else {
 				break;
@@ -226,7 +226,7 @@ public class View {
 					createDiscontinued = Date.valueOf(discontinued).toLocalDate();
 					break;
 				} catch (Exception e) {
-					logger.info("Please enter a valid date yyyy-mm-dd");
+					LOGGER.info("Please enter a valid date yyyy-mm-dd");
 				}
 			} else {
 				break;
@@ -244,7 +244,7 @@ public class View {
 				}
 				break;
 			} catch (Exception e) {
-				logger.info("Please enter a valid company id");
+				LOGGER.info("Please enter a valid company id");
 			}
 		}
 		Company company = new Company();
@@ -264,7 +264,7 @@ public class View {
 			computer.setId(id);
 			System.out.println(computer);
 		} catch (ServiceException e) {
-			e.WrongID();
+			e.wrongID();
 		}
 	}
 
@@ -285,7 +285,7 @@ public class View {
 				try {
 					companyController.getCompaniesWithOffset(pageNumberCompany).stream().forEach(System.out::println);
 				} catch (DAOException e) {
-					e.WrongPageNumber();
+					e.wrongPageNumber();
 				}
 			}
 		}
@@ -320,7 +320,7 @@ public class View {
 		try {
 			companyController.deleteCompany(deleteId);
 		} catch (DAOException e) {
-			logger.info("No computer with that id");
+			LOGGER.info("No computer with that id");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

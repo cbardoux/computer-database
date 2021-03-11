@@ -2,8 +2,6 @@ package main.java.com.excilys.cdb.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import main.java.com.excilys.cdb.dao.ComputerDAO;
@@ -13,11 +11,13 @@ import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.model.Page;
 
 @Service
-@Scope("singleton")
 public class ComputerService {
-	
-	@Autowired
+
 	private ComputerDAO computerDAO;
+
+	public ComputerService(ComputerDAO computerDAO) {
+		this.computerDAO = computerDAO;
+	}
 
 	public Page<Computer> getComputersWithOffset(Page<Computer> page) {
 		return computerDAO.listComputersWithOffset(page);
@@ -28,7 +28,8 @@ public class ComputerService {
 	}
 
 	public Computer getComputerById(int id) throws ServiceException {
-		return computerDAO.getComputerById(id).orElseThrow(() -> new ServiceException("No computer found with this id"));
+		return computerDAO.getComputerById(id)
+				.orElseThrow(() -> new ServiceException("No computer found with this id"));
 	}
 
 	public void createComputer(Computer computer) {

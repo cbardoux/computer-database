@@ -28,22 +28,20 @@ import main.java.com.excilys.cdb.validator.ComputerValidator;
 public class AddComputerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Autowired
 	private ComputerService instanceComputerService;
-	
+
 	@Autowired
 	private CompanyService instanceCompany;
-	
+
 	@Autowired
 	private ComputerValidator instanceValidator;
-	
+
 	@Autowired
 	private MappingDTO instanceMapping;
-	
-	
-	
-	private static final Logger logger = LoggerFactory.getLogger(AddComputerServlet.class);
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AddComputerServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -60,7 +58,7 @@ public class AddComputerServlet extends HttpServlet {
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 		super.init(config);
 	}
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -69,7 +67,7 @@ public class AddComputerServlet extends HttpServlet {
 		computerDTO.name = request.getParameter("name");
 		computerDTO.introduced = request.getParameter("introduced");
 		computerDTO.discontinued = request.getParameter("discontinued");
-		computerDTO.company_id = request.getParameter("company_id");
+		computerDTO.companyId = request.getParameter("companyId");
 
 		try {
 			instanceValidator.validateComputer(computerDTO);
@@ -82,7 +80,7 @@ public class AddComputerServlet extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp");
 			request.setAttribute("errorMessage", e.getMessage());
 			dispatcher.forward(request, response);
-			logger.error(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 
 	}

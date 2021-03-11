@@ -4,24 +4,22 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import main.java.com.excilys.cdb.dao.CompanyDAO;
 import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
 import main.java.com.excilys.cdb.exception.ValidatorException;
 import main.java.com.excilys.cdb.model.Company;
-import main.java.com.excilys.cdb.service.CompanyService;
 
 @Component
-@Scope("singleton")
 public class ComputerValidator {
 
 	@Autowired
-	private CompanyService controllerInstance;
+	private CompanyDAO companyDAOInstance;
 
 	public void validateComputer(ComputerDTOForServlet computerDTO) throws ValidatorException {
 
-		int company_id;
+		int companyId;
 		LocalDate introduced;
 		LocalDate discontinued;
 
@@ -30,9 +28,9 @@ public class ComputerValidator {
 		}
 
 		try {
-			company_id = Integer.parseInt(computerDTO.company_id);
+			companyId = Integer.parseInt(computerDTO.companyId);
 		} catch (Exception e) {
-			company_id = 0;
+			companyId = 0;
 		}
 
 		if (!computerDTO.introduced.equals("")) {
@@ -55,22 +53,8 @@ public class ComputerValidator {
 			throw new ValidatorException("Introduced date must be before discontinued date");
 		}
 
-		boolean isCompanyIdExist = false;
-
-		if (company_id == 0) {
-			isCompanyIdExist = true;
-		} else {
-			for (Company userlist : controllerInstance.getCompanies()) {
-				if (userlist.getId() == company_id) {
-					isCompanyIdExist = true;
-					break;
-				}
-			}
-		}
-
-		if (!isCompanyIdExist) {
+		if (!computerDTO.companyId.equals("0") && companyDAOInstance.isCompanyExists(companyId) == 0) {
 			throw new ValidatorException("The id of the company does not exists");
 		}
-
 	}
 }

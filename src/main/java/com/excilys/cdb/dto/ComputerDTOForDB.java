@@ -7,12 +7,12 @@ public class ComputerDTOForDB {
 	public String name;
 	public Date introduced;
 	public Date discontinued;
-	public String company_id;
+	public String companyId;
 	
 	@Override
 	public String toString() {
 		return "ComputerDTOForDB [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", company_id=" + company_id + "]";
+				+ ", company_id=" + companyId + "]";
 	}
 		
 }
