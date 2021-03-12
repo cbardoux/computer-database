@@ -29,10 +29,10 @@ public class EditComputerServlet extends HttpServlet {
 
 	@Autowired
 	private ComputerService instanceComputer;
-	
+
 	@Autowired
 	private CompanyService instanceCompany;
-	
+
 	@Autowired
 	private ComputerValidator instanceValidator;
 
@@ -47,7 +47,6 @@ public class EditComputerServlet extends HttpServlet {
 		try {
 			computerDTO = mapping.objectToCreateDTOForEdit(
 					instanceComputer.getComputerById(Integer.parseInt(request.getParameter("id"))));
-			computerDTO.id = Integer.parseInt(request.getParameter("id"));
 		} catch (NumberFormatException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} catch (ServiceException e) {
@@ -59,7 +58,7 @@ public class EditComputerServlet extends HttpServlet {
 
 		dispatcher.forward(request, response);
 	}
-	
+
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
@@ -80,7 +79,7 @@ public class EditComputerServlet extends HttpServlet {
 			computerDTO.companyId = request.getParameter("companyId");
 
 			instanceValidator.validateComputer(computerDTO);
-			
+
 			Computer computer = mapping.modifyComputerDTOToComputerObject(computerDTO);
 
 			instanceComputer.modifyComputer(computer);

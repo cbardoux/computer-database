@@ -1,7 +1,5 @@
 package main.java.com.excilys.cdb.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import main.java.com.excilys.cdb.dao.ComputerDAO;
@@ -21,10 +19,6 @@ public class ComputerService {
 
 	public Page<Computer> getComputersWithOffset(Page<Computer> page) {
 		return computerDAO.listComputersWithOffset(page);
-	}
-
-	public List<Computer> getComputers() {
-		return computerDAO.listComputers();
 	}
 
 	public Computer getComputerById(int id) throws ServiceException {

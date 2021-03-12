@@ -1,18 +1,17 @@
 package main.java.com.excilys.cdb.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import main.java.com.excilys.cdb.dto.ComputerDTOForDB;
@@ -24,181 +23,77 @@ import main.java.com.excilys.cdb.model.Page;
 
 @Repository
 public class ComputerDAO {
-	
+
 	private DataSource dataSource;
 	private MappingDTO mappingDTO;
-	
+
 	public ComputerDAO(DataSource dataSource, MappingDTO mappingDTO) {
 		this.dataSource = dataSource;
 		this.mappingDTO = mappingDTO;
 	}
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
 	private static final String FIND_COMPUTERS_WITH_PAGE_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ?";
-	private static final String FIND_COMPUTERS_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id;";
-	private static final String FIND_COMPUTER_QUERY = "SELECT computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id = ?;";
+	private static final String FIND_COMPUTER_QUERY = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id = :id;";
 	private static final String CREATE_COMPUTER_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 	private static final String MODIFY_COMPUTER_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
 	private static final String DELETE_COMPUTER_QUERY = "DELETE FROM computer WHERE id = ?;";
 	private static final String COUNT_ROWS = "SELECT COUNT(id) FROM computer;";
-	
+
 	public Page<Computer> listComputersWithOffset(Page<Computer> page) {
 
-		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
-		List<Computer> resultList = new ArrayList<>();
-		String request = FIND_COMPUTERS_WITH_PAGE_QUERY 
-				+ " ORDER BY " + "computer." + page.getOrderBy()
-				+ " LIMIT " + (page.getIndex() - 1) * page.getLimit() + ", " + page.getLimit()
-				+ ";";
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(request)) {
-
-			statement.setString(1, "%" + page.getSearch() + "%");
-
-			ResultSet resultSet = statement.executeQuery();
-
-			while (resultSet.next()) {
-				computerDTO.id = resultSet.getInt(1);
-				computerDTO.name = resultSet.getString(2);
-				computerDTO.introduced = resultSet.getString(3);
-				computerDTO.discontinued = resultSet.getString(4);
-				computerDTO.companyId = resultSet.getString(5);
-				computerDTO.companyName = resultSet.getString(6);
-				
-				Computer computer = mappingDTO.listComputerDTOToComputerObject(computerDTO);
-				
-				resultList.add(computer);
-
-			}
-			page.setContent(resultList);
-
-		} catch (SQLException e) {
-			LOGGER.error(e.getMessage());
-		}
+		String request = FIND_COMPUTERS_WITH_PAGE_QUERY + " ORDER BY " + "computer." + page.getOrderBy() + " LIMIT "
+				+ (page.getIndex() - 1) * page.getLimit() + ", " + page.getLimit() + ";";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
+		List<ComputerDTOForServlet> resultList = jdbcTemplate.query(request, new ComputerRowMapper(),
+				"%" + page.getSearch() + "%");
+		page.setContent(
+				resultList.stream().map(mappingDTO::listComputerDTOToComputerObject).collect(Collectors.toList()));
 		return page;
-	}
-
-	public List<Computer> listComputers() {
-		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
-		List<Computer> resultList = new ArrayList<>();
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTERS_QUERY);) {
-
-			ResultSet resultSet = statement.executeQuery();
-
-			while (resultSet.next()) {
-
-				computerDTO.id = resultSet.getInt(1);
-				computerDTO.name = resultSet.getString(2);
-				computerDTO.introduced = resultSet.getString(3);
-				computerDTO.discontinued = resultSet.getString(4);
-				computerDTO.companyId = resultSet.getString(5);
-				computerDTO.companyName = resultSet.getString(6);
-
-				Computer computer = mappingDTO.listComputerDTOToComputerObject(computerDTO);
-
-				resultList.add(computer);
-			}
-
-		} catch (SQLException e) {
-			LOGGER.error(e.getMessage());
-		}
-		return resultList;
 	}
 
 	public Optional<Computer> getComputerById(int id) {
 
-		ComputerDTOForServlet computerDTO = new ComputerDTOForServlet();
-		Optional<Computer> optionalComputer;
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(FIND_COMPUTER_QUERY)) {
-
-			statement.setInt(1, id);
-			ResultSet resultSet = statement.executeQuery();
-			if (resultSet.next()) {
-				computerDTO.name = resultSet.getString(1);
-				computerDTO.introduced = resultSet.getString(2);
-				computerDTO.discontinued = resultSet.getString(3);
-				computerDTO.companyId = resultSet.getString(4);
-				computerDTO.companyName = resultSet.getString(5);
-
-				Computer computer = mappingDTO.getComputerByIdDTOToComputerObject(computerDTO);
-
-				optionalComputer = Optional.of(computer);
-
-				return optionalComputer;
-			}
-		} catch (SQLException e) {
-			LOGGER.error(e.getMessage());
-		}
-		return optionalComputer = Optional.empty();
+		Optional<Computer> computer = Optional.empty();
+		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(this.dataSource);
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("id", id);
+		ComputerDTOForServlet computerDTO = jdbcTemplate.queryForObject(FIND_COMPUTER_QUERY, param,
+				new ComputerRowMapper());
+		computer = Optional.of(mappingDTO.getComputerByIdDTOToComputerObject(computerDTO));
+		return computer;
 	}
 
 	public void createComputer(Computer computer) {
-
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(CREATE_COMPUTER_QUERY)) {
-
-			ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
-
-			statement.setString(1, computerDTO.name);
-			statement.setDate(2, computerDTO.introduced);
-			statement.setDate(3, computerDTO.discontinued);
-			statement.setString(4, computerDTO.companyId);
-
-			statement.executeUpdate();
-
-		} catch (SQLException e) {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
+		ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
+		try {
+			jdbcTemplate.update(CREATE_COMPUTER_QUERY, computerDTO.name, computerDTO.introduced,
+					computerDTO.discontinued, computerDTO.companyId);
+		} catch (DataAccessException e) {
 			LOGGER.error(e.getMessage());
 		}
 	}
 
 	public void modifyComputer(Computer computer) {
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(MODIFY_COMPUTER_QUERY)) {
-
-			ComputerDTOForDB computerDTO = mappingDTO.computerObjectToModifyComputerDTOForDB(computer);
-
-			statement.setString(1, computerDTO.name);
-			statement.setDate(2, computerDTO.introduced);
-			statement.setDate(3, computerDTO.discontinued);
-			statement.setString(4, computerDTO.companyId);
-			statement.setInt(5, computerDTO.id);
-
-			statement.executeUpdate();
-
-		} catch (SQLException e) {
-			LOGGER.error(e.getMessage());
-		}
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
+		ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
+		jdbcTemplate.update(MODIFY_COMPUTER_QUERY, computerDTO.name, computerDTO.introduced, computerDTO.discontinued,
+				computerDTO.companyId, computerDTO.id);
 	}
 
 	public void deleteComputer(int id) throws DAOException {
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(DELETE_COMPUTER_QUERY)) {
-
-			statement.setInt(1, id);
-			statement.executeUpdate();
-
-		} catch (SQLException e) {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
+		try {
+			jdbcTemplate.update(DELETE_COMPUTER_QUERY, id);
+		} catch (DataAccessException e) {
 			LOGGER.error(e.getMessage());
-			throw new DAOException("No computer with this id");
 		}
 	}
 
 	public int countRows() {
-		int countRows = 0;
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(COUNT_ROWS)) {
-
-			ResultSet resultSet = statement.executeQuery();
-			resultSet.next();
-			countRows = resultSet.getInt(1);
-
-		} catch (SQLException e) {
-			LOGGER.error(e.getMessage());
-		}
-		return countRows;
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
+		return jdbcTemplate.queryForObject(COUNT_ROWS, Integer.class);
 	}
-
 }

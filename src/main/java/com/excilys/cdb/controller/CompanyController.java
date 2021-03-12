@@ -3,13 +3,13 @@ package main.java.com.excilys.cdb.controller;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.service.CompanyService;
 
-@Controller
+@Component
 public class CompanyController {
 
 	private CompanyService companyService;

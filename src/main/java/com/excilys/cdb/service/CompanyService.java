@@ -26,7 +26,6 @@ public class CompanyService {
 
 		int offset = (page - 1) * LIMIT_PAGINATION;
 		listCompanies = companyDAO.listCompaniesWithOffset(offset);
-
 		return listCompanies;
 	}
 

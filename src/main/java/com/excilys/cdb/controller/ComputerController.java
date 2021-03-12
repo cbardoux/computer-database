@@ -1,9 +1,8 @@
 package main.java.com.excilys.cdb.controller;
 
 import java.time.LocalDate;
-import java.util.List;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
@@ -12,7 +11,7 @@ import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.model.Page;
 import main.java.com.excilys.cdb.service.ComputerService;
 
-@Controller
+@Component
 public class ComputerController {
 
 	private ComputerService computerService;
@@ -23,10 +22,6 @@ public class ComputerController {
 
 	public Page<Computer> getComputersWithOffset(Page<Computer> page) {
 		return computerService.getComputersWithOffset(page);
-	}
-	
-	public List<Computer> getComputers() throws DAOException {
-		return computerService.getComputers();
 	}
 
 	public Computer getComputerById(int id) throws ServiceException {
