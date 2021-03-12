@@ -30,7 +30,7 @@ public class SpringConfig extends AbstractContextLoaderInitializer {
 	
 	@Bean(destroyMethod = "close")
     public DataSource dataSource() throws SQLException {
-        HikariConfig config = new HikariConfig("/main/resources/db.properties");
+        HikariConfig config = new HikariConfig("/db.properties");
         return new HikariDataSource(config);
     }
 
