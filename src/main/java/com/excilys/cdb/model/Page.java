@@ -3,6 +3,12 @@ package main.java.com.excilys.cdb.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope(value="session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Page<E> {
 	private int limit = 10;
 	private int index = 1;

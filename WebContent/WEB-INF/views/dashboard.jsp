@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,7 +71,7 @@
 						</c:url>">Discontinued date</a></th>
 						<!-- Table header for Company -->
 						<th><a href="<c:url value="/home">
-				  		<c:param name="orderBy" value="companyId"/>
+				  		<c:param name="orderBy" value="company_id"/>
 						</c:url>">Company</a></th>
 
 					</tr>
@@ -82,8 +83,8 @@
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
 							<td><a
-								href="${pageContext.request.contextPath}/home/edit?id=${computer.id}"
-								onclick="">${computer.name}</a></td>
+								href="<c:url value="/home/edit"><c:param name="id" 
+								value="${computer.id}"/></c:url>">${computer.name}</a></td>
 							<td>${computer.introduced}</td>
 							<td>${computer.discontinued}</td>
 							<td>${computer.companyName}</td>
@@ -124,20 +125,20 @@
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<a href="<c:url value="/home">
-				  		<c:param name="limit" value="10"/>
+				  		<c:param name="limitPage" value="10"/>
 						</c:url>" class="btn btn-default">10</a>
 				<a href="<c:url value="/home">
-				  		<c:param name="limit" value="20"/>
+				  		<c:param name="limitPage" value="20"/>
 						</c:url>" class="btn btn-default">20</a>
 				<a href="<c:url value="/home">
-				  		<c:param name="limit" value="50"/>
+				  		<c:param name="limitPage" value="50"/>
 						</c:url>" class="btn btn-default">50</a>
 			</div>
 		</div>
 	</footer>
-	<script src="resources/js/jquery.min.js"></script>
-	<script src="resources/js/bootstrap.min.js"></script>
-	<script src="resources/js/dashboard.js"></script>
+	<script> <%@include file="../../resources/js/jquery.min.js"%></script>
+	<script> <%@include file="../../resources/js/bootstrap.min.js"%></script>
+	<script> <%@include file="../../resources/js/dashboard.js"%></script>
 
 </body>
 </html>

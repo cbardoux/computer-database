@@ -24,7 +24,7 @@ import main.java.com.excilys.cdb.service.ComputerService;
 import main.java.com.excilys.cdb.validator.ComputerValidator;
 
 @Controller
-@WebServlet("/home/add")
+//@WebServlet("/home/add")
 public class AddComputerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

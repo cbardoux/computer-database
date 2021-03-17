@@ -110,3 +110,6 @@ buildNumber.properties
 
 # Database properties
 src/main/resources/db.properties
+
+#Server
+Tomcat v8.0 Server at localhost-config/

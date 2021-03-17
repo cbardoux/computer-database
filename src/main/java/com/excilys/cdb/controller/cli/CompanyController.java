@@ -1,4 +1,4 @@
-package main.java.com.excilys.cdb.controller;
+package main.java.com.excilys.cdb.controller.cli;
 
 import java.sql.SQLException;
 import java.util.List;
