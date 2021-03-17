@@ -18,7 +18,6 @@ import main.java.com.excilys.cdb.service.ComputerService;
 import main.java.com.excilys.cdb.validator.ComputerValidator;
 
 @Controller
-@SessionAttributes("page")
 public class EditComputerController {
 
 	@Autowired
@@ -34,8 +33,8 @@ public class EditComputerController {
 	private ComputerValidator instanceValidator;
 
 	@GetMapping(value = "/home/edit")
-	public String editHome(Model model, @RequestParam(required = false) String id,
-			ComputerDTOForServlet computerDTO, @RequestParam(required = false) String errorMessage) {
+	public String editHome(Model model, @RequestParam(required = false) String id, ComputerDTOForServlet computerDTO,
+			@RequestParam(required = false) String errorMessage) {
 		try {
 			computerDTO = mapping.objectToCreateDTOForEdit(instanceComputer.getComputerById(Integer.parseInt(id)));
 		} catch (NumberFormatException e) {

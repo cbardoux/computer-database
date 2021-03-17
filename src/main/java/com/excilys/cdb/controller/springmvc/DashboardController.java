@@ -43,22 +43,26 @@ public class DashboardController {
 	public String home(Model model, @RequestParam(required = false) String index,
 			@RequestParam(required = false) String search, @RequestParam(required = false) String limitPage,
 			@RequestParam(required = false) String orderBy, @RequestParam(required = false) String errorMessage) {
+		
 		setIndex(index);
 		setLimitPage(limitPage);
 		setSearch(search);
 		setOrderBy(orderBy);
-		int numberOfRows = instanceService.countRows();
-
+		
+		int numberOfRows = instanceService.countRows(page);
 		int limit = page.getLimit();
 		int indexMax = numberOfRows % limit == 0 ? numberOfRows / limit : numberOfRows / limit + 1;
 
 		List<ComputerDTOForServlet> computerDTOList = instanceService.getComputersWithOffset(page).getContent().stream()
 				.map(computer -> mapping.computerObjectToCreateComputerDTO(computer)).collect(Collectors.toList());
+		
+		model.addAttribute("rows", numberOfRows);
 		model.addAttribute("computers", computerDTOList);
 		model.addAttribute("indexLow", page.valueOfIndexLow(indexMax));
 		model.addAttribute("indexHigh", page.valueOfIndexHigh(indexMax));
 		model.addAttribute("indexMax", indexMax);
 		model.addAttribute("errorMessage", errorMessage);
+		
 		return "dashboard";
 	}
 

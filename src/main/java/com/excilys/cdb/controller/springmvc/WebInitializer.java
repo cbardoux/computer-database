@@ -11,15 +11,15 @@ import main.java.com.excilys.cdb.SpringConfig;
 
 public class WebInitializer implements WebApplicationInitializer {
 
-	 @Override
-	    public void onStartup(ServletContext servletContext) throws ServletException {
+	@Override
+	public void onStartup(ServletContext servletContext) throws ServletException {
 
-		 AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-	        ctx.register(SpringConfig.class);
-	        ctx.setServletContext(servletContext);
+		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+		ctx.register(SpringConfig.class);
+		ctx.setServletContext(servletContext);
 
-	        var servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(ctx));
-	        servlet.setLoadOnStartup(1);
-			servlet.addMapping("/");
-		}
+		var servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(ctx));
+		servlet.setLoadOnStartup(1);
+		servlet.addMapping("/");
+	}
 }

@@ -39,10 +39,9 @@ public class ComputerDAO {
 	private static final String CREATE_COMPUTER_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 	private static final String MODIFY_COMPUTER_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
 	private static final String DELETE_COMPUTER_QUERY = "DELETE FROM computer WHERE id = ?;";
-	private static final String COUNT_ROWS = "SELECT COUNT(id) FROM computer;";
+	private static final String COUNT_ROWS = "SELECT COUNT(id) FROM computer WHERE name LIKE ?";
 
 	public Page<Computer> listComputersWithOffset(Page<Computer> page) {
-
 		String request = FIND_COMPUTERS_WITH_PAGE_QUERY + " ORDER BY " + "computer." + page.getOrderBy() + " LIMIT "
 				+ (page.getIndex() - 1) * page.getLimit() + ", " + page.getLimit() + ";";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
@@ -92,8 +91,9 @@ public class ComputerDAO {
 		}
 	}
 
-	public int countRows() {
+	public int countRows(Page<Computer> page) {
+		String request = COUNT_ROWS + " ORDER BY " + page.getOrderBy() + ";";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
-		return jdbcTemplate.queryForObject(COUNT_ROWS, Integer.class);
+		return jdbcTemplate.queryForObject(request, Integer.class, "%" + page.getSearch() + "%");
 	}
 }

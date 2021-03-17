@@ -38,7 +38,7 @@ public class ComputerService {
 		computerDAO.deleteComputer(id);
 	}
 
-	public int countRows() {
-		return computerDAO.countRows();
+	public int countRows(Page<Computer> page) {
+		return computerDAO.countRows(page);
 	}
 }

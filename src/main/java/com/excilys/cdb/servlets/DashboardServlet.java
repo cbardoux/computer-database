@@ -57,7 +57,7 @@ public class DashboardServlet extends HttpServlet {
 		}
 
 		List<ComputerDTOForServlet> computerDTOList = new ArrayList<>();
-		int numberOfRows = instanceService.countRows();
+		int numberOfRows = instanceService.countRows(page);
 		int limit = page.getLimit();
 		int indexMax = numberOfRows % limit == 0 ? numberOfRows / limit : numberOfRows / limit + 1;
 
@@ -93,7 +93,7 @@ public class DashboardServlet extends HttpServlet {
 		computerDTOList = instanceService.getComputersWithOffset(page).getContent().stream()
 				.map(computer -> mapping.computerObjectToCreateComputerDTO(computer)).collect(Collectors.toList());
 
-		request.setAttribute("rows", instanceService.countRows());
+		request.setAttribute("rows", numberOfRows);
 		request.setAttribute("computers", computerDTOList);
 		request.setAttribute("indexLow", page.valueOfIndexLow(indexMax));
 		request.setAttribute("indexHigh", page.valueOfIndexHigh(indexMax));

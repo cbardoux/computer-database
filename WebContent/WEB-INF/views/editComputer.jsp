@@ -1,4 +1,5 @@
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +14,10 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/home"> Application - Computer Database </a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/home"><fmt:message key="label.all.display.application"/></a>
+            <a class="pull-right" href="?lang=fr"><fmt:message key="label.lang.fr" /></a>
+			<a class="pull-right">|</a>
+        	<a class="pull-right" href="?lang=en"><fmt:message key="label.lang.en" /></a>
         </div>
     </header>
     <section id="main">
@@ -23,25 +27,25 @@
                     <div class="label label-default pull-right">
                         id: ${computer.id}
                     </div>
-                    <h1>Edit Computer</h1>
+                    <h1><fmt:message key="label.all.display.editComputer"/></h1>
 
                     <form action="${pageContext.request.contextPath}/home/edit" method="POST">
                         <input type="hidden" value="${computer.id}" id="id" name="id"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
+                                <label for="computerName"><fmt:message key="label.dashboard.display.name"/></label>
                                 <input type="text" class="form-control" id="name" name="name" value="${computer.name}">
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
+                                <label for="introduced"><fmt:message key="label.dashboard.display.introduced"/></label>
                                 <input type="date" class="form-control" id="introduced" name="introduced" onchange = limitMinDate(this.value) value="${computer.introduced}">
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
+                                <label for="discontinued"><fmt:message key="label.dashboard.display.discontinued"/></label>
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" onchange = limitMaxDate(this.value) value="${computer.discontinued}">
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
+                                <label for="companyId"><fmt:message key="label.dashboard.display.company"/></label>
                                 <select class="form-control" id="companyId" name="companyId">
                                 	<option value="${computer.companyId}">${computer.companyName}</option>
                                     <c:forEach items="${companies}" var="company">
@@ -51,9 +55,9 @@
                             </div>          
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Edit" class="btn btn-primary">
+                            <input type="submit" value="<fmt:message key="label.dashboard.button.edit"/>" class="btn btn-primary">
                             or
-                            <a href="${pageContext.request.contextPath}/home" class="btn btn-default">Cancel</a>
+                            <a href="${pageContext.request.contextPath}/home" class="btn btn-default"><fmt:message key="label.all.button.cancel"/></a>
                         </div>
                         <div>
                             ${errorMessage}

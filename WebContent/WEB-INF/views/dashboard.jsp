@@ -1,11 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="utf-8">
 <!-- Bootstrap -->
 <style><%@include file="../../resources/css/bootstrap.min.css"%></style>
 <style><%@include file="../../resources/css/font-awesome.css"%></style>
@@ -14,29 +14,31 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="${pageContext.request.contextPath}/home"> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href="${pageContext.request.contextPath}/home"><fmt:message key="label.all.display.application"/></a>
+			<a class="pull-right" href="?lang=fr"><fmt:message key="label.lang.fr" /></a>
+			<a class="pull-right">|</a>
+        	<a class="pull-right" href="?lang=en"><fmt:message key="label.lang.en" /></a>
 		</div>
+		
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${rows} Computers found</h1>
+			<h1 id="homeTitle">${rows} <fmt:message key="label.dashboard.display.number"/></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="<fmt:message key="label.dashboard.input.filter"/>" /> <input
+							type="submit" id="searchsubmit" value="<fmt:message key="label.dashboard.button.filter"/>"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="${pageContext.request.contextPath}/home/add">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+						href="${pageContext.request.contextPath}/home/add"><fmt:message key="label.all.button.add"/></a> <a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();"><fmt:message key="label.dashboard.button.edit"/></a>
 				</div>
 			</div>
 		</div>
@@ -61,18 +63,18 @@
 						</span></th>
 						<th><a href="<c:url value="/home">
 				  		<c:param name="orderBy" value="name"/>
-						</c:url>">Computer name</a></th>
+						</c:url>"><fmt:message key="label.dashboard.display.name"/></a></th>
 						<th><a href="<c:url value="/home">
 				  		<c:param name="orderBy" value="introduced"/>
-						</c:url>">Introduced date</a></th>
+						</c:url>"><fmt:message key="label.dashboard.display.introduced"/></a></th>
 						<!-- Table header for Discontinued Date -->
 						<th><a href="<c:url value="/home">
 				  		<c:param name="orderBy" value="discontinued"/>
-						</c:url>">Discontinued date</a></th>
+						</c:url>"><fmt:message key="label.dashboard.display.discontinued"/></a></th>
 						<!-- Table header for Company -->
 						<th><a href="<c:url value="/home">
 				  		<c:param name="orderBy" value="company_id"/>
-						</c:url>">Company</a></th>
+						</c:url>"><fmt:message key="label.dashboard.display.company"/></a></th>
 
 					</tr>
 				</thead>
@@ -139,6 +141,11 @@
 	<script> <%@include file="../../resources/js/jquery.min.js"%></script>
 	<script> <%@include file="../../resources/js/bootstrap.min.js"%></script>
 	<script> <%@include file="../../resources/js/dashboard.js"%></script>
+	<script type="text/javascript">
+        var strings = new Array();
+        strings['view'] = "<fmt:message key="label.dashboard.button.view" />";
+        strings['edit'] = "<fmt:message key="label.dashboard.button.edit" />";
+    </script>
 
 </body>
 </html>
