@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><fmt:message key="label.all.display.application"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <style><%@include file="../../resources/css/bootstrap.min.css"%></style>
@@ -34,11 +34,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><fmt:message key="label.dashboard.display.introduced"/></label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="YYYY-MM-DD" onchange = limitMinDate(this.value)>
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="<fmt:message key="label.all.input.name"/>" onchange = limitMinDate(this.value)>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued"><fmt:message key="label.dashboard.display.discontinued"/></label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="YYYY-MM-DD" onchange = limitMaxDate(this.value)>
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="<fmt:message key="label.all.input.name"/>" onchange = limitMaxDate(this.value)>
                             </div>
                             <div class="form-group">
                                 <label for="companyId"><fmt:message key="label.dashboard.display.company"/></label>

@@ -18,10 +18,6 @@ public class CompanyController {
 		this.companyService = companyService;
 	}
 
-	public List<Company> getCompaniesWithOffset(int page) throws DAOException {
-		return companyService.getCompaniesWithOffset(page);
-	}
-
 	public List<Company> getCompanies() throws DAOException {
 		return companyService.getCompanies();
 	}

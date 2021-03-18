@@ -1,4 +1,4 @@
-package main.java.com.excilys.cdb.controller.springmvc;
+package main.java.com.excilys.cdb.controller.web;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;

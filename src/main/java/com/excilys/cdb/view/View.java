@@ -270,24 +270,10 @@ public class View {
 
 	private void listCompanies() {
 		System.out.println("--- Companies list ---");
-		int pageNumberCompany;
-		while (true) {
-			System.out.println("Enter 0 to quit or a page number :");
-			try {
-				pageNumberCompany = inputUser.nextInt();
-			} catch (Exception e1) {
-				pageNumberCompany = 0;
-			}
-			inputUser.nextLine();
-			if (pageNumberCompany == 0) {
-				break;
-			} else {
-				try {
-					companyController.getCompaniesWithOffset(pageNumberCompany).stream().forEach(System.out::println);
-				} catch (DAOException e) {
-					e.wrongPageNumber();
-				}
-			}
+		try {
+			companyController.getCompanies().stream().forEach(System.out::println);
+		} catch (DAOException e) {
+			e.printStackTrace();
 		}
 	}
 

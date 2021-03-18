@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import main.java.com.excilys.cdb.dao.CompanyDAO;
 import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
 import main.java.com.excilys.cdb.exception.ValidatorException;
-import main.java.com.excilys.cdb.model.Company;
 
 @Component
 public class ComputerValidator {

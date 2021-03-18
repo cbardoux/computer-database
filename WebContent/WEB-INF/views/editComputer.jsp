@@ -3,21 +3,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><fmt:message key="label.all.display.application"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <style><%@include file="../../resources/css/bootstrap.min.css"%></style>
 <style><%@include file="../../resources/css/font-awesome.css"%></style>
 <style><%@include file="../../resources/css/main.css"%></style>
 <script><%@include file="../../resources/js/addComputer.js"%></script>
+<script><%@include file="../../resources/js/jquery.min.js"%></script>
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="${pageContext.request.contextPath}/home"><fmt:message key="label.all.display.application"/></a>
-            <a class="pull-right" href="?lang=fr"><fmt:message key="label.lang.fr" /></a>
+            <div>
+			<a class="pull-right" href="?lang=fr"><fmt:message key="label.lang.fr" /></a>
 			<a class="pull-right">|</a>
         	<a class="pull-right" href="?lang=en"><fmt:message key="label.lang.en" /></a>
+		</div>
         </div>
     </header>
     <section id="main">
