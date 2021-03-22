@@ -4,6 +4,8 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,15 +14,10 @@ import javax.persistence.Table;
 public class ComputerDTOForDB {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int id;
-	
-	@Column(name = "name")
 	public String name;
-	
-	@Column(name = "introduced")
 	public Date introduced;
-	
-	@Column(name = "discontinued")
 	public Date discontinued;
 	
 	@Column(name = "company_id")

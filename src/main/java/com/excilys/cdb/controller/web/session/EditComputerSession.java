@@ -7,18 +7,18 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class EditComputerSession {
-	private String id;
+	private int id;
 	private String name;
 	private String introduced;
 	private String discontinued;
 	private String companyId;
 	private String companyName;
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

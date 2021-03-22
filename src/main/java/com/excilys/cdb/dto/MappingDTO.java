@@ -75,8 +75,8 @@ public class MappingDTO {
 
 		company.setName(computerDTO.companyName);
 
-		Computer computer = new Computer.ComputerBuilder().id(computerDTO.id).name(computerDTO.name).introduced(introduced)
-				.discontinued(discontinued).company(company).build();
+		Computer computer = new Computer.ComputerBuilder().id(computerDTO.id).name(computerDTO.name)
+				.introduced(introduced).discontinued(discontinued).company(company).build();
 
 		return computer;
 	}
@@ -174,7 +174,6 @@ public class MappingDTO {
 		ComputerDTOForDB computerDTO = new ComputerDTOForDB();
 
 		computerDTO.id = computer.getId();
-
 		computerDTO.name = computer.getName();
 
 		try {
@@ -254,6 +253,16 @@ public class MappingDTO {
 		}
 
 		return computerDTO;
+	}
+	
+	public Company CompanyDTOtoCompany(CompanyDTO companyDTO) {
+
+		Company company = new Company();
+
+		company.setId(companyDTO.id);
+		company.setName(companyDTO.name);
+		
+		return company;
 	}
 
 	private LocalDate stringToLocalDate(String stringDate, DateTimeFormatter formatter) {

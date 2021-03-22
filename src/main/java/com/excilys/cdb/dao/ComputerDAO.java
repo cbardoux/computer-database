@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,14 +50,12 @@ public class ComputerDAO {
 	private static final String COUNT_ROWS = "SELECT COUNT(id) FROM computer WHERE name LIKE ?";
 
 	public Page<Computer> listComputersWithOffset(Page<Computer> page) {
-		String request = "from ComputerDTOFromDB as c WHERE c.name like :name order by :type";
-//		String request = FIND_COMPUTERS_WITH_PAGE_QUERY + " ORDER BY " + "computer." + page.getOrderBy() + " LIMIT "
-//				+ (page.getIndex() - 1) * page.getLimit() + ", " + page.getLimit() + ";";
+		String request = "from ComputerDTOFromDB WHERE name like :name order by " + page.getOrderBy();
 		try (Session session = factory.openSession();) {
-
 			List<ComputerDTOFromDB> computerDTOList = session.createQuery(request, ComputerDTOFromDB.class)
-					.setParameter("name", "%" + page.getSearch() + "%").setParameter("type", "c." + page.getOrderBy())
-					.setFirstResult(page.getIndex()).setMaxResults(page.getLimit()).list();
+					.setParameter("name", "%" + page.getSearch() + "%")
+					.setFirstResult(page.getIndex())
+					.setMaxResults(page.getLimit()).list();
 			page.setContent(computerDTOList.stream().map(mappingDTO::listComputerDTOToComputerObject)
 					.collect(Collectors.toList()));
 		}
@@ -65,44 +65,71 @@ public class ComputerDAO {
 	public Optional<Computer> getComputerById(int id) {
 
 		Optional<Computer> computer = Optional.empty();
-		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(this.dataSource);
-		MapSqlParameterSource param = new MapSqlParameterSource();
-		param.addValue("id", id);
-		ComputerDTOForServlet computerDTO = jdbcTemplate.queryForObject(FIND_COMPUTER_QUERY, param,
-				new ComputerRowMapper());
-		computer = Optional.of(mappingDTO.getComputerByIdDTOToComputerObject(computerDTO));
+		try (Session session = factory.openSession();) {
+			ComputerDTOFromDB computerDTO = (ComputerDTOFromDB) session
+					.createQuery("from ComputerDTOFromDB where id= :id").setParameter("id", id).getSingleResult();
+			computer = Optional.of(mappingDTO.listComputerDTOToComputerObject(computerDTO));
+		}
 		return computer;
 	}
 
 	public void createComputer(Computer computer) {
 		ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
-
+		Transaction tx = null;
 		try (Session session = factory.openSession();) {
-			Query q = session.createQuery("insert into ComputerDTOForDB (name, introduced, discontinued, companyId)"
-					+ "select name, introduced, discontinued, companyId from ComputerDTOForDB");
-			int result = q.executeUpdate();
+			tx = session.beginTransaction();
+			session.save(computerDTO);
+			tx.commit();
+		} catch (HibernateException e) {
+			tx.rollback();
+			e.printStackTrace();
 		}
 	}
 
 	public void modifyComputer(Computer computer) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
-		ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
-		jdbcTemplate.update(MODIFY_COMPUTER_QUERY, computerDTO.name, computerDTO.introduced, computerDTO.discontinued,
-				computerDTO.companyId, computerDTO.id);
+		ComputerDTOForDB computerDTO = mappingDTO.computerObjectToModifyComputerDTOForDB(computer);
+		Transaction tx = null;
+		try (Session session = factory.openSession();) {
+			tx = session.beginTransaction();
+			Query query = session.createQuery(
+					"update ComputerDTOForDB set name= :name, introduced= :introduced, discontinued= :discontinued, company_id= :companyId where id= :id")
+					.setParameter("id", computerDTO.id).setParameter("name", computerDTO.name)
+					.setParameter("introduced", computerDTO.introduced)
+					.setParameter("discontinued", computerDTO.discontinued)
+					.setParameter("companyId", computerDTO.companyId);
+			query.executeUpdate();
+			tx.commit();
+		} catch (HibernateException e) {
+			tx.rollback();
+			e.printStackTrace();
+		}
 	}
 
 	public void deleteComputer(int id) throws DAOException {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
-		try {
-			jdbcTemplate.update(DELETE_COMPUTER_QUERY, id);
-		} catch (DataAccessException e) {
-			LOGGER.error(e.getMessage());
+		Transaction tx = null;
+		try (Session session = factory.openSession();) {
+			tx = session.beginTransaction();
+			Query query = session.createQuery("delete from ComputerDTOForDB where id= :id");
+			query.setParameter("id", id);
+			query.executeUpdate();
+			tx.commit();
+		} catch (HibernateException e) {
+			tx.rollback();
+			e.printStackTrace();
 		}
 	}
 
 	public int countRows(Page<Computer> page) {
-		String request = COUNT_ROWS + " ORDER BY " + page.getOrderBy() + ";";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
-		return jdbcTemplate.queryForObject(request, Integer.class, "%" + page.getSearch() + "%");
+		Transaction tx = null;
+		String request = "select count(id) from ComputerDTOFromDB where name like :name";
+		int intResult = 0;
+		try (Session session = factory.openSession();) {
+			tx = session.beginTransaction();
+			Query query = session.createQuery(request)
+					.setParameter("name", "%" + page.getSearch() + "%");
+			Long longResult = (Long) query.uniqueResult();
+			intResult = longResult.intValue();
+		}
+		return intResult;
 	}
 }

@@ -135,7 +135,7 @@ public class ComputerController {
 		try {
 			if (id != null) {
 				computerDTO = mapping.objectToCreateDTOForEdit(instanceComputer.getComputerById(Integer.parseInt(id)));
-				editSession.setId(id);
+				editSession.setId(Integer.parseInt(id));
 				setComputerSession(computerDTO);
 			}
 		} catch (NumberFormatException e) {

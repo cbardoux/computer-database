@@ -52,7 +52,7 @@ public class ComputerValidator {
 			throw new ValidatorException("Introduced date must be before discontinued date");
 		}
 
-		if (!computerDTO.companyId.equals("0") && companyDAOInstance.isCompanyExists(companyId) == 0) {
+		if (!computerDTO.companyId.equals("0") && !computerDTO.companyId.equals("") && companyDAOInstance.isCompanyExists(companyId) == 0) {
 			throw new ValidatorException("The id of the company does not exists");
 		}
 	}

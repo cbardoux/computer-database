@@ -2,9 +2,13 @@ package main.java.com.excilys.cdb.dao;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -14,6 +18,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import main.java.com.excilys.cdb.dto.CompanyDTO;
+import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Company;
 
@@ -21,9 +27,13 @@ import main.java.com.excilys.cdb.model.Company;
 public class CompanyDAO {
 
 	private DataSource dataSource;
+	private SessionFactory factory;
+	private MappingDTO mappingDTO;
 
-	public CompanyDAO(DataSource dataSource) {
+	public CompanyDAO(DataSource dataSource, SessionFactory factory, MappingDTO mappingDTO) {
 		this.dataSource = dataSource;
+		this.factory = factory;
+		this.mappingDTO = mappingDTO;
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
@@ -34,10 +44,12 @@ public class CompanyDAO {
 	private static final String DELETE_COMPUTER_WITH_COMPANY_ID_QUERY = "DELETE FROM computer WHERE company_id = ?;";
 
 	public List<Company> listCompanies() {
-
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
-		List<Company> resultList = jdbcTemplate.query(FIND_COMPANIES_QUERY, new CompanyRowMapper());
-		return resultList;
+		Optional<List<Company>> companyList = Optional.empty();
+		try (Session session = factory.openSession();) {
+			List<CompanyDTO> companyDTOList = session.createQuery("from CompanyDTO", CompanyDTO.class).list();
+			companyList = Optional.of(companyDTOList.stream().map(mappingDTO::CompanyDTOtoCompany).collect(Collectors.toList()));
+		}
+		return companyList.get();
 	}
 
 	@Transactional
