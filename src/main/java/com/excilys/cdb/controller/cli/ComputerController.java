@@ -2,7 +2,7 @@ package main.java.com.excilys.cdb.controller.cli;
 
 import java.time.LocalDate;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
@@ -11,7 +11,7 @@ import main.java.com.excilys.cdb.model.Computer;
 import main.java.com.excilys.cdb.model.Page;
 import main.java.com.excilys.cdb.service.ComputerService;
 
-@Component
+@Controller
 public class ComputerController {
 
 	private ComputerService computerService;

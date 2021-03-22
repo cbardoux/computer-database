@@ -6,6 +6,11 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -26,10 +31,12 @@ public class ComputerDAO {
 
 	private DataSource dataSource;
 	private MappingDTO mappingDTO;
+	private SessionFactory factory;
 
-	public ComputerDAO(DataSource dataSource, MappingDTO mappingDTO) {
+	public ComputerDAO(DataSource dataSource, MappingDTO mappingDTO, SessionFactory factory) {
 		this.dataSource = dataSource;
 		this.mappingDTO = mappingDTO;
+		this.factory = factory;
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
@@ -65,14 +72,32 @@ public class ComputerDAO {
 	}
 
 	public void createComputer(Computer computer) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
 		ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
+		Session session = factory.openSession();
+		Transaction tx = null;
 		try {
-			jdbcTemplate.update(CREATE_COMPUTER_QUERY, computerDTO.name, computerDTO.introduced,
-					computerDTO.discontinued, computerDTO.companyId);
-		} catch (DataAccessException e) {
-			LOGGER.error(e.getMessage());
+			tx = session.beginTransaction();
+			Query q = session.createQuery("insert into ComputerDTOForDB (name, introduced, discontinued, companyId)"
+					+ "select name, introduced, discontinued, companyId from ComputerDTOForDB");
+			int result = q.executeUpdate();
+//			
+//			session.save(computerDTO);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
+//		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
+//		ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
+//		try {
+//			jdbcTemplate.update(CREATE_COMPUTER_QUERY, computerDTO.name, computerDTO.introduced,
+//					computerDTO.discontinued, computerDTO.companyId);
+//		} catch (DataAccessException e) {
+//			LOGGER.error(e.getMessage());
+//		}
 	}
 
 	public void modifyComputer(Computer computer) {
