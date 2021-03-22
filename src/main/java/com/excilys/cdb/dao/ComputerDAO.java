@@ -6,10 +6,8 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import main.java.com.excilys.cdb.dto.ComputerDTOForDB;
 import main.java.com.excilys.cdb.dto.ComputerDTOForServlet;
+import main.java.com.excilys.cdb.dto.ComputerDTOFromDB;
 import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.model.Computer;
@@ -49,13 +48,17 @@ public class ComputerDAO {
 	private static final String COUNT_ROWS = "SELECT COUNT(id) FROM computer WHERE name LIKE ?";
 
 	public Page<Computer> listComputersWithOffset(Page<Computer> page) {
-		String request = FIND_COMPUTERS_WITH_PAGE_QUERY + " ORDER BY " + "computer." + page.getOrderBy() + " LIMIT "
-				+ (page.getIndex() - 1) * page.getLimit() + ", " + page.getLimit() + ";";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
-		List<ComputerDTOForServlet> resultList = jdbcTemplate.query(request, new ComputerRowMapper(),
-				"%" + page.getSearch() + "%");
-		page.setContent(
-				resultList.stream().map(mappingDTO::listComputerDTOToComputerObject).collect(Collectors.toList()));
+		String request = "from ComputerDTOFromDB as c WHERE c.name like :name order by :type";
+//		String request = FIND_COMPUTERS_WITH_PAGE_QUERY + " ORDER BY " + "computer." + page.getOrderBy() + " LIMIT "
+//				+ (page.getIndex() - 1) * page.getLimit() + ", " + page.getLimit() + ";";
+		try (Session session = factory.openSession();) {
+
+			List<ComputerDTOFromDB> computerDTOList = session.createQuery(request, ComputerDTOFromDB.class)
+					.setParameter("name", "%" + page.getSearch() + "%").setParameter("type", "c." + page.getOrderBy())
+					.setFirstResult(page.getIndex()).setMaxResults(page.getLimit()).list();
+			page.setContent(computerDTOList.stream().map(mappingDTO::listComputerDTOToComputerObject)
+					.collect(Collectors.toList()));
+		}
 		return page;
 	}
 
@@ -73,31 +76,12 @@ public class ComputerDAO {
 
 	public void createComputer(Computer computer) {
 		ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
-		Session session = factory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
+
+		try (Session session = factory.openSession();) {
 			Query q = session.createQuery("insert into ComputerDTOForDB (name, introduced, discontinued, companyId)"
 					+ "select name, introduced, discontinued, companyId from ComputerDTOForDB");
 			int result = q.executeUpdate();
-//			
-//			session.save(computerDTO);
-			tx.commit();
-		} catch (HibernateException e) {
-			if (tx != null)
-				tx.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
 		}
-//		JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
-//		ComputerDTOForDB computerDTO = mappingDTO.computerObjectToCreateComputerDTOForDB(computer);
-//		try {
-//			jdbcTemplate.update(CREATE_COMPUTER_QUERY, computerDTO.name, computerDTO.introduced,
-//					computerDTO.discontinued, computerDTO.companyId);
-//		} catch (DataAccessException e) {
-//			LOGGER.error(e.getMessage());
-//		}
 	}
 
 	public void modifyComputer(Computer computer) {

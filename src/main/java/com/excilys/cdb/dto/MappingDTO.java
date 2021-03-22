@@ -14,7 +14,7 @@ public class MappingDTO {
 
 	private DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 
-	public Computer listComputerDTOToComputerObject(ComputerDTOForServlet computerDTO) {
+	public Computer listComputerDTOToComputerObject(ComputerDTOFromDB computerDTO) {
 
 		Company company = new Company();
 		LocalDate introduced;
@@ -35,8 +35,8 @@ public class MappingDTO {
 		}
 
 		try {
-			companyId = Integer.parseInt(computerDTO.companyId);
-			companyName = computerDTO.companyName;
+			companyId = computerDTO.company.getId();
+			companyName = computerDTO.company.getName();
 			company.setId(companyId);
 			company.setName(companyName);
 		} catch (Exception e) {

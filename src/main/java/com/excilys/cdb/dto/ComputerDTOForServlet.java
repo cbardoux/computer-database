@@ -1,37 +1,13 @@
 package main.java.com.excilys.cdb.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "computer")
 public class ComputerDTOForServlet {
 
-	@Id
 	public int id;
-	
-	@Column(name = "name")
 	public String name;
-	
-	@Column(name = "introduced")
 	public String introduced;
-	
-	@Column(name = "discontinued")
 	public String discontinued;
-	
-	@Column(name = "company_id")
 	public String companyId;
-	
-	@Column(name = "company_name")
 	public String companyName;
-
-	@Override
-	public String toString() {
-		return "ListComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
-				+ discontinued + ", company_id=" + companyId + ", company_name=" + companyName + "]";
-	}
 
 	public int getId() {
 		return id;
@@ -81,4 +57,9 @@ public class ComputerDTOForServlet {
 		this.companyName = companyName;
 	}
 
+	@Override
+	public String toString() {
+		return "ListComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
+				+ discontinued + ", company_id=" + companyId + ", company_name=" + companyName + "]";
+	}
 }
