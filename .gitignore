@@ -109,7 +109,10 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 # Database properties
-src/main/resources/db.properties
+persistence/src/main/resources/db.properties
 
 #Server
 Tomcat v8.0 Server at localhost-config/
+
+#Checkstyle
+.checkstyle
