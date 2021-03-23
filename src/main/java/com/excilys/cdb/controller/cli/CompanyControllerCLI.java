@@ -10,11 +10,11 @@ import main.java.com.excilys.cdb.model.Company;
 import main.java.com.excilys.cdb.service.CompanyService;
 
 @Controller
-public class CompanyController {
+public class CompanyControllerCLI {
 
 	private CompanyService companyService;
 	
-	public CompanyController(CompanyService companyService) {
+	public CompanyControllerCLI(CompanyService companyService) {
 		this.companyService = companyService;
 	}
 

@@ -28,9 +28,9 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @EnableWebMvc
 @ComponentScan({ "main.java.com.excilys.cdb.dao", "main.java.com.excilys.cdb.service",
-		"main.java.com.excilys.cdb.servlets", "main.java.com.excilys.cdb.view", "main.java.com.excilys.cdb.validator",
+		"main.java.com.excilys.cdb.view", "main.java.com.excilys.cdb.validator",
 		"main.java.com.excilys.cdb.controller.web", "main.java.com.excilys.cdb.dto",
-		"main.java.com.excilys.cdb.model" })
+		"main.java.com.excilys.cdb.model", "main.java.com.excilys.cdb.controller.cli",})
 public class SpringConfig implements WebMvcConfigurer {
 
 	@Bean
@@ -44,7 +44,7 @@ public class SpringConfig implements WebMvcConfigurer {
 		return bean;
 	}
 
-	@Bean(destroyMethod = "close")
+	@Bean
 	public DataSource dataSource() {
 		HikariConfig config = new HikariConfig("/db.properties");
 		return new HikariDataSource(config);

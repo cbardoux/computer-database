@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import main.java.com.excilys.cdb.controller.cli.CompanyController;
-import main.java.com.excilys.cdb.controller.cli.ComputerController;
+import main.java.com.excilys.cdb.controller.cli.CompanyControllerCLI;
+import main.java.com.excilys.cdb.controller.cli.ComputerControllerCLI;
 import main.java.com.excilys.cdb.dto.MappingDTO;
 import main.java.com.excilys.cdb.exception.DAOException;
 import main.java.com.excilys.cdb.exception.ServiceException;
@@ -26,10 +26,10 @@ import main.java.com.excilys.cdb.model.Page;
 public class View {
 
 	@Autowired
-	private CompanyController companyController;
+	private CompanyControllerCLI companyController;
 
 	@Autowired
-	private ComputerController computerController;
+	private ComputerControllerCLI computerController;
 
 	@Autowired
 	private MappingDTO mapping;

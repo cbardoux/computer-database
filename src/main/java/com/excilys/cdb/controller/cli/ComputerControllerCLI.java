@@ -12,11 +12,11 @@ import main.java.com.excilys.cdb.model.Page;
 import main.java.com.excilys.cdb.service.ComputerService;
 
 @Controller
-public class ComputerController {
+public class ComputerControllerCLI {
 
 	private ComputerService computerService;
 	
-	public ComputerController(ComputerService computerService) {
+	public ComputerControllerCLI(ComputerService computerService) {
 		this.computerService = computerService;
 	}
 
