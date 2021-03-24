@@ -10,5 +10,5 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ComponentScan({ "com.excilys.cdb.dao", "com.excilys.cdb.view",
 		"com.excilys.cdb.model", "com.excilys.cdb.controller",
 		"com.excilys.cdb.dto"})
-public class SpringConfig implements WebMvcConfigurer {
+public class ConsoleSpringConfig implements WebMvcConfigurer {
 }

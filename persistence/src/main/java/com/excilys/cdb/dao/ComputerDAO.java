@@ -43,7 +43,8 @@ public class ComputerDAO {
 		String request = FIND_COMPUTERS_WITH_PAGE_QUERY + page.getOrderBy();
 		try (Session session = factory.openSession();) {
 			List<ComputerDTOFromDB> computerDTOList = session.createQuery(request, ComputerDTOFromDB.class)
-					.setParameter("name", "%" + page.getSearch() + "%").setFirstResult(page.getIndex())
+					.setParameter("name", "%" + page.getSearch() + "%")
+					.setFirstResult((page.getIndex()- 1) * page.getLimit())
 					.setMaxResults(page.getLimit()).list();
 			page.setContent(computerDTOList.stream().map(mappingDTO::listComputerDTOToComputerObject)
 					.collect(Collectors.toList()));

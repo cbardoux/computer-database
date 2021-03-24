@@ -7,6 +7,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({ "com.excilys.cdb.dao", "com.excilys.cdb.service" })
+@ComponentScan({ "com.excilys.cdb.dao" })
 public class ServiceSpringConfig implements WebMvcConfigurer {
 }

@@ -19,7 +19,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @EnableWebMvc
 @ComponentScan({ "com.excilys.cdb.dao" })
-public class SpringConfig implements WebMvcConfigurer {
+public class PersistenceSpringConfig implements WebMvcConfigurer {
 
 	@Bean
 	public DataSource dataSource() {

@@ -31,7 +31,7 @@ import com.zaxxer.hikari.HikariDataSource;
 		"com.excilys.cdb.view", "com.excilys.cdb.validator",
 		"com.excilys.cdb.controller", "com.excilys.cdb.dto",
 		"com.excilys.cdb.model"})
-public class SpringConfig implements WebMvcConfigurer {
+public class WebappSpringConfig implements WebMvcConfigurer {
 
 	@Bean
 	public ViewResolver viewResolver() {

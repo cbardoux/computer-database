@@ -13,7 +13,7 @@ public class WebInitializer implements WebApplicationInitializer {
 	public void onStartup(ServletContext servletContext) throws ServletException {
 
 		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-		ctx.register(SpringConfig.class);
+		ctx.register(WebappSpringConfig.class);
 		ctx.setServletContext(servletContext);
 
 		var servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(ctx));
