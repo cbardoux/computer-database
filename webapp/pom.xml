@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>cdb</artifactId>
-    <groupId>com.excilys.cdb</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>cdb</artifactId>
+		<groupId>com.excilys.cdb</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
 
-  <groupId>com.excilys.cdb</groupId>
-  <artifactId>webapp</artifactId>
-  <version>1.0-SNAPSHOT</version>
+	<artifactId>webapp</artifactId>
+	<version>1.0-SNAPSHOT</version>
 
-  <name>webapp</name>
-  <packaging>war</packaging>
-  <url>http://maven.apache.org</url>
+	<name>webapp</name>
+	<packaging>war</packaging>
+	<url>http://maven.apache.org</url>
 
-  <dependencies>
-    <dependency>
+	<dependencies>
+		<dependency>
 			<groupId>com.excilys.cdb</groupId>
 			<artifactId>error</artifactId>
 			<version>1.0-SNAPSHOT</version>
@@ -35,17 +36,25 @@
 			<artifactId>jsp-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-  </dependencies>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+		</dependency>
+	</dependencies>
 
-  <build>      
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.1</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>

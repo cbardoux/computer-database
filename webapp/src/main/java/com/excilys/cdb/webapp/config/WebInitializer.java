@@ -7,17 +7,17 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-public class WebInitializer implements WebApplicationInitializer {
-
-	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
-
-		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-		ctx.register(WebappSpringConfig.class);
-		ctx.setServletContext(servletContext);
-
-		var servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(ctx));
-		servlet.setLoadOnStartup(1);
-		servlet.addMapping("/");
-	}
-}
+//public class WebInitializer implements WebApplicationInitializer {
+//
+//	@Override
+//	public void onStartup(ServletContext servletContext) throws ServletException {
+//
+//		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+//		ctx.register(WebappSpringConfig.class);
+//		ctx.setServletContext(servletContext);
+//
+//		var servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(ctx));
+//		servlet.setLoadOnStartup(1);
+//		servlet.addMapping("/");
+//	}
+//}

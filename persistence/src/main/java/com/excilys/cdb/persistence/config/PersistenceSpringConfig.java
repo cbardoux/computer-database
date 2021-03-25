@@ -18,7 +18,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({ "com.excilys.cdb.dao" })
+@ComponentScan({ "com.excilys.cdb.dto", "com.excilys.cdb.dao", "com.excilys.cdb.model" })
 public class PersistenceSpringConfig implements WebMvcConfigurer {
 
 	@Bean

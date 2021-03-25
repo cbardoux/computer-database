@@ -4,17 +4,24 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.excilys.cdb.controller.session.EditComputerSession;
+import com.excilys.cdb.dto.CdbUserDetails;
 import com.excilys.cdb.dto.ComputerDTOForServlet;
 import com.excilys.cdb.dto.MappingDTO;
+import com.excilys.cdb.dto.User;
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.exception.ServiceException;
 import com.excilys.cdb.exception.ValidatorException;
@@ -191,4 +198,5 @@ public class ComputerController {
 		}
 		return "redirect:/home/add";
 	}
+	
 }

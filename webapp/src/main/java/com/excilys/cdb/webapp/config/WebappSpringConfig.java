@@ -30,7 +30,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan({ "com.excilys.cdb.dao", "com.excilys.cdb.service",
 		"com.excilys.cdb.view", "com.excilys.cdb.validator",
 		"com.excilys.cdb.controller", "com.excilys.cdb.dto",
-		"com.excilys.cdb.model"})
+		"com.excilys.cdb.model", "com.excilys.cdb.webapp.config"})
 public class WebappSpringConfig implements WebMvcConfigurer {
 
 	@Bean
