@@ -59,7 +59,7 @@ public class ComputerDTOForServlet {
 
 	@Override
 	public String toString() {
-		return "ListComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
+		return "ComputerDTOForServlet [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
 				+ discontinued + ", company_id=" + companyId + ", company_name=" + companyName + "]";
 	}
 }

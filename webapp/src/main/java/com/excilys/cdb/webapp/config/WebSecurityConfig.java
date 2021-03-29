@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests().mvcMatchers("/home", "/home/add", "/home/edit").hasAnyRole("ADMIN", "USER")
           .and()
-                .authorizeRequests().mvcMatchers("/login", "/resources/**").permitAll()
+                .authorizeRequests().mvcMatchers("/login", "/resources/**", "/api").permitAll()
           .and()
           		.formLogin().loginPage("/login").usernameParameter("username").passwordParameter("password").permitAll()
                 .successForwardUrl("/home")

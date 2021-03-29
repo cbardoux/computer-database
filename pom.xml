@@ -40,6 +40,7 @@
 		<com.h2database.version>1.0.60</com.h2database.version>
 		<com.zaxxer.version>3.4.5</com.zaxxer.version>
 		<org.springframework.security.version>5.2.0.RELEASE</org.springframework.security.version>
+		<jackson.version>2.12.2</jackson.version>
 	</properties>
 
 	<dependencyManagement>
@@ -175,6 +176,19 @@
 				<artifactId>spring-data-jpa</artifactId>
 				<version>2.4.6</version>
 			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+<!-- 			<dependency>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-jsr310</artifactId>
+				<version>${jackson.version}</version>
+			</dependency> -->
 		</dependencies>
 	</dependencyManagement>
 
