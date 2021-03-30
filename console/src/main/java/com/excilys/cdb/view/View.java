@@ -1,5 +1,6 @@
 package com.excilys.cdb.view;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -8,31 +9,28 @@ import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.excilys.cdb.controller.CompanyControllerCLI;
-import com.excilys.cdb.controller.ComputerControllerCLI;
+import com.excilys.cdb.controller.cli.CompanyControllerCLI;
+import com.excilys.cdb.controller.cli.ComputerControllerCLI;
 import com.excilys.cdb.dto.MappingDTO;
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.exception.ServiceException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.model.Page;
 
 @Component
 @Scope("prototype")
 public class View {
 
-	@Autowired
 	private CompanyControllerCLI companyController;
-
-	@Autowired
 	private ComputerControllerCLI computerController;
 
-	@Autowired
-	private MappingDTO mapping;
+	public View(CompanyControllerCLI companyController, ComputerControllerCLI computerController) {
+		this.companyController = companyController;
+		this.computerController = computerController;
+	}
 
 	private Scanner inputUser = new Scanner(System.in);
 	private static final Logger LOGGER = LoggerFactory.getLogger(View.class);
@@ -96,9 +94,10 @@ public class View {
 		try {
 			computerController.deleteComputer(deleteId);
 		} catch (DAOException e) {
-			LOGGER.info("No computer with that id");
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		System.out.println("The computer with id " + deleteId + " has been deleted with success");
 	}
 
 	private void modifyComputer() {
@@ -279,23 +278,7 @@ public class View {
 
 	private void listComputers() {
 		System.out.println("--- Computers list ---");
-		int pageNumberComputer;
-		while (true) {
-			System.out.println("Enter 0 to quit or a page number :");
-			pageNumberComputer = inputUser.nextInt();
-			inputUser.nextLine();
-			Page<Computer> page = new Page<>();
-			page.setIndex(pageNumberComputer);
-			page.setLimit(10);
-
-			if (pageNumberComputer == 0) {
-				break;
-			} else {
-				computerController.getComputersWithOffset(page).getContent().stream()
-						.map(computer -> mapping.computerObjectToCreateComputerDTO(computer))
-						.forEach(System.out::println);
-			}
-		}
+		System.out.println(computerController.getComputers());
 	}
 
 	public void deleteCompany() {

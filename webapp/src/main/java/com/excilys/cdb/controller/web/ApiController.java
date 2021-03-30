@@ -1,10 +1,12 @@
-package com.excilys.cdb.controller;
+package com.excilys.cdb.controller.web;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,16 +68,18 @@ public class ApiController {
 		}
 	}
 
-	@PostMapping(value = "/deleteComputer")
-	public void deleteComputer(@RequestParam int id) {
+	@DeleteMapping(value = "/deleteComputer/{ids}")
+	public void deleteComputer(@PathVariable int[] ids) {
 		try {
-			serviceComputer.deleteComputer(id);
+			for (int id : ids) {
+				serviceComputer.deleteComputer(id);
+			}
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	@PostMapping(value = "/deleteCompany")
+	@DeleteMapping(value = "/deleteCompany")
 	public void deleteCompany(@RequestParam int id) {
 		try {
 			serviceCompany.deleteCompany(id);

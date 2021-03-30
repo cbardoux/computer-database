@@ -2,13 +2,10 @@ package com.excilys.cdb.console.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.Import;
 
 @Configuration
-@EnableWebMvc
-@ComponentScan({ "com.excilys.cdb.dao", "com.excilys.cdb.view",
-		"com.excilys.cdb.model", "com.excilys.cdb.controller",
-		"com.excilys.cdb.dto"})
-public class ConsoleSpringConfig implements WebMvcConfigurer {
+@ComponentScan({ "com.excilys.cdb.view", "com.excilys.cdb.controller.cli", "com.excilys.cdb.app"})
+@Import(com.excilys.cdb.service.config.ServiceSpringConfig.class)
+public class ConsoleSpringConfig {
 }

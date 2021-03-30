@@ -10,16 +10,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@EnableWebMvc
 @ComponentScan({ "com.excilys.cdb.dto", "com.excilys.cdb.dao", "com.excilys.cdb.model" })
-public class PersistenceSpringConfig implements WebMvcConfigurer {
+public class PersistenceSpringConfig {
 
 	@Bean
 	public DataSource dataSource() {

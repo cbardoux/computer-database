@@ -1,4 +1,4 @@
-package com.excilys.cdb.controller;
+package com.excilys.cdb.controller.web;
 
 import java.util.Arrays;
 import java.util.List;
@@ -191,5 +191,5 @@ public class ComputerController {
 		}
 		return "redirect:/home/add";
 	}
-	
+
 }
