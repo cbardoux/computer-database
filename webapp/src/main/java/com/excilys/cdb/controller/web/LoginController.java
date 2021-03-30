@@ -44,10 +44,8 @@ public class LoginController {
 	public String postLogin(Model model, HttpSession session,
 			@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout) {
-		// read principal out of security context and set it to session
 		UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder
 				.getContext().getAuthentication();
-		System.out.println("azeazd" + authentication);
 		validatePrinciple(authentication.getPrincipal());
 		User loggedInUser = ((CdbUserDetails) authentication.getPrincipal()).getUserDetails();
 		String errorMessge = null;
@@ -65,10 +63,8 @@ public class LoginController {
 
 	private void validatePrinciple(Object principal) {
 		if (!(principal instanceof CdbUserDetails)) {
-			System.out.println(27);
 			throw new IllegalArgumentException("Principal can not be null!");
 		}
-		System.out.println(27);
 	}
 	
 	@GetMapping("/register")

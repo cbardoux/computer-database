@@ -1,10 +1,13 @@
 package com.excilys.cdb.controller.web;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,16 +30,17 @@ import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.ComputerValidator;
 
 @RestController
-@RequestMapping("/api")
-public class ApiController {
+@RequestMapping("/api/computer/")
+public class ComputerRestController {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerRestController.class);
 	ComputerService serviceComputer;
 	CompanyService serviceCompany;
 	Page<Computer> page;
 	MappingDTO mapping;
 	ComputerValidator instanceValidator;
 
-	public ApiController(ComputerService serviceComputer, Page<Computer> page, MappingDTO mapping,
+	public ComputerRestController(ComputerService serviceComputer, Page<Computer> page, MappingDTO mapping,
 			CompanyService serviceCompany, ComputerValidator instanceValidator) {
 		this.mapping = mapping;
 		this.page = page;
@@ -46,73 +50,76 @@ public class ApiController {
 	}
 
 	@GetMapping(value = "/list", produces = "application/json")
-	public List<ComputerDTOForServlet> listComputers() {
-		List<ComputerDTOForServlet> computerDTOList = serviceComputer.getComputersWithOffset(page).getContent().stream()
-				.map(computer -> mapping.computerObjectToCreateComputerDTO(computer)).collect(Collectors.toList());
-
-		return computerDTOList;
-	}
-	
-	@GetMapping(value = "/getComputer/{id}", produces = "application/json")
-	public ComputerDTOForServlet getComputer(@PathVariable int id) {
-		Optional<ComputerDTOForServlet> opt = Optional.empty();
+	public ResponseEntity<List<ComputerDTOForServlet>> listComputers() {
 		try {
-			opt = Optional.of(mapping.objectToCreateDTOForEdit(serviceComputer.getComputerById(id)));
-		} catch (ServiceException e) {
-			e.printStackTrace();
+			return new ResponseEntity<List<ComputerDTOForServlet>>(serviceComputer.getComputersWithOffset(page)
+					.getContent().stream().map(computer -> mapping.computerObjectToCreateComputerDTO(computer))
+					.collect(Collectors.toList()), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
 		}
-		return opt.get();
+	}
+
+	@GetMapping(value = "/get/{id}", produces = "application/json")
+	public ResponseEntity<ComputerDTOForServlet> getComputer(@PathVariable int id) {
+		try {
+			return new ResponseEntity<ComputerDTOForServlet>(mapping.objectToCreateDTOForEdit(serviceComputer.getComputerById(id)), HttpStatus.OK);
+		} catch (ServiceException e) {
+			LOGGER.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
 	}
 
 	@GetMapping(value = "/count", produces = "application/json")
-	public int count() {
-		return serviceComputer.countRows(page);
+	public ResponseEntity<Integer> count() {
+		try {
+			return new ResponseEntity<Integer>(serviceComputer.countRows(page), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
 	}
 
 	@PostMapping(value = "/add")
-	public void addComputer(@RequestBody ComputerDTOForServlet computerDTO) {
+	public ResponseEntity<Boolean> addComputer(@RequestBody ComputerDTOForServlet computerDTO) {
 		int companyExists = serviceCompany.isCompanyExists(Integer.parseInt(computerDTO.companyId));
 		try {
 			instanceValidator.validateComputer(computerDTO, companyExists);
 			Computer computer = mapping.createComputerDTOToComputerObject(computerDTO);
 			serviceComputer.createComputer(computer);
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		} catch (ValidatorException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 		}
 	}
 
-	@DeleteMapping(value = "/deleteComputer/{ids}")
-	public void deleteComputer(@PathVariable int[] ids) {
+	@DeleteMapping(value = "/delete/{ids}")
+	public ResponseEntity<Boolean> deleteComputer(@PathVariable int[] ids) {
 		try {
 			for (int id : ids) {
 				serviceComputer.deleteComputer(id);
 			}
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		} catch (DAOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@DeleteMapping(value = "/deleteCompany")
-	public void deleteCompany(@RequestParam int id) {
-		try {
-			serviceCompany.deleteCompany(id);
-		} catch (DAOException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@PutMapping(value = "/edit")
-	public void editComputer(@RequestParam int id, @RequestBody ComputerDTOForServlet computerDTO) {
+	public ResponseEntity<Boolean> editComputer(@RequestParam int id, @RequestBody ComputerDTOForServlet computerDTO) {
 		int companyExists = serviceCompany.isCompanyExists(Integer.parseInt(computerDTO.companyId));
 		computerDTO.setId(id);
 		try {
 			instanceValidator.validateComputer(computerDTO, companyExists);
 			Computer computer = mapping.modifyComputerDTOToComputerObject(computerDTO);
 			serviceComputer.modifyComputer(computer);
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		} catch (ValidatorException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 		}
 	}
 }

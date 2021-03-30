@@ -94,9 +94,9 @@ public class View {
 		try {
 			computerController.deleteComputer(deleteId);
 		} catch (DAOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 	}
 
@@ -272,7 +272,7 @@ public class View {
 		try {
 			companyController.getCompanies().stream().forEach(System.out::println);
 		} catch (DAOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 	}
 
@@ -291,7 +291,7 @@ public class View {
 		} catch (DAOException e) {
 			LOGGER.info("No computer with that id");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		System.out.println("The company with id " + deleteId + " has been deleted with success");
 	}

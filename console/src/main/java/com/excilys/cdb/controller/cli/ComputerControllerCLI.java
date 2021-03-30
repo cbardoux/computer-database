@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import com.excilys.cdb.dto.ComputerDTOForServlet;
@@ -19,6 +21,7 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.view.View;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -29,6 +32,8 @@ public class ComputerControllerCLI {
 
 	private ComputerService computerService;
 	private MappingDTO mapping;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerControllerCLI.class);
 
 	public ComputerControllerCLI(ComputerService computerService, MappingDTO mapping) {
 		this.computerService = computerService;
@@ -53,7 +58,7 @@ public class ComputerControllerCLI {
 			is.close();
 		}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		return list;
 	}
@@ -97,7 +102,7 @@ public class ComputerControllerCLI {
 		try {
 			listComputerDTO = mapper.readValue(stringComputers, new TypeReference<List<ComputerDTOForServlet>>(){});
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		for(ComputerDTOForServlet computerDTO : listComputerDTO) {
 			listComputers.add(mapping.createComputerDTOToComputerObject(computerDTO));
