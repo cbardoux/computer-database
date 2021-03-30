@@ -2,6 +2,7 @@ package com.excilys.cdb.controller.web;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.excilys.cdb.dto.ComputerDTOForServlet;
 import com.excilys.cdb.dto.MappingDTO;
 import com.excilys.cdb.exception.DAOException;
+import com.excilys.cdb.exception.ServiceException;
 import com.excilys.cdb.exception.ValidatorException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -44,11 +46,22 @@ public class ApiController {
 	}
 
 	@GetMapping(value = "/list", produces = "application/json")
-	public List<ComputerDTOForServlet> listcomputers() {
+	public List<ComputerDTOForServlet> listComputers() {
 		List<ComputerDTOForServlet> computerDTOList = serviceComputer.getComputersWithOffset(page).getContent().stream()
 				.map(computer -> mapping.computerObjectToCreateComputerDTO(computer)).collect(Collectors.toList());
 
 		return computerDTOList;
+	}
+	
+	@GetMapping(value = "/getComputer/{id}", produces = "application/json")
+	public ComputerDTOForServlet getComputer(@PathVariable int id) {
+		Optional<ComputerDTOForServlet> opt = Optional.empty();
+		try {
+			opt = Optional.of(mapping.objectToCreateDTOForEdit(serviceComputer.getComputerById(id)));
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+		return opt.get();
 	}
 
 	@GetMapping(value = "/count", produces = "application/json")

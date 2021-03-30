@@ -61,35 +61,4 @@ public class WebappSpringConfig implements WebMvcConfigurer {
 		localeChangeInterceptor.setParamName("lang");
 		registry.addInterceptor(localeChangeInterceptor);
 	}
-	
-	@Bean
-	public DataSource dataSource() {
-		HikariConfig config = new HikariConfig("/db.properties");
-		return new HikariDataSource(config);
-	}
-
-	@Bean
-	public LocalSessionFactoryBean sessionFactory() {
-		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-
-		sessionFactory.setDataSource(dataSource());
-
-		sessionFactory.setPackagesToScan("com.excilys.cdb.dto");
-		sessionFactory.setHibernateProperties(hibernateProperties());
-
-		return sessionFactory;
-	}
-
-	@Bean
-	public PlatformTransactionManager hibernateTransactionManager() {
-		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-		transactionManager.setSessionFactory(sessionFactory().getObject());
-		return transactionManager;
-	}
-
-	private final Properties hibernateProperties() {
-		Properties hibernateProperties = new Properties();
-		hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-		return hibernateProperties;
-	}
 }
